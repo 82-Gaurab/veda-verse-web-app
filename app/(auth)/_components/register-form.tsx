@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function RegisterForm() {
 
-  const {register, handleSubmit, formState: {errors, isSubmitting}} = useForm<RegisterData>(
+  const {register, handleSubmit, formState: {errors}} = useForm<RegisterData>(
     {
       resolver: zodResolver(registerSchema)
     }
