@@ -39,7 +39,7 @@ export default function LoginForm() {
         </div>
 
         <div className="m-1 flex flex-col">
-          <input className="px-5 py-2 border-none bg-gray-700 text-white rounded-2xl outline-[#BE9D68] outline-1" placeholder="Password" {...register("password")}/>
+          <input type="password" className="px-5 py-2 border-none bg-gray-700 text-white rounded-2xl outline-[#BE9D68] outline-1" placeholder="Password" {...register("password")}/>
             {
             errors.password && // conditional rendering
             <span className="text-red-500">

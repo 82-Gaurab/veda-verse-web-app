@@ -40,13 +40,13 @@ export default function RegisterForm() {
         </div>
 
         <div className="m-1 flex flex-col">
-          <input className="px-5 py-1.5 border-none bg-gray-700 rounded-2xl outline-[#BE9D68] outline-1" placeholder="Password" {...register("password")}/>
+          <input type="password" className="px-5 py-1.5 border-none bg-gray-700 rounded-2xl outline-[#BE9D68] outline-1" placeholder="Password" {...register("password")}/>
           {
             errors.password && <span className="text-red-500">{errors.password.message}</span>
           }
         </div>
         <div className="m-1 flex flex-col">
-          <input className="px-5 py-1.5 border-none bg-gray-700 rounded-2xl outline-[#BE9D68] outline-1" placeholder="Confirm Password" {...register("confirmPassword")}/>
+          <input type="password" className="px-5 py-1.5 border-none bg-gray-700 rounded-2xl outline-[#BE9D68] outline-1" placeholder="Confirm Password" {...register("confirmPassword")}/>
           {
             errors.confirmPassword && <span className="text-red-500">{errors.confirmPassword.message}</span>
           }
