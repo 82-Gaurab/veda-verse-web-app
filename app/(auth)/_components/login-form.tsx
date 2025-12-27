@@ -23,10 +23,13 @@ export default function LoginForm() {
 
   return (
     <div className="mx-auto max-w-md-border m-2 p-4 rounded">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="m-1">
-          <label className="block mb-2 font-semibold">Email:</label>
-          <input className="p-1 border" {...register("email")}/>
+      <div className="mb-2">
+          Create an account. 
+          <Link href= "/register" className="text-blue-500 "> Register</Link> 
+        </div>
+      <form className="flex flex-col gap-1" onSubmit={handleSubmit(onSubmit)}>
+        <div className="m-1 flex flex-col">
+          <input className="px-4 py-1 border border-gray-400 bg-gray-700 placeholder-[#BE9D68] rounded-2xl" placeholder="Email" {...register("email")}/>
             {
             errors.email && // conditional rendering
             <span className="text-red-500">
@@ -35,9 +38,8 @@ export default function LoginForm() {
           }
         </div>
 
-        <div className="m-1">
-          <label className="block mb-2 font-semibold">Password:</label>
-          <input className="p-1 border" {...register("password")}/>
+        <div className="m-1 flex flex-col">
+          <input className="px-4 py-1 border rounded-2xl" placeholder="Password" {...register("password")}/>
             {
             errors.password && // conditional rendering
             <span className="text-red-500">
@@ -45,11 +47,8 @@ export default function LoginForm() {
             </span>
           }
         </div>
-        <button type="submit" className="bg-green-500 border rounded p-2 mt-2 text-white">Login</button>
-        <div>
-          Create an account. 
-          <Link href= "/register" className="text-blue-500 underline"> Register</Link> 
-        </div>
+        <button type="submit" className="bg-[#488563] rounded-4xl p-2 mt-2 text-white border-none">Login</button>
+        
       </form>
     </div>
   );

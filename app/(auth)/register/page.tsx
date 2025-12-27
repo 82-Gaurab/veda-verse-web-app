@@ -3,7 +3,7 @@ import RegisterForm from "../_components/register-form";
 export default function Page() {
   return (
     <div>
-      Register
+      <p className="text-center">Register</p>
       <RegisterForm />
 
     </div>
