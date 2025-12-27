@@ -4,9 +4,11 @@ import {useForm} from "react-hook-form";
 
 import { LoginData, loginSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 
 
 export default function LoginForm() {
+  const router = useRouter();
 
   const {register, handleSubmit, formState: { errors}} = useForm<LoginData>(
     {
@@ -17,19 +19,17 @@ export default function LoginForm() {
 
   
   const onSubmit = async (data: LoginData) => {
-    alert(data.email);
+    alert(`Successfully logged in with ${data.email}`);
+    router.push("/auth/dashboard");
   }
 
 
   return (
-    <div className="mx-auto max-w-md-border m-2 p-4 rounded">
-      <div className="mb-2">
-          Create an account. 
-          <Link href= "/register" className="text-blue-500 "> Register</Link> 
-        </div>
-      <form className="flex flex-col gap-1" onSubmit={handleSubmit(onSubmit)}>
+    <div className="mx-auto max-w-md-border m-1 p-4 rounded">
+
+      <form className="flex flex-col gap-1 w-2xs" onSubmit={handleSubmit(onSubmit)}>
         <div className="m-1 flex flex-col">
-          <input className="px-4 py-1 border border-gray-400 bg-gray-700 placeholder-[#BE9D68] rounded-2xl" placeholder="Email" {...register("email")}/>
+          <input className="px-5 py-1.5 border-none bg-gray-700 rounded-2xl outline-[#BE9D68] outline-1" placeholder="Email" {...register("email")}/>
             {
             errors.email && // conditional rendering
             <span className="text-red-500">
@@ -39,7 +39,7 @@ export default function LoginForm() {
         </div>
 
         <div className="m-1 flex flex-col">
-          <input className="px-4 py-1 border rounded-2xl" placeholder="Password" {...register("password")}/>
+          <input className="px-5 py-2 border-none bg-gray-700 text-white rounded-2xl outline-[#BE9D68] outline-1" placeholder="Password" {...register("password")}/>
             {
             errors.password && // conditional rendering
             <span className="text-red-500">
@@ -47,9 +47,13 @@ export default function LoginForm() {
             </span>
           }
         </div>
-        <button type="submit" className="bg-[#488563] rounded-4xl p-2 mt-2 text-white border-none">Login</button>
-        
+        <button type="submit" className="bg-[#488563] rounded-4xl p-2 mt-2 text-white border-none cursor-pointer">Login</button>
       </form>
+
+        <div className="my-2 text-center text-[20px]">
+          Create an account. 
+          <Link href= "/register" className="text-[#BE9D68]"> Register</Link> 
+        </div>
     </div>
   );
 }
