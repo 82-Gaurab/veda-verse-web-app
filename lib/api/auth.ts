@@ -5,8 +5,6 @@ import { API } from "./endpoint";
 
 export const register = async(registerData: any) => {
   try {
-    console.log("From auth register")
-    console.log(registerData);
     const response = await axios.post(API.AUTH.REGISTER, registerData);
     return response.data; // response ko body (what backend returns)
   } catch (error: Error | any) {
