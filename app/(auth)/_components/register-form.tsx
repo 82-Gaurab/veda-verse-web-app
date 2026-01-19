@@ -2,6 +2,7 @@
 "use client";
 
 import Link from "next/link";
+import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { RegisterData, registerSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,19 +27,17 @@ export default function RegisterForm() {
   const onSubmit = async (data: RegisterData) => {
     try {
       const res = await handleRegister(data);
-      // console.log("Page ko try");
-      // console.log(res);
       if (!res.success) {
         throw new Error(res.message || "Registration failed");
       }
+      toast.success("Registration successful");
       // handle redirect (optional)
       setTransition(() => {
         router.push("/login");
       });
     } catch (err: Error | any) {
-      // console.log("Page ko error bitra aayo");
-
       setError(err.message || "Registration failed");
+      toast.error(err.message);
     }
   };
 

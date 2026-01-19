@@ -2,7 +2,7 @@
 "use client";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-
+import toast from "react-hot-toast";
 import { LoginData, loginSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -29,11 +29,14 @@ export default function LoginForm() {
         throw new Error(res.message || "Login Failed");
       }
 
+      toast.success("Login success");
+
       setTransition(() => {
         router.push("/auth/dashboard");
       });
     } catch (error: Error | any) {
       setError(error.message || "Login Failed");
+      toast.error(error.message);
     }
   };
 
