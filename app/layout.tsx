@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import Sidebar from "./_component/Sidebar";
+import RootShell from "./_component/RootShell";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,13 +30,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="flex min-h-screen w-full">
-          {/* Sidebar */}
-          <Sidebar />
-
-          {/* Main content (ensures it takes all available space) */}
-          <main className="flex-1 px-2 sm:px-6 lg:px-8 p-2">{children}</main>
-        </div>
+        <RootShell>{children}</RootShell>
         <Toaster position="top-center" toastOptions={{ duration: 1500 }} />
       </body>
     </html>

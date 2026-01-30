@@ -20,7 +20,7 @@ export default function LoginForm({ onOpenRegister }: LoginFormProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
   });
@@ -32,7 +32,18 @@ export default function LoginForm({ onOpenRegister }: LoginFormProps) {
         throw new Error(res.message || "Login Failed");
       }
 
-      toast.success("Login success");
+      if (res.success) {
+        toast.success("Login success");
+        if (res.data?.role == "admin") {
+          return router.replace("/admin");
+        }
+        if (res.data?.role === "user") {
+          return router.replace("/user/dashboard");
+        }
+        return router.replace("/");
+      } else {
+        setError("Login failed");
+      }
 
       setTransition(() => {
         router.push("/auth/dashboard");
@@ -75,9 +86,10 @@ export default function LoginForm({ onOpenRegister }: LoginFormProps) {
         </div>
         <button
           type="submit"
+          disabled={isSubmitting || pending}
           className="bg-[#488563] rounded-4xl p-2 mt-2 text-white border-none cursor-pointer"
         >
-          Login
+          {isSubmitting || pending ? "Logging in..." : "Log In"}
         </button>
       </form>
       <div className="my-2 text-center text-[20px]">
