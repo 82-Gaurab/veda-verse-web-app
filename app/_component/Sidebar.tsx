@@ -36,7 +36,7 @@ export default function Sidebar() {
         <div>
           <div className="p-4 border-b border-gray-200 dark:border-gray-800">
             <Link href="/" className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded bg-gray-900 dark:bg-white text-white dark:text-gray-900 flex items-center justify-center font-bold">
+              <div className="h-8 w-8 rounded bg-gray-900 dark:bg-white dark:text-gray-900 flex items-center justify-center font-bold">
                 <Image
                   src="/icons/logo.png"
                   height={20}
@@ -44,7 +44,7 @@ export default function Sidebar() {
                   alt="logo"
                 />
               </div>
-              <span className="font-semibold">Sidebar</span>
+              <span className="font-semibold text-[#488563]">VedaVerse</span>
             </Link>
           </div>
 
