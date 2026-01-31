@@ -8,7 +8,7 @@ const ADMIN_LINKS = [
   { href: "/admin/users", label: "Users" },
 ];
 
-export default function Sidebar() {
+export default function AdminSidebar() {
   const pathname = usePathname();
 
   const isActive = (href: string) =>

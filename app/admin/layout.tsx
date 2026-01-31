@@ -2,17 +2,12 @@
 
 import { AuthProvider } from "@/context/AuthContext";
 import Header from "./_components/Header";
-import Sidebar from "./_components/Sidebar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <AuthProvider>
       <div className="flex w-full min-h-screen">
         <div className="page-wrapper flex w-full">
-          {/* Header/sidebar */}
-          <div className="xl:block">
-            <Sidebar />
-          </div>
           <div className="w-full bg-background">
             {/* Top Header  */}
             <Header />
