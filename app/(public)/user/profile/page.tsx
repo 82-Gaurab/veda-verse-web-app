@@ -1,3 +1,9 @@
+import EditUserForm from "@/app/_component/EditProfile";
+
 export default function Page() {
-  return <div>Profile</div>;
+  return (
+    <div>
+      <EditUserForm />
+    </div>
+  );
 }

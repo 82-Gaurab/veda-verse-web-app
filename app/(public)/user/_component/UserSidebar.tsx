@@ -5,13 +5,13 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 const LINKS = [
-  { href: "/", label: "Home" },
+  { href: "/user/dashboard", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/explore", label: "Explore" },
   { href: "/contact", label: "Contact Us" },
 ];
 
-export default function Sidebar() {
+export default function UserSidebar() {
   const pathname = usePathname();
 
   const isActive = (href: string) =>
