@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import Link from "next/link";
+import Image from "next/image";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { LoginData, loginSchema } from "../schema";
@@ -9,15 +9,18 @@ import { useRouter } from "next/navigation";
 import { handleLogin } from "@/lib/action/auth-action";
 import { useState, useTransition } from "react";
 
-export default function LoginForm() {
+interface LoginFormProps {
+  onOpenRegister: () => void;
+}
+
+export default function LoginForm({ onOpenRegister }: LoginFormProps) {
   const router = useRouter();
   const [pending, setTransition] = useTransition();
   const [error, setError] = useState("");
-
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
   });
@@ -29,7 +32,18 @@ export default function LoginForm() {
         throw new Error(res.message || "Login Failed");
       }
 
-      toast.success("Login success");
+      if (res.success) {
+        toast.success("Login success");
+        if (res.data?.role == "admin") {
+          return router.replace("/admin");
+        }
+        if (res.data?.role === "user") {
+          return router.replace("/user/dashboard");
+        }
+        return router.replace("/");
+      } else {
+        setError("Login failed");
+      }
 
       setTransition(() => {
         router.push("/auth/dashboard");
@@ -41,7 +55,9 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="mx-auto max-w-md-border m-1 p-4 rounded">
+    <div className="flex flex-col items-center mx-auto max-w-md-border m-1 p-4 rounded">
+      <Image src="/icons/logo.png" height={130} width={130} alt="logo" />
+      <p className="text-center m-0 text-3xl">Welcome Back</p>
       <form
         className="flex flex-col gap-1 w-2xs"
         onSubmit={handleSubmit(onSubmit)}
@@ -70,18 +86,25 @@ export default function LoginForm() {
         </div>
         <button
           type="submit"
+          disabled={isSubmitting || pending}
           className="bg-[#488563] rounded-4xl p-2 mt-2 text-white border-none cursor-pointer"
         >
-          Login
+          {isSubmitting || pending ? "Logging in..." : "Log In"}
         </button>
       </form>
-
       <div className="my-2 text-center text-[20px]">
         Create an account.
-        <Link href="/register" className="text-[#BE9D68]">
-          {" "}
+        {/* <Link href="/register" className="text-[#BE9D68]">
+            {" "}
+            Register
+          </Link> */}
+        <button
+          type="button"
+          className="text-[#BE9D68]"
+          onClick={onOpenRegister}
+        >
           Register
-        </Link>
+        </button>
       </div>
     </div>
   );
