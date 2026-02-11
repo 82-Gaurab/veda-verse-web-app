@@ -16,3 +16,20 @@ export const createUser = async (userData: any) => {
     );
   }
 };
+
+export const getAllUsers = async (
+  page: number,
+  size: number,
+  search?: string,
+) => {
+  try {
+    const response = await axios.get(API.ADMIN.USER.GET_ALL_USERS, {
+      params: { page, size, search },
+    });
+    return response.data;
+  } catch (error: Error | any) {
+    throw new Error(
+      error.response?.data?.message || error.message || "Get all users failed",
+    );
+  }
+};
