@@ -11,9 +11,13 @@ import { useState, useTransition } from "react";
 
 interface LoginFormProps {
   onOpenRegister: () => void;
+  onForgotPassword: () => void;
 }
 
-export default function LoginForm({ onOpenRegister }: LoginFormProps) {
+export default function LoginForm({
+  onOpenRegister,
+  onForgotPassword,
+}: LoginFormProps) {
   const router = useRouter();
   const [pending, setTransition] = useTransition();
   const [error, setError] = useState("");
@@ -105,6 +109,14 @@ export default function LoginForm({ onOpenRegister }: LoginFormProps) {
         >
           Register
         </button>
+        <div className="mt-1 text-center text-sm">
+          <button
+            onClick={onForgotPassword}
+            className="font-semibold hover:underline"
+          >
+            Forgot Password?
+          </button>
+        </div>
       </div>
     </div>
   );
