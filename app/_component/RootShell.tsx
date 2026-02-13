@@ -17,7 +17,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
       {isUserRoute && <UserSidebar />}
       {isAdminRoute && <AdminSidebar />}
 
-      <main className="flex-1 px-2 sm:px-6 lg:px-8 p-2">{children}</main>
+      <main className="flex-1 px-2 sm:px-6 lg:px-8 p-2 w-full">{children}</main>
     </div>
   );
 }
