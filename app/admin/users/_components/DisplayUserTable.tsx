@@ -1,198 +1,263 @@
-/* eslint-disable react-hooks/incompatible-library */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-// import * as React from "react";
-
-// import {
-//   createColumnHelper,
-//   flexRender,
-//   getCoreRowModel,
-//   useReactTable,
-// } from "@tanstack/react-table";
-
-// type Person = {
-//   firstName: string;
-//   lastName: string;
-//   age: number;
-//   visits: number;
-//   status: string;
-//   progress: number;
-// };
-
-// const defaultData: Person[] = [
-//   {
-//     firstName: "tanner",
-//     lastName: "linsley",
-//     age: 24,
-//     visits: 100,
-//     status: "In Relationship",
-//     progress: 50,
-//   },
-//   {
-//     firstName: "tandy",
-//     lastName: "miller",
-//     age: 40,
-//     visits: 40,
-//     status: "Single",
-//     progress: 80,
-//   },
-//   {
-//     firstName: "joe",
-//     lastName: "dirte",
-//     age: 45,
-//     visits: 20,
-//     status: "Complicated",
-//     progress: 10,
-//   },
-// ];
-
-// const columnHelper = createColumnHelper<Person>();
-
-// const columns = [
-//   columnHelper.accessor("firstName", {
-//     cell: (info) => info.getValue(),
-//     footer: (info) => info.column.id,
-//   }),
-//   columnHelper.accessor((row) => row.lastName, {
-//     id: "lastName",
-//     cell: (info) => <i>{info.getValue()}</i>,
-//     header: () => <span>Last Name</span>,
-//     footer: (info) => info.column.id,
-//   }),
-//   columnHelper.accessor("age", {
-//     header: () => "Age",
-//     cell: (info) => info.renderValue(),
-//     footer: (info) => info.column.id,
-//   }),
-//   columnHelper.accessor("visits", {
-//     header: () => <span>Visits</span>,
-//     footer: (info) => info.column.id,
-//   }),
-//   columnHelper.accessor("status", {
-//     header: "Status",
-//     footer: (info) => info.column.id,
-//   }),
-//   columnHelper.accessor("progress", {
-//     header: "Profile Progress",
-//     footer: (info) => info.column.id,
-//   }),
-// ];
-
-// export default function DisplayUserTable() {
-//   const [data, setData] = React.useState(() => [...defaultData]);
-
-//   const table = useReactTable({
-//     data,
-//     columns,
-//     getCoreRowModel: getCoreRowModel(),
-//   });
-
-//   return (
-//     <div className="p-2">
-//       <table className="border border-gray-300">
-//         <thead>
-//           {table.getHeaderGroups().map((headerGroup) => (
-//             <tr key={headerGroup.id}>
-//               {headerGroup.headers.map((header) => (
-//                 <th
-//                   className="border-b border-r border-gray-300 px-1 py-0.5"
-//                   key={header.id}
-//                 >
-//                   {header.isPlaceholder
-//                     ? null
-//                     : flexRender(
-//                         header.column.columnDef.header,
-//                         header.getContext(),
-//                       )}
-//                 </th>
-//               ))}
-//             </tr>
-//           ))}
-//         </thead>
-//         <tbody className="border-b border-gray-300">
-//           {table.getRowModel().rows.map((row) => (
-//             <tr className="border-r border-gray-300" key={row.id}>
-//               {row.getVisibleCells().map((cell) => (
-//                 <td key={cell.id}>
-//                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
-//                 </td>
-//               ))}
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-//     </div>
-//   );
-// }
-import DataTable from "react-data-table-component";
-export default function DisplayUserTable() {
-  type Person = {
-    userId: string;
-    firstName: string;
-    lastName: string;
-    username: string;
-    email: string;
-    role: string;
+import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import toast from "react-hot-toast";
+import { handleDeleteUser } from "@/lib/action/admin/user-action";
+import DeleteModal from "@/app/_component/DeleteModal";
+const DisplayUserTable = ({
+  users,
+  pagination,
+  search,
+}: {
+  users: any[];
+  pagination: any;
+  search?: string;
+}) => {
+  const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState(search || "");
+  const handleSearchChange = () => {
+    router.push(
+      `/admin/users?page=1&size=${pagination.size}` +
+        (searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ""),
+    );
   };
-  const users: Person[] = [
-    {
-      userId: "id101",
-      firstName: "tanner",
-      lastName: "linsley",
-      username: "tanner",
-      email: "tanner@gmail.com",
-      role: "user",
-    },
-    {
-      userId: "id102",
-      firstName: "tandy",
-      lastName: "miller",
-      username: "miller",
-      email: "miller@gmail.com",
-      role: "user",
-    },
-    {
-      userId: "id103",
-      firstName: "joe",
-      lastName: "dirte",
-      username: "joe",
-      email: "dirte@gmail.com",
-      role: "user",
-    },
-  ];
-  const userColumns = [
-    {
-      name: "User ID",
-      selector: (row: { userId: string }) => row.userId,
-      sortable: true,
-    },
-    {
-      name: "Name",
-      selector: (row: { username: string }) => row.username,
-      sortable: true,
-    },
-    {
-      name: "Email",
-      selector: (row: { email: string }) => row.email,
-      sortable: true,
-    },
-    {
-      name: "Role",
-      selector: (row: { role: string }) => row.role,
-      sortable: true,
-    },
-  ];
-  return (
-    <div className="mb-8 mt-6">
-      <h1 className="mb-4 text-2xl font-semibold text-gray-800">User List</h1>
+  const makePagination = (): React.ReactElement[] => {
+    const pages = [];
+    const currentPage = pagination.page;
+    const totalPages = pagination.totalPages;
+    const delta = 2; // Number of pages to show on each side of current page
 
-      <DataTable
-        columns={userColumns}
-        data={users}
-        pagination
-        highlightOnHover
-        keyField="userId"
-        className="w-full border-collapse"
+    // Previous button
+    const prevHref =
+      `/admin/users?page=${currentPage - 1}&size=${pagination.size}` +
+      (searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : "");
+    pages.push(
+      <Link
+        key="prev"
+        className={`px-3 py-1 border rounded-md 
+                    ${currentPage === 1 ? "bg-gray-200 text-gray-400 cursor-not-allowed pointer-events-none" : "bg-white text-blue-500 hover:bg-blue-100"}`}
+        href={currentPage === 1 ? "#" : prevHref}
+      >
+        Previous
+      </Link>,
+    );
+
+    // Calculate range of pages to show
+    const startPage = Math.max(1, currentPage - delta);
+    const endPage = Math.min(totalPages, currentPage + delta);
+
+    // Add first page if not in range
+    if (startPage > 1) {
+      const href =
+        `/admin/users?page=1&size=${pagination.size}` +
+        (searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : "");
+      pages.push(
+        <Link
+          key={1}
+          className="px-3 py-1 border rounded-md bg-white text-blue-500 hover:bg-blue-100"
+          href={href}
+        >
+          1
+        </Link>,
+      );
+      if (startPage > 2) {
+        pages.push(
+          <span key="ellipsis1" className="px-2 text-gray-500">
+            ...
+          </span>,
+        );
+      }
+    }
+
+    // Add page numbers in range
+    for (let i = startPage; i <= endPage; i++) {
+      const href =
+        `/admin/users?page=${i}&size=${pagination.size}` +
+        (search ? `&search=${encodeURIComponent(search)}` : "");
+      pages.push(
+        <Link
+          key={i}
+          className={`px-3 py-1 border rounded-md 
+                        ${i === currentPage ? "bg-blue-500 text-white" : "bg-white text-blue-500 hover:bg-blue-100"}`}
+          href={href}
+        >
+          {i}
+        </Link>,
+      );
+    }
+
+    // Add last page if not in range
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pages.push(
+          <span key="ellipsis2" className="px-2 text-gray-500">
+            ...
+          </span>,
+        );
+      }
+      const href =
+        `/admin/users?page=${totalPages}&size=${pagination.size}` +
+        (search ? `&search=${encodeURIComponent(search)}` : "");
+      pages.push(
+        <Link
+          key={totalPages}
+          className="px-3 py-1 border rounded-md bg-white text-blue-500 hover:bg-blue-100"
+          href={href}
+        >
+          {totalPages}
+        </Link>,
+      );
+    }
+
+    // Next button
+    const nextHref =
+      `/admin/users?page=${currentPage + 1}&size=${pagination.size}` +
+      (search ? `&search=${encodeURIComponent(search)}` : "");
+    pages.push(
+      <Link
+        key="next"
+        className={`px-3 py-1 border rounded-md 
+                    ${currentPage === totalPages ? "bg-gray-200 text-gray-400 cursor-not-allowed pointer-events-none" : "bg-white text-blue-500 hover:bg-blue-100"}`}
+        href={currentPage === totalPages ? "#" : nextHref}
+      >
+        Next
+      </Link>,
+    );
+
+    return pages;
+  };
+  const [deleteId, setDeleteId] = useState(null);
+
+  const onDelete = async () => {
+    try {
+      await handleDeleteUser(deleteId!);
+      toast.success("User deleted successfully");
+    } catch (err: Error | any) {
+      toast.error(err.message || "Failed to delete user");
+    } finally {
+      setDeleteId(null);
+    }
+  };
+  return (
+    <div className="mt-6 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+      <DeleteModal
+        isOpen={deleteId}
+        onClose={() => setDeleteId(null)}
+        onConfirm={onDelete}
+        title="Delete Confirmation"
+        description="Are you sure you want to delete this item? This action cannot be undone."
       />
+
+      <div className="p-4 bg-gray-50 dark:bg-gray-800">
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleSearchChange();
+            }
+          }}
+          placeholder="Search users..."
+          className="mr-2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <button
+          onClick={handleSearchChange}
+          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+        >
+          Search
+        </button>
+      </div>
+      <table className="w-full table-auto border-collapse">
+        <thead className="bg-gray-50 dark:bg-gray-800">
+          <tr>
+            <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+              ID
+            </th>
+            <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+              Image
+            </th>
+            <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+              Name
+            </th>
+            <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+              Email
+            </th>
+            <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+              Role
+            </th>
+            <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+          {users.map((user) => (
+            <tr key={user._id}>
+              <td className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">
+                {user._id}
+              </td>
+              <td className="px-4 py-2">
+                {user.profilePicture ? (
+                  <img
+                    src={`${process.env.Next_PUBLIC_API_BASE_URL}${user.profilePicture}`}
+                    alt="User Image"
+                    className="w-10 h-10 rounded-full object-cover"
+                    width={40}
+                    height={40}
+                  />
+                ) : (
+                  <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+                    <span className="text-gray-600 text-sm">N/A</span>
+                  </div>
+                )}
+              </td>
+              <td className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">
+                {user.firstName || " " + user.lastName || " "}
+              </td>
+              <td className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">
+                {user.email}
+              </td>
+              <td className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 text-capitalize">
+                {user.role}
+              </td>
+              <td className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">
+                {/* Add action buttons or links here */}
+                <Link
+                  href={`/admin/users/${user._id}`}
+                  className="text-green-500 hover:underline"
+                >
+                  View
+                </Link>
+                <Link
+                  href={`/admin/users/${user._id}/edit`}
+                  className="text-blue-500 ml-4 hover:underline"
+                >
+                  Edit
+                </Link>
+                <button
+                  onClick={() => setDeleteId(user._id)}
+                  className="ml-4 text-red-500 hover:underline"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {/* Pagination */}
+      <div className="p-4 flex justify-between items-center bg-gray-50 dark:bg-gray-800">
+        <div className="text-sm text-gray-700 dark:text-gray-300">
+          Page {pagination.page} of {pagination.totalPages}
+        </div>
+        <div className="space-x-2">{makePagination()}</div>
+      </div>
     </div>
   );
-}
+};
+
+export default DisplayUserTable;

@@ -4,10 +4,12 @@ import { useState } from "react";
 import LoginForm from "./login-form";
 import RegisterForm from "./register-form";
 import Modal from "./modal";
+import ForgetPasswordForm from "./ForgetPasswordForm";
 
 export default function AuthModals() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   return (
     <>
@@ -19,6 +21,10 @@ export default function AuthModals() {
             setShowLoginModal(false);
             setShowRegisterModal(true);
           }}
+          onForgotPassword={() => {
+            setShowLoginModal(false);
+            setShowForgotPassword(true);
+          }}
         />
       </Modal>
 
@@ -29,6 +35,17 @@ export default function AuthModals() {
         <RegisterForm
           onOpenLogin={() => {
             setShowRegisterModal(false);
+            setShowLoginModal(true);
+          }}
+        />
+      </Modal>
+      <Modal
+        isOpen={showForgotPassword}
+        onClose={() => setShowForgotPassword(false)}
+      >
+        <ForgetPasswordForm
+          onOpenLogin={() => {
+            setShowForgotPassword(false);
             setShowLoginModal(true);
           }}
         />
