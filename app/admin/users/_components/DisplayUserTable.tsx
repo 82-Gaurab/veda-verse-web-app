@@ -201,9 +201,9 @@ const DisplayUserTable = ({
                 {user._id}
               </td>
               <td className="px-4 py-2">
-                {user.imageUrl ? (
-                  <Image
-                    src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${user.imageUrl}`}
+                {user.profilePicture ? (
+                  <img
+                    src={`${process.env.Next_PUBLIC_API_BASE_URL}${user.profilePicture}`}
                     alt="User Image"
                     className="w-10 h-10 rounded-full object-cover"
                     width={40}
