@@ -33,3 +33,40 @@ export const getAllUsers = async (
     );
   }
 };
+
+export const getUserById = async (id: string) => {
+  try {
+    const response = await axios.get(API.ADMIN.USER.GET_ONE(id));
+    return response.data;
+  } catch (error: Error | any) {
+    throw new Error(
+      error.response?.data?.message || error.message || "Get User By Id Failed",
+    );
+  }
+};
+
+export const updateUser = async (id: string, updateData: any) => {
+  try {
+    const response = await axios.put(API.ADMIN.USER.UPDATE(id), updateData, {
+      headers: {
+        "Content-Type": "multipart/form-data", // for file upload/multer
+      },
+    });
+    return response.data;
+  } catch (error: Error | any) {
+    throw new Error(
+      error.response?.data?.message || error.message || "Update user failed",
+    );
+  }
+};
+
+export const deleteUser = async (id: string) => {
+  try {
+    const response = await axios.delete(API.ADMIN.USER.DELETE(id));
+    return response.data;
+  } catch (error: Error | any) {
+    throw new Error(
+      error.response?.data?.message || error.message || "Delete user failed",
+    );
+  }
+};
