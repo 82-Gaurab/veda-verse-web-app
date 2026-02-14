@@ -9,7 +9,7 @@ export default async function Page({
 }) {
   const params = await searchParams;
   const page = (params.page as string) || "1";
-  const size = (params.size as string) || "3";
+  const size = (params.size as string) || "5";
   const search = (params.search as string) || "";
 
   const response = await handleGetAllUsers(page, size, search as string);
