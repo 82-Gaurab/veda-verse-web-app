@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
-import RootShell from "./_component/RootShell";
+import RootShell from "./(public)/_component/RootShell";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
