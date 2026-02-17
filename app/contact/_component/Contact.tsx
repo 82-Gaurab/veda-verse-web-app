@@ -14,7 +14,7 @@ const cormorant = Cormorant_Garamond({
 export default function ContactPage() {
   return (
     <div className="relative min-h-screen bg-[#FDF6E3] text-[#3A3A3A] overflow-hidden">
-      <div className="mx-auto px-8 py-24 space-y-24">
+      <div className="mx-auto max-w-7xl px-8 py-24 space-y-24">
         {/* Hero Section */}
         <section className="text-center space-y-6">
           <h1
