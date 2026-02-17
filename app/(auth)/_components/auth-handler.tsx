@@ -14,17 +14,23 @@ export default function AuthModals({ isCompact }: { isCompact: boolean }) {
 
   return (
     <>
-      <button
-        className="cursor-pointer"
-        style={{ color: "black" }}
+      <div
+        className={`flex justify-center cursor-pointer`}
         onClick={() => setShowLoginModal(true)}
       >
-        {isCompact ? (
-          <Image src={"/icons/login.png"} alt={"icon"} height={30} width={30} />
-        ) : (
-          "Login"
-        )}
-      </button>
+        <button className="cursor-pointer" style={{ color: "black" }}>
+          {isCompact ? (
+            <Image
+              src={"/icons/login.png"}
+              alt={"icon"}
+              height={40}
+              width={40}
+            />
+          ) : (
+            "Login"
+          )}
+        </button>
+      </div>
 
       <Modal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)}>
         <LoginForm

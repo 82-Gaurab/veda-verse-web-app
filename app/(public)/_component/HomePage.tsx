@@ -51,7 +51,7 @@ const HomePage = () => {
           <h2 className="text-3xl font-serif font-bold mb-8 text-amber-800">
             Featured Books
           </h2>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="flex flex-wrap justify-center items-center gap-6">
             {books.map((book, index) => (
               <BookCard key={index} {...book} />
             ))}

@@ -1,6 +1,5 @@
 "use client";
 
-import "./sidebar.css";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -78,8 +77,8 @@ export default function Sidebar({ isCompact, setIsCompact }: SidebarProps) {
                 }}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200 ease-in-out ${
                   isActive(link.href)
-                    ? "active rounded text-gray-700"
-                    : "text-gray-700 hover:bg-fuchsia-300"
+                    ? "bg-[#f1ede1] shadow-[inset_0_5px_8px_rgba(0,0,0,0.2)] rounded text-gray-700"
+                    : "text-gray-700 hover:bg-fuchsia-200"
                 }`}
               >
                 <Image
@@ -97,7 +96,7 @@ export default function Sidebar({ isCompact, setIsCompact }: SidebarProps) {
           </nav>
         </div>
 
-        <div className="m-6 border border-gray-200 flex justify-center">
+        <div className="m-6">
           <AuthModals isCompact={isCompact} />
         </div>
       </aside>

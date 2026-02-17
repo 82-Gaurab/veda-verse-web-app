@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import Sidebar from "./Sidebar";
 import UserSidebar from "../user/_component/UserSidebar";
 import AdminSidebar from "../../admin/_components/Sidebar";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 
 export default function RootShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
