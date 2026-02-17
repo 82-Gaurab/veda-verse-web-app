@@ -1,4 +1,4 @@
-import EditUserForm from "@/app/_component/EditProfile";
+import EditUserForm from "@/app/(public)/_component/EditProfile";
 
 export default function Page() {
   return (
