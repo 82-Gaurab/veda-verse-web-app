@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { handleDeleteUser } from "@/lib/action/admin/user-action";
-import DeleteModal from "@/app/_component/DeleteModal";
+import DeleteModal from "@/app/(public)/_component/DeleteModal";
 const DisplayUserTable = ({
   users,
   pagination,
