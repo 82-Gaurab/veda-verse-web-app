@@ -17,6 +17,8 @@ interface RegisterModalProps {
 export default function RegisterForm({ onOpenLogin }: RegisterModalProps) {
   const [pending, setTransition] = useTransition();
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const router = useRouter();
 
@@ -48,7 +50,7 @@ export default function RegisterForm({ onOpenLogin }: RegisterModalProps) {
   return (
     <div className="flex flex-col items-center mx-auto max-w-md-border m-2 p-4 rounded">
       <Image src="/icons/logo.png" height={130} width={130} alt="logo" />
-      <p className="text-center text-3xl">Create a new Account</p>
+      <p className="text-center text-3xl mb-4">Create a new Account</p>
 
       <form
         className="flex flex-col gap-1 w-2xs"
@@ -75,24 +77,38 @@ export default function RegisterForm({ onOpenLogin }: RegisterModalProps) {
           )}
         </div>
 
-        <div className="m-1 flex flex-col">
+        <div className="m-1 flex flex-col relative">
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             className="px-5 py-1.5 border-none bg-gray-700 rounded-2xl outline-[#BE9D68] outline-1"
             placeholder="Password"
             {...register("password")}
           />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-2 text-gray-400 hover:text-gray-200"
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
           {errors.password && (
             <span className="text-red-500">{errors.password.message}</span>
           )}
         </div>
-        <div className="m-1 flex flex-col">
+        <div className="m-1 flex flex-col relative">
           <input
-            type="password"
+            type={showConfirmPassword ? "text" : "password"}
             className="px-5 py-1.5 border-none bg-gray-700 rounded-2xl outline-[#BE9D68] outline-1"
             placeholder="Confirm Password"
             {...register("confirmPassword")}
           />
+          <button
+            type="button"
+            onClick={() => setShowConfirmPassword(!showPassword)}
+            className="absolute right-3 top-2 text-gray-400 hover:text-gray-200"
+          >
+            {showConfirmPassword ? "Hide" : "Show"}
+          </button>
           {errors.confirmPassword && (
             <span className="text-red-500">
               {errors.confirmPassword.message}
@@ -107,11 +123,10 @@ export default function RegisterForm({ onOpenLogin }: RegisterModalProps) {
         </button>
         <div className="my-2 text-center text-[20px]">
           Already have an account.
-          {/* <Link href="/login" className="text-[#BE9D68]">
-            {" "}
-            Login
-          </Link> */}
-          <button className="text-[#BE9D68]" onClick={onOpenLogin}>
+          <button
+            className="text-[#BE9D68] ml-1 cursor-pointer"
+            onClick={onOpenLogin}
+          >
             Login
           </button>
         </div>

@@ -71,10 +71,13 @@ const ForgetPasswordForm = ({ onOpenLogin }: ForgotPasswordFormProps) => {
         {isSubmitting || pending ? "Sending..." : "Send Link"}
       </button>
 
-      <div className="mt-1 text-center text-sm">
-        Already have an account?{" "}
-        <button onClick={onOpenLogin} className="font-semibold hover:underline">
-          Log in
+      <div className="my-2 text-center text-[20px]">
+        Already have an account.
+        <button
+          className="text-[#BE9D68] ml-1 cursor-pointer"
+          onClick={onOpenLogin}
+        >
+          Login
         </button>
       </div>
     </form>

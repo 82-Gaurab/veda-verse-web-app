@@ -21,6 +21,7 @@ export default function LoginForm({
   const router = useRouter();
   const [pending, setTransition] = useTransition();
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -59,9 +60,9 @@ export default function LoginForm({
   };
 
   return (
-    <div className="flex flex-col items-center mx-auto max-w-md-border m-1 p-4 rounded">
+    <div className="flex flex-col items-center mx-auto max-w-md-border m-1 p-3 rounded">
       <Image src="/icons/logo.png" height={130} width={130} alt="logo" />
-      <p className="text-center m-0 text-3xl">Welcome Back</p>
+      <p className="text-center m-0 text-3xl mb-4">Welcome Back</p>
       <form
         className="flex flex-col gap-1 w-2xs"
         onSubmit={handleSubmit(onSubmit)}
@@ -77,13 +78,20 @@ export default function LoginForm({
           )}
         </div>
 
-        <div className="m-1 flex flex-col">
+        <div className="m-1 flex flex-col relative">
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             className="px-5 py-2 border-none bg-gray-700 text-white rounded-2xl outline-[#BE9D68] outline-1"
             placeholder="Password"
             {...register("password")}
           />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-2 text-gray-400 hover:text-gray-200"
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
           {errors.password && ( // conditional rendering
             <span className="text-red-500">{errors.password.message}</span>
           )}
@@ -98,21 +106,17 @@ export default function LoginForm({
       </form>
       <div className="my-2 text-center text-[20px]">
         Create an account.
-        {/* <Link href="/register" className="text-[#BE9D68]">
-            {" "}
-            Register
-          </Link> */}
         <button
           type="button"
-          className="text-[#BE9D68]"
+          className="text-[#BE9D68] ml-1 cursor-pointer"
           onClick={onOpenRegister}
         >
           Register
         </button>
-        <div className="mt-1 text-center text-sm">
+        <div className="mt-2 text-center text-sm">
           <button
             onClick={onForgotPassword}
-            className="font-semibold hover:underline"
+            className="font-semibold text-red-400 hover:underline cursor-pointer"
           >
             Forgot Password?
           </button>
