@@ -38,7 +38,7 @@ const DisplayUserTable = ({
       <Link
         key="prev"
         className={`px-3 py-1 border rounded-md 
-                    ${currentPage === 1 ? "bg-gray-200 text-gray-400 cursor-not-allowed pointer-events-none" : "bg-white text-blue-500 hover:bg-blue-100"}`}
+                    ${currentPage === 1 ? "bg-gray-200 text-black cursor-not-allowed pointer-events-none" : "bg-white text-blue-500 hover:bg-blue-100"}`}
         href={currentPage === 1 ? "#" : prevHref}
       >
         Previous
@@ -120,7 +120,7 @@ const DisplayUserTable = ({
       <Link
         key="next"
         className={`px-3 py-1 border rounded-md 
-                    ${currentPage === totalPages ? "bg-gray-200 text-gray-400 cursor-not-allowed pointer-events-none" : "bg-white text-blue-500 hover:bg-blue-100"}`}
+                    ${currentPage === totalPages ? "bg-gray-200 text-black cursor-not-allowed pointer-events-none" : "bg-white text-blue-500 hover:bg-blue-100"}`}
         href={currentPage === totalPages ? "#" : nextHref}
       >
         Next
@@ -142,7 +142,7 @@ const DisplayUserTable = ({
     }
   };
   return (
-    <div className="mt-6 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+    <div className="mt-6 border border-gray-700 rounded-lg overflow-hidden">
       <DeleteModal
         isOpen={deleteId}
         onClose={() => setDeleteId(null)}
@@ -151,7 +151,7 @@ const DisplayUserTable = ({
         description="Are you sure you want to delete this item? This action cannot be undone."
       />
 
-      <div className="p-4 bg-gray-50 dark:bg-gray-800">
+      <div className="p-4 bg-gray-800">
         <input
           type="text"
           value={searchTerm}
@@ -172,34 +172,32 @@ const DisplayUserTable = ({
         </button>
       </div>
       <table className="w-full table-auto border-collapse">
-        <thead className="bg-gray-50 dark:bg-gray-800">
+        <thead className="bg-gray-800">
           <tr>
-            <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+            <th className="px-4 py-2 text-left text-sm font-medium text-gray-400">
               ID
             </th>
-            <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+            <th className="px-4 py-2 text-left text-sm font-medium text-gray-400">
               Image
             </th>
-            <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+            <th className="px-4 py-2 text-left text-sm font-medium text-gray-400">
               Name
             </th>
-            <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+            <th className="px-4 py-2 text-left text-sm font-medium text-gray-400">
               Email
             </th>
-            <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+            <th className="px-4 py-2 text-left text-sm font-medium text-gray-400">
               Role
             </th>
-            <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+            <th className="px-4 py-2 text-left text-sm font-medium text-gray-400">
               Actions
             </th>
           </tr>
         </thead>
-        <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+        <tbody className="bg-gray-900 divide-y divide-gray-700">
           {users.map((user) => (
             <tr key={user._id}>
-              <td className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">
-                {user._id}
-              </td>
+              <td className="px-4 py-2 text-sm text-gray-300">{user._id}</td>
               <td className="px-4 py-2">
                 {user.profilePicture ? (
                   <img
@@ -250,8 +248,8 @@ const DisplayUserTable = ({
         </tbody>
       </table>
       {/* Pagination */}
-      <div className="p-4 flex justify-between items-center bg-gray-50 dark:bg-gray-800">
-        <div className="text-sm text-gray-700 dark:text-gray-300">
+      <div className="p-4 flex justify-between items-center bg-gray-800">
+        <div className="text-sm text-gray-300">
           Page {pagination.page} of {pagination.totalPages}
         </div>
         <div className="space-x-2">{makePagination()}</div>

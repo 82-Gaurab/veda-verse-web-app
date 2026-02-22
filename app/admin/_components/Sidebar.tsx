@@ -12,7 +12,7 @@ const ADMIN_LINKS = [
   { href: "/admin/books", label: "Books", id: "books" },
   { href: "/admin/orders", label: "Orders", id: "order" },
   { href: "/admin/categories", label: "Categories", id: "category" },
-  { href: "/admin/reviews", label: "Reviews", id: "review" },
+  { href: "/admin/messages", label: "Messages", id: "message" },
   { href: "/admin/inventory", label: "Inventory", id: "inventory" },
 ];
 

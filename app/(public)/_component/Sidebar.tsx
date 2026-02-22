@@ -38,38 +38,44 @@ export default function Sidebar({ isCompact, setIsCompact }: SidebarProps) {
       >
         <div>
           <div className="p-4 border-b border-gray-200 ">
-            <div className="rounded flex items-center justify-center font-bold"></div>
-            <Link
-              href="/"
-              className="flex items-center gap-2"
-              style={{ justifyContent: isCompact ? "center" : "" }}
+            <div
+              className="rounded flex items-center font-bold"
+              style={{ gap: isCompact ? "0" : "16px" }}
             >
-              {isCompact ? null : (
-                <>
-                  <Image
-                    src="/icons/logo.png"
-                    height={isCompact ? 60 : 40}
-                    width={isCompact ? 40 : 50}
-                    alt="logo"
-                    style={{
-                      transition: "all ease-in-out 0.35s",
-                      cursor: "pointer",
-                    }}
-                  />
-                  <span className="font-semibold text-[#488563] text-[25px]">
-                    VedaVerse
-                  </span>
-                </>
-              )}
+              <Link
+                href="/admin"
+                className="flex items-center gap-1"
+                style={{
+                  justifyContent: isCompact ? "center" : "",
+                }}
+              >
+                {isCompact ? null : (
+                  <>
+                    <Image
+                      src="/icons/logo.png"
+                      height="40"
+                      width="35"
+                      alt="logo"
+                      style={{
+                        transition: "all ease-in-out 0.35s",
+                        cursor: "pointer",
+                      }}
+                    />
+                    <span className="font-semibold text-[#488563] text-[20px]">
+                      Admin Panel
+                    </span>
+                  </>
+                )}
+              </Link>
               <Image
                 onClick={() => setIsCompact((prev) => !prev)}
                 src="/icons/menu.png"
                 height={isCompact ? 60 : 40}
-                width={isCompact ? 40 : 50}
+                width={isCompact ? 40 : 35}
                 alt="logo"
                 className="transition-all ease-in-out duration-300 cursor-pointer"
               />
-            </Link>
+            </div>
           </div>
 
           <nav className="p-2 mt-24 space-y-1 flex flex-col gap-3">
