@@ -10,6 +10,7 @@ import {
   updateUser,
   requestPasswordReset,
   resetPassword,
+  changePassword,
 } from "../api/auth";
 import { setAuthToken, setUserData } from "../cookie";
 
@@ -118,6 +119,37 @@ export const handleResetPassword = async (
     return {
       success: false,
       message: error.message || "Reset password action failed",
+    };
+  }
+};
+
+export const handleChangePassword = async (
+  token: string,
+  oldPassword: string,
+  newPassword: string,
+  confirmPassword: string,
+) => {
+  try {
+    const response = await changePassword(
+      token,
+      oldPassword,
+      newPassword,
+      confirmPassword,
+    );
+    if (response.success) {
+      return {
+        success: true,
+        message: "Password has been changed successfully",
+      };
+    }
+    return {
+      success: false,
+      message: response.message || "Change password failed",
+    };
+  } catch (error: Error | any) {
+    return {
+      success: false,
+      message: error.message || "Change password action failed",
     };
   }
 };

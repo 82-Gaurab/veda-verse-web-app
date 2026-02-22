@@ -7,6 +7,7 @@ export const API = {
     UPDATE_PROFILE: "/auth/update-profile",
     REQUEST_RESET_PASSWORD: "/auth/request-password-reset",
     RESET_PASSWORD: (token: string) => `/auth/reset-password/${token}`,
+    CHANGE_PASSWORD: (token: string) => `/auth/change-password/${token}`,
   },
   ADMIN: {
     USER: {

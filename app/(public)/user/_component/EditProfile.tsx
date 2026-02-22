@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { UserEditData, UserEditSchema } from "@/app/admin/users/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRef, useState, useTransition } from "react";
@@ -13,7 +13,6 @@ export default function EditUserForm() {
   const {
     register,
     handleSubmit,
-    control,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<UserEditData>({
@@ -79,59 +78,12 @@ export default function EditUserForm() {
     });
   };
   console.log(errors);
-  return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      {/* Profile Image Display */}
-      <div className="mb-4">
-        {previewImage ? (
-          <div className="relative w-24 h-24">
-            <img
-              src={previewImage}
-              alt="Profile Image Preview"
-              className="w-24 h-24 rounded-full object-cover"
-            />
-            <Controller
-              name="profilePicture"
-              control={control}
-              render={({ field: { onChange } }) => (
-                <button
-                  type="button"
-                  onClick={() => handleDismissImage(onChange)}
-                  className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
-                >
-                  ✕
-                </button>
-              )}
-            />
-          </div>
-        ) : (
-          <div className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center">
-            <span className="text-gray-600">No Image</span>
-          </div>
-        )}
-      </div>
-      {/* Profile Image Input */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">Profile Image</label>
-        <Controller
-          name="profilePicture"
-          control={control}
-          render={({ field: { onChange } }) => (
-            <input
-              ref={fileInputRef}
-              type="file"
-              onChange={(e) => handleImageChange(e.target.files?.[0], onChange)}
-              accept=".jpg,.jpeg,.png,.webp"
-            />
-          )}
-        />
-        {errors.profilePicture && (
-          <p className="text-sm text-red-600">
-            {errors.profilePicture.message}
-          </p>
-        )}
-      </div>
 
+  return (
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-4 shadow-xl rounded-2xl p-6"
+    >
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
           <label className="text-sm font-medium" htmlFor="firstName">
@@ -141,7 +93,7 @@ export default function EditUserForm() {
             id="firstName"
             type="text"
             autoComplete="given-name"
-            className="h-10 w-full rounded-md border border-black/10 dark:border-white/15 bg-background px-3 text-sm outline-none focus:border-foreground/40"
+            className="mt-1 w-full h-10 rounded-lg border border-gray-300 dark:border-neutral-700 bg-transparent px-3 text-sm focus:ring-2 focus:ring-black dark:focus:ring-white outline-none transition"
             {...register("firstName")}
             placeholder="Jane"
           />
@@ -158,7 +110,7 @@ export default function EditUserForm() {
             id="lastName"
             type="text"
             autoComplete="family-name"
-            className="h-10 w-full rounded-md border border-black/10 dark:border-white/15 bg-background px-3 text-sm outline-none focus:border-foreground/40"
+            className="mt-1 w-full h-10 rounded-lg border border-gray-300 dark:border-neutral-700 bg-transparent px-3 text-sm focus:ring-2 focus:ring-black dark:focus:ring-white outline-none transition"
             {...register("lastName")}
             placeholder="Doe"
           />
@@ -176,7 +128,7 @@ export default function EditUserForm() {
           id="username"
           type="text"
           autoComplete="username"
-          className="h-10 w-full rounded-md border border-black/10 dark:border-white/15 bg-background px-3 text-sm outline-none focus:border-foreground/40"
+          className="mt-1 w-full h-10 rounded-lg border border-gray-300 dark:border-neutral-700 bg-transparent px-3 text-sm focus:ring-2 focus:ring-black dark:focus:ring-white outline-none transition"
           {...register("username")}
           placeholder="Jane Doe"
         />

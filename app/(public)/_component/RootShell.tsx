@@ -30,12 +30,11 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
       )}
 
       <main
-        className="transition-all duration-300 min-h-screen"
+        className="transition-all duration-300 min-h-screen flex-1"
         style={{
           marginLeft: `${parseInt(sidebarWidth) + 10}px`,
           marginRight: "10px",
           marginTop: "1px",
-          width: `calc(100% - ${sidebarWidth}px)`,
         }}
       >
         {children}
