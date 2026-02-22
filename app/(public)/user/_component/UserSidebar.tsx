@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import Link from "next/link";
@@ -8,9 +9,10 @@ import { useState } from "react";
 
 const LINKS = [
   { href: "/user/dashboard", label: "Home", id: "home" },
-  { href: "/about", label: "About", id: "about" },
-  { href: "/explore", label: "Explore", id: "explore" },
-  { href: "/contact", label: "Contact Us", id: "contact" },
+  { href: "/user/wishlist", label: "WishList", id: "wishlist" },
+  { href: "/user/cart", label: "Cart", id: "cart" },
+  { href: "/user/history", label: "Purchase History", id: "purchase-history" },
+  { href: "/user/reviews", label: "Reviews", id: "review" },
 ];
 
 export default function UserSidebar({ isCompact, setIsCompact }: SidebarProps) {
@@ -37,38 +39,44 @@ export default function UserSidebar({ isCompact, setIsCompact }: SidebarProps) {
       >
         <div>
           <div className="p-4 border-b border-gray-200 ">
-            <div className="rounded flex items-center justify-center font-bold"></div>
-            <Link
-              href="/user/dashboard"
-              className="flex items-center gap-2"
-              style={{ justifyContent: isCompact ? "center" : "" }}
+            <div
+              className="rounded flex items-center font-bold"
+              style={{ gap: isCompact ? "0" : "16px" }}
             >
-              {isCompact ? null : (
-                <>
-                  <Image
-                    src="/icons/logo.png"
-                    height={isCompact ? 60 : 40}
-                    width={isCompact ? 40 : 50}
-                    alt="logo"
-                    style={{
-                      transition: "all ease-in-out 0.35s",
-                      cursor: "pointer",
-                    }}
-                  />
-                  <span className="font-semibold text-[#488563] text-[25px]">
-                    VedaVerse
-                  </span>
-                </>
-              )}
+              <Link
+                href="/admin"
+                className="flex items-center gap-1"
+                style={{
+                  justifyContent: isCompact ? "center" : "",
+                }}
+              >
+                {isCompact ? null : (
+                  <>
+                    <Image
+                      src="/icons/logo.png"
+                      height="40"
+                      width="35"
+                      alt="logo"
+                      style={{
+                        transition: "all ease-in-out 0.35s",
+                        cursor: "pointer",
+                      }}
+                    />
+                    <span className="font-semibold text-[#488563] text-[20px]">
+                      Admin Panel
+                    </span>
+                  </>
+                )}
+              </Link>
               <Image
                 onClick={() => setIsCompact((prev) => !prev)}
                 src="/icons/menu.png"
                 height={isCompact ? 60 : 40}
-                width={isCompact ? 40 : 50}
+                width={isCompact ? 40 : 35}
                 alt="logo"
                 className="transition-all ease-in-out duration-300 cursor-pointer"
               />
-            </Link>
+            </div>
           </div>
 
           <nav className="p-2 mt-24 space-y-1 flex flex-col gap-3">
@@ -102,7 +110,7 @@ export default function UserSidebar({ isCompact, setIsCompact }: SidebarProps) {
 
         <Link className="mb-6 flex justify-center" href={"/user/profile"}>
           <img
-            src="/icons/default-profile.png"
+            src={imgSrc}
             alt="User Image"
             className={`${isCompact ? "w-12 h-12" : "w-10 h-10"} rounded-full object-cover`}
             onError={() => setImgSrc("/default-profile.png")}
