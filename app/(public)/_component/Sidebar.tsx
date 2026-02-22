@@ -11,7 +11,7 @@ const LINKS = [
   { href: "/explore", label: "Explore", id: "explore" },
   { href: "/contact", label: "Contact Us", id: "contact" },
 ];
-interface SidebarProps {
+export interface SidebarProps {
   isCompact: boolean;
   setIsCompact: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -38,32 +38,37 @@ export default function Sidebar({ isCompact, setIsCompact }: SidebarProps) {
       >
         <div>
           <div className="p-4 border-b border-gray-200 ">
-            <div className="rounded flex items-center justify-center font-bold">
-              <Image
-                onClick={() => setIsCompact((prev) => !prev)}
-                src="/icons/logo.png"
-                height={isCompact ? 60 : 40}
-                width={isCompact ? 40 : 50}
-                alt="logo"
-                style={{
-                  transition: "all ease-in-out 0.35s",
-                  cursor: "pointer",
-                }}
-              />
-            </div>
+            <div className="rounded flex items-center justify-center font-bold"></div>
             <Link
               href="/"
-              className="flex flex-col items-center gap-2"
+              className="flex items-center gap-2"
               style={{ justifyContent: isCompact ? "center" : "" }}
             >
               {isCompact ? null : (
-                <span
-                  className="font-semibold"
-                  style={{ color: "#488563", fontSize: "25px" }}
-                >
-                  VedaVerse
-                </span>
+                <>
+                  <Image
+                    src="/icons/logo.png"
+                    height={isCompact ? 60 : 40}
+                    width={isCompact ? 40 : 50}
+                    alt="logo"
+                    style={{
+                      transition: "all ease-in-out 0.35s",
+                      cursor: "pointer",
+                    }}
+                  />
+                  <span className="font-semibold text-[#488563] text-[25px]">
+                    VedaVerse
+                  </span>
+                </>
               )}
+              <Image
+                onClick={() => setIsCompact((prev) => !prev)}
+                src="/icons/menu.png"
+                height={isCompact ? 60 : 40}
+                width={isCompact ? 40 : 50}
+                alt="logo"
+                className="transition-all ease-in-out duration-300 cursor-pointer"
+              />
             </Link>
           </div>
 

@@ -5,6 +5,7 @@ import Sidebar from "./Sidebar";
 import UserSidebar from "../user/_component/UserSidebar";
 import AdminSidebar from "../../admin/_components/Sidebar";
 import { useState } from "react";
+import { AuthProvider } from "@/context/AuthContext";
 
 export default function RootShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -19,8 +20,14 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
       {!isAdminRoute && !isUserRoute && (
         <Sidebar isCompact={isCompact} setIsCompact={setIsCompact} />
       )}
-      {isUserRoute && <UserSidebar />}
-      {isAdminRoute && <AdminSidebar />}
+      {isUserRoute && (
+        <UserSidebar isCompact={isCompact} setIsCompact={setIsCompact} />
+      )}
+      {isAdminRoute && (
+        <AuthProvider>
+          <AdminSidebar isCompact={isCompact} setIsCompact={setIsCompact} />
+        </AuthProvider>
+      )}
 
       <main
         className="transition-all duration-300 min-h-screen"
