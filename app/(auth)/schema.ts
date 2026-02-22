@@ -38,3 +38,11 @@ export const resetPasswordSchema = z
   });
 
 export type ResetPasswordData = z.infer<typeof resetPasswordSchema>;
+
+export const messageSchema = z.object({
+  username: z.string().min(2, { message: "Enter your name" }),
+  userEmail: z.email({ message: "Enter a valid email" }),
+  message: z.string().min(2, { message: "Enter a message" }),
+});
+
+export type MessageData = z.infer<typeof messageSchema>;

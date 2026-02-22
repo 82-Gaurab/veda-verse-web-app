@@ -19,9 +19,9 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
       />
 
       {/* Modal box */}
-      <div className="relative z-50 w-full max-w-sm rounded-xl p-5 px-12 shadow-xl bg-[#354152] flex flex-col">
+      <div className="relative z-50 w-full max-w-sm rounded-xl p-5 px-12 shadow-xl bg-[#e0e5ec] flex flex-col">
         <button
-          className="absolute top-5 right-5 text-red text-[15px] z-40 cursor-pointer hover:bg-gray-500 pt-1 pr-2 pb-1 pl-2 rounded-2xl"
+          className="absolute top-5 right-5 text-red-600 hover:text-white text-[15px] z-40 cursor-pointer hover:bg-gray-500 pt-1 pr-2 pb-1 pl-2 rounded-2xl"
           onClick={() => onClose()}
         >
           X

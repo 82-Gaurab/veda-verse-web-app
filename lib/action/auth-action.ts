@@ -11,6 +11,7 @@ import {
   requestPasswordReset,
   resetPassword,
   changePassword,
+  sendMessage,
 } from "../api/auth";
 import { setAuthToken, setUserData } from "../cookie";
 
@@ -150,6 +151,25 @@ export const handleChangePassword = async (
     return {
       success: false,
       message: error.message || "Change password action failed",
+    };
+  }
+};
+
+export const handleUserMessage = async (formData: any) => {
+  try {
+    const res = await sendMessage(formData);
+    if (res.success) {
+      return {
+        success: true,
+        data: res.data,
+        message: "Message sent successful",
+      };
+    }
+    return { success: false, message: res.message || "Failed to Send Message" };
+  } catch (error: Error | any) {
+    return {
+      success: false,
+      message: error.message || "Failed to Send Message",
     };
   }
 };

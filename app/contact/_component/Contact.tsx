@@ -1,6 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { MessageData, messageSchema } from "@/app/(auth)/schema";
+import { handleUserMessage } from "@/lib/action/auth-action";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Playfair_Display, Cormorant_Garamond } from "next/font/google";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -12,6 +18,30 @@ const cormorant = Cormorant_Garamond({
 });
 
 export default function ContactPage() {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<MessageData>({
+    resolver: zodResolver(messageSchema),
+  });
+
+  const onSubmit = async (data: MessageData) => {
+    try {
+      const res = await handleUserMessage(data);
+
+      if (!res.success) {
+        throw new Error(res.message || "Failed to send message");
+      }
+
+      toast.success("Message sent successfully!");
+      reset();
+    } catch (err: Error | any) {
+      toast.error(err.message || "Failed to send message");
+    }
+  };
+
   return (
     <div className="relative min-h-screen bg-[#FDF6E3] text-[#3A3A3A] overflow-hidden">
       <div className="mx-auto max-w-7xl px-8 py-24 space-y-24">
@@ -33,8 +63,11 @@ export default function ContactPage() {
 
         {/* Contact Form Section */}
         <section className="bg-[#FFF8E1] border border-[#FFECC0] rounded-xl shadow-lg p-10">
-          <form className="flex flex-col gap-6">
-            <div>
+          <form
+            className="flex flex-col gap-6"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <div className="flex flex-col">
               <label
                 className={`${cormorant.className} text-lg`}
                 htmlFor="name"
@@ -42,14 +75,18 @@ export default function ContactPage() {
                 Name
               </label>
               <input
-                id="name"
-                type="text"
-                placeholder="Your name"
                 className="mt-2 w-full border border-[#FFECC0] rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#C6A75E]"
+                placeholder="Your name"
+                {...register("username")}
               />
+              {errors.username && (
+                <span className="text-red-500 text-sm mt-1">
+                  {errors.username.message}
+                </span>
+              )}
             </div>
 
-            <div>
+            <div className="flex flex-col">
               <label
                 className={`${cormorant.className} text-lg`}
                 htmlFor="email"
@@ -57,11 +94,16 @@ export default function ContactPage() {
                 Email
               </label>
               <input
-                id="email"
                 type="email"
-                placeholder="Your email"
                 className="mt-2 w-full border border-[#FFECC0] rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#C6A75E]"
+                placeholder="Your email"
+                {...register("userEmail")}
               />
+              {errors.userEmail && (
+                <span className="text-red-500 text-sm mt-1">
+                  {errors.userEmail.message}
+                </span>
+              )}
             </div>
 
             <div>
@@ -72,11 +114,16 @@ export default function ContactPage() {
                 Message
               </label>
               <textarea
-                id="message"
-                placeholder="Write your message..."
                 rows={6}
                 className="mt-2 w-full border border-[#FFECC0] rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#C6A75E]"
+                placeholder="Write your message..."
+                {...register("message")}
               />
+              {errors.message && (
+                <span className="text-red-500 text-sm mt-1">
+                  {errors.message.message}
+                </span>
+              )}
             </div>
 
             <button

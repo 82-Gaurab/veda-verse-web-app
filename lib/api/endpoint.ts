@@ -1,6 +1,9 @@
 // list of backend routes
 
 export const API = {
+  USER: {
+    MESSAGE: "/messages/",
+  },
   AUTH: {
     REGISTER: "/auth/register",
     LOGIN: "/auth/login",
@@ -10,6 +13,10 @@ export const API = {
     CHANGE_PASSWORD: (token: string) => `/auth/change-password/${token}`,
   },
   ADMIN: {
+    MESSAGES: {
+      GET_ALL_MESSAGE: "/admin/messages/",
+      DELETE: (userId: string) => `/admin/messages/${userId}`,
+    },
     USER: {
       CREATE_USER: "/admin/users/",
       GET_ALL_USERS: "/admin/users/",
