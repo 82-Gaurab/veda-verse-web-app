@@ -10,6 +10,7 @@ export const UserSchema = z
     confirmPassword: z.string().min(6, { message: "Minimum 6 characters" }),
     firstName: z.string().optional(),
     lastName: z.string().optional(),
+    role: z.string().optional(),
     username: z
       .string()
       .min(3, { message: "Username must be at least 3 characters" }),

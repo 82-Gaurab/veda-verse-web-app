@@ -5,6 +5,7 @@ interface DeleteModalProps {
   title: string;
   description: string;
 }
+
 export default function DeleteModal({
   isOpen,
   onClose,
@@ -18,27 +19,40 @@ export default function DeleteModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
 
       {/* Modal Content */}
-      <div className="relative z-50 w-full max-w-sm rounded-xl p-5 px-12 shadow-xl bg-[#354152] flex flex-col gap-2">
-        <h2 className="text-white text-lg font-semibold">{title}</h2>
-        <p className="text-gray-300 mt-2">{description}</p>
+      <div
+        className="relative z-50 w-full max-w-sm rounded-2xl p-6 bg-[#e6ebf0] 
+                      shadow-[6px_6px_12px_#c0c7d1,-6px_-6px_12px_#ffffff] 
+                      flex flex-col gap-4 animate-fadeIn"
+      >
+        <h2 className="text-gray-800 text-lg font-semibold">{title}</h2>
+        <p className="text-gray-600">{description}</p>
 
-        <div style={{ marginTop: "10px" }} className="flex gap-1 justify-end">
+        <div className="flex justify-end gap-3 mt-4">
           <button
             onClick={onClose}
-            style={{ backgroundColor: "blueviolet" }}
-            className="px-4 py-2 rounded mr-2 text-black"
+            className="px-4 py-2 rounded-xl 
+                       bg-[#f0f3f7] 
+                       shadow-[inset_3px_3px_6px_#c0c7d1,inset_-3px_-3px_6px_#ffffff]
+                       text-gray-800 
+                       hover:shadow-[inset_1px_1px_3px_#c0c7d1,inset_-1px_-1px_3px_#ffffff] 
+                       transition"
           >
             Cancel
           </button>
 
           <button
             onClick={onConfirm}
-            className="px-4 py-2 text-red-500 rounded"
+            className="px-4 py-2 rounded-xl 
+                       bg-[#ffeded] 
+                       shadow-[inset_3px_3px_6px_#f0baba,inset_-3px_-3px_6px_#ffffff]
+                       text-red-600 
+                       hover:shadow-[inset_1px_1px_3px_#f0baba,inset_-1px_-1px_3px_#ffffff] 
+                       transition"
           >
             Delete
           </button>

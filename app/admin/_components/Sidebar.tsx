@@ -79,7 +79,7 @@ export default function AdminSidebar({
             </div>
           </div>
 
-          <nav className="p-2 mt-10 space-y-1 flex flex-col gap-3">
+          <nav className="p-2 mt-2 space-y-1 flex flex-col gap-3">
             {ADMIN_LINKS.map((link) => (
               <Link
                 key={link.href}

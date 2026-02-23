@@ -63,7 +63,7 @@ export default function UserSidebar({ isCompact, setIsCompact }: SidebarProps) {
                       }}
                     />
                     <span className="font-semibold text-[#488563] text-[20px]">
-                      Admin Panel
+                      VedaVerse
                     </span>
                   </>
                 )}

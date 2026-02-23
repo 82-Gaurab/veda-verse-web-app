@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
@@ -7,8 +8,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRef, useState, useTransition } from "react";
 import toast from "react-hot-toast";
 import { handleCreateUser } from "@/lib/action/admin/user-action";
+import { Edit2 } from "lucide-react";
 export default function CreateUserForm() {
   const [pending, startTransition] = useTransition();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -21,22 +26,6 @@ export default function CreateUserForm() {
   const [error, setError] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  //   const handleImageChange = (
-  //     file: File | undefined,
-  //     onChange: (file: File | undefined) => void,
-  //   ) => {
-  //     if (file) {
-  //       const reader = new FileReader();
-  //       reader.onloadend = () => {
-  //         setPreviewImage(reader.result as string);
-  //       };
-  //       reader.readAsDataURL(file);
-  //     } else {
-  //       setPreviewImage(null);
-  //     }
-  //     onChange(file);
-  //   };
 
   const handleImageChange = (
     file: File | undefined,
@@ -98,68 +87,104 @@ export default function CreateUserForm() {
   };
   console.log(errors);
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      {/* Profile Image Display */}
-      <div className="mb-4">
-        {previewImage ? (
-          <div className="relative w-24 h-24">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="max-w-2xl mx-auto space-y-6 p-8 rounded-3xl 
+               bg-[#eef2f7] 
+               shadow-[10px_10px_30px_#c8d0e0,-10px_-10px_30px_#ffffff]"
+    >
+      {/* Profile Avatar */}
+      <div className="flex justify-center mb-6">
+        <div className="relative w-28 h-28">
+          {previewImage ? (
             <img
               src={previewImage}
-              alt="Profile Image Preview"
-              className="w-24 h-24 rounded-full object-cover"
+              alt="Profile Preview"
+              className="w-28 h-28 rounded-full object-cover 
+                       border-4 border-[#eef2f7] 
+                       shadow-[6px_6px_12px_#c8d0e0,-6px_-6px_12px_#ffffff]"
             />
-            <Controller
-              name="profilePicture"
-              control={control}
-              render={({ field: { onChange } }) => (
-                <button
-                  type="button"
-                  onClick={() => handleDismissImage(onChange)}
-                  className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
-                >
-                  ✕
-                </button>
-              )}
-            />
-          </div>
-        ) : (
-          <div className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center">
-            <span className="text-gray-600">No Image</span>
-          </div>
-        )}
-      </div>
-      {/* Profile Image Input */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">Profile Image</label>
-        <Controller
-          name="profilePicture"
-          control={control}
-          render={({ field: { onChange } }) => (
-            <input
-              ref={fileInputRef}
-              type="file"
-              onChange={(e) => handleImageChange(e.target.files?.[0], onChange)}
-              accept=".jpg,.jpeg,.png,.webp"
-            />
+          ) : (
+            <div className="w-28 h-28 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 border-2 border-dashed border-gray-400">
+              <span className="text-sm">No Image</span>
+            </div>
           )}
-        />
-        {errors.profilePicture && (
-          <p className="text-sm text-red-600">
-            {errors.profilePicture.message}
-          </p>
-        )}
+
+          <Controller
+            name="profilePicture"
+            control={control}
+            render={({ field: { onChange } }) => {
+              const isNewImage = previewImage && previewImage !== null;
+
+              return (
+                <>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".jpg,.jpeg,.png,.webp"
+                    onChange={(e) =>
+                      handleImageChange(e.target.files?.[0], onChange)
+                    }
+                    className="hidden"
+                  />
+
+                  {/* Edit Icon */}
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="absolute bottom-0 right-0 
+                             bg-slate-700 hover:bg-slate-800 
+                             text-white p-2 rounded-full 
+                             shadow-md transition active:scale-95"
+                  >
+                    <Edit2 size={16} />
+                  </button>
+
+                  {/* Remove Icon */}
+                  {isNewImage && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleDismissImage(onChange);
+                        setPreviewImage(null);
+                      }}
+                      className="absolute top-0 right-0 
+                               bg-red-500 hover:bg-red-600 
+                               text-white w-7 h-7 rounded-full 
+                               flex items-center justify-center 
+                               text-sm shadow-md transition active:scale-95"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </>
+              );
+            }}
+          />
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      {/* Name Fields Grid */}
+      <div className="grid grid-cols-2 gap-6">
         <div className="space-y-1">
-          <label className="text-sm font-medium" htmlFor="firstName">
+          <label
+            className="text-xs uppercase tracking-wider text-gray-500"
+            htmlFor="firstName"
+          >
             First name
           </label>
           <input
             id="firstName"
             type="text"
             autoComplete="given-name"
-            className="h-10 w-full rounded-md border border-black/10 dark:border-white/15 bg-background px-3 text-sm outline-none focus:border-foreground/40"
+            className="w-full px-4 py-3 rounded-xl 
+                     bg-[#eef2f7] 
+                     shadow-[inset_4px_4px_8px_#c8d0e0,inset_-4px_-4px_8px_#ffffff]
+                     outline-none
+                     text-sm text-gray-700
+                     placeholder:text-gray-400
+                     transition
+                     focus:shadow-[inset_2px_2px_4px_#c8d0e0,inset_-2px_-2px_4px_#ffffff]"
             {...register("firstName")}
             placeholder="Jane"
           />
@@ -169,14 +194,24 @@ export default function CreateUserForm() {
         </div>
 
         <div className="space-y-1">
-          <label className="text-sm font-medium" htmlFor="lastName">
+          <label
+            className="text-xs uppercase tracking-wider text-gray-500"
+            htmlFor="lastName"
+          >
             Last name
           </label>
           <input
             id="lastName"
             type="text"
             autoComplete="family-name"
-            className="h-10 w-full rounded-md border border-black/10 dark:border-white/15 bg-background px-3 text-sm outline-none focus:border-foreground/40"
+            className="w-full px-4 py-3 rounded-xl 
+                     bg-[#eef2f7] 
+                     shadow-[inset_4px_4px_8px_#c8d0e0,inset_-4px_-4px_8px_#ffffff]
+                     outline-none
+                     text-sm text-gray-700
+                     placeholder:text-gray-400
+                     transition
+                     focus:shadow-[inset_2px_2px_4px_#c8d0e0,inset_-2px_-2px_4px_#ffffff]"
             {...register("lastName")}
             placeholder="Doe"
           />
@@ -186,15 +221,26 @@ export default function CreateUserForm() {
         </div>
       </div>
 
+      {/* Email */}
       <div className="space-y-1">
-        <label className="text-sm font-medium" htmlFor="email">
+        <label
+          className="text-xs uppercase tracking-wider text-gray-500"
+          htmlFor="email"
+        >
           Email
         </label>
         <input
           id="email"
           type="email"
           autoComplete="email"
-          className="h-10 w-full rounded-md border border-black/10 dark:border-white/15 bg-background px-3 text-sm outline-none focus:border-foreground/40"
+          className="w-full px-4 py-3 rounded-xl 
+                   bg-[#eef2f7] 
+                   shadow-[inset_4px_4px_8px_#c8d0e0,inset_-4px_-4px_8px_#ffffff]
+                   outline-none
+                   text-sm text-gray-700
+                   placeholder:text-gray-400
+                   transition
+                   focus:shadow-[inset_2px_2px_4px_#c8d0e0,inset_-2px_-2px_4px_#ffffff]"
           {...register("email")}
           placeholder="you@example.com"
         />
@@ -203,15 +249,26 @@ export default function CreateUserForm() {
         )}
       </div>
 
+      {/* Username */}
       <div className="space-y-1">
-        <label className="text-sm font-medium" htmlFor="username">
+        <label
+          className="text-xs uppercase tracking-wider text-gray-500"
+          htmlFor="username"
+        >
           Username
         </label>
         <input
           id="username"
           type="text"
           autoComplete="username"
-          className="h-10 w-full rounded-md border border-black/10 dark:border-white/15 bg-background px-3 text-sm outline-none focus:border-foreground/40"
+          className="w-full px-4 py-3 rounded-xl 
+                   bg-[#eef2f7] 
+                   shadow-[inset_4px_4px_8px_#c8d0e0,inset_-4px_-4px_8px_#ffffff]
+                   outline-none
+                   text-sm text-gray-700
+                   placeholder:text-gray-400
+                   transition
+                   focus:shadow-[inset_2px_2px_4px_#c8d0e0,inset_-2px_-2px_4px_#ffffff]"
           {...register("username")}
           placeholder="Jane Doe"
         />
@@ -219,35 +276,76 @@ export default function CreateUserForm() {
           <p className="text-xs text-red-600">{errors.username.message}</p>
         )}
       </div>
-      <div className="space-y-1">
-        <label className="text-sm font-medium" htmlFor="password">
+
+      {/* Password */}
+      <div className="space-y-1 relative">
+        <label
+          className="text-xs uppercase tracking-wider text-gray-500"
+          htmlFor="password"
+        >
           Password
         </label>
-        <input
-          id="password"
-          type="password"
-          autoComplete="new-password"
-          className="h-10 w-full rounded-md border border-black/10 dark:border-white/15 bg-background px-3 text-sm outline-none focus:border-foreground/40"
-          {...register("password")}
-          placeholder="••••••"
-        />
+        <div className="relative">
+          <input
+            id="password"
+            type={showPassword ? "text" : "password"}
+            autoComplete="new-password"
+            className="w-full px-4 py-3 rounded-xl 
+                 bg-[#eef2f7] 
+                 shadow-[inset_4px_4px_8px_#c8d0e0,inset_-4px_-4px_8px_#ffffff]
+                 outline-none
+                 text-sm text-gray-700
+                 placeholder:text-gray-400
+                 transition
+                 focus:shadow-[inset_2px_2px_4px_#c8d0e0,inset_-2px_-2px_4px_#ffffff]"
+            {...register("password")}
+            placeholder="••••••"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition"
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
+        </div>
         {errors.password?.message && (
           <p className="text-xs text-red-600">{errors.password.message}</p>
         )}
       </div>
 
-      <div className="space-y-1">
-        <label className="text-sm font-medium" htmlFor="confirmPassword">
+      {/* Confirm Password */}
+      <div className="space-y-1 relative">
+        <label
+          className="text-xs uppercase tracking-wider text-gray-500"
+          htmlFor="confirmPassword"
+        >
           Confirm password
         </label>
-        <input
-          id="confirmPassword"
-          type="password"
-          autoComplete="new-password"
-          className="h-10 w-full rounded-md border border-black/10 dark:border-white/15 bg-background px-3 text-sm outline-none focus:border-foreground/40"
-          {...register("confirmPassword")}
-          placeholder="••••••"
-        />
+        <div className="relative">
+          <input
+            id="confirmPassword"
+            type={showConfirmPassword ? "text" : "password"}
+            autoComplete="new-password"
+            className="w-full px-4 py-3 rounded-xl 
+                 bg-[#eef2f7] 
+                 shadow-[inset_4px_4px_8px_#c8d0e0,inset_-4px_-4px_8px_#ffffff]
+                 outline-none
+                 text-sm text-gray-700
+                 placeholder:text-gray-400
+                 transition
+                 focus:shadow-[inset_2px_2px_4px_#c8d0e0,inset_-2px_-2px_4px_#ffffff]"
+            {...register("confirmPassword")}
+            placeholder="••••••"
+          />
+          <button
+            type="button"
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition"
+          >
+            {showConfirmPassword ? "Hide" : "Show"}
+          </button>
+        </div>
         {errors.confirmPassword?.message && (
           <p className="text-xs text-red-600">
             {errors.confirmPassword.message}
@@ -255,10 +353,18 @@ export default function CreateUserForm() {
         )}
       </div>
 
+      {/* Submit Button */}
       <button
         type="submit"
         disabled={isSubmitting || pending}
-        className="h-10 w-full rounded-md bg-foreground text-background text-sm font-semibold hover:opacity-90 disabled:opacity-60"
+        className="w-full py-3 rounded-xl 
+                 bg-linear-to-r from-slate-700 to-slate-800
+                 text-white text-sm font-medium
+                 shadow-lg
+                 hover:opacity-90
+                 active:scale-[0.98]
+                 transition
+                 disabled:opacity-50"
       >
         {isSubmitting || pending ? "Creating account..." : "Create account"}
       </button>
