@@ -59,3 +59,14 @@ export const deleteBook = async (id: string) => {
     );
   }
 };
+
+export const getBookById = async (id: string) => {
+  try {
+    const response = await axios.get(API.BOOKS.GET_ONE(id));
+    return response.data;
+  } catch (error: Error | any) {
+    throw new Error(
+      error.response?.data?.message || error.message || "Get Book By Id Failed",
+    );
+  }
+};

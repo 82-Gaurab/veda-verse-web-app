@@ -48,6 +48,7 @@ export default function CreateBookForm({ genres }: { genres: Genre[] }) {
 
         formData.append("price", data.price.toString());
         formData.append("stockAmount", data.stockAmount.toString());
+        formData.append("description", data.description);
 
         const selectedGenreNames = genres
           .filter((g) => data.genre?.includes(g._id))
@@ -301,6 +302,19 @@ export default function CreateBookForm({ genres }: { genres: Genre[] }) {
                   />
                 );
               }}
+            />
+          </div>
+
+          <div>
+            <label className="text-xs uppercase tracking-wider text-gray-500 block">
+              Description
+            </label>
+            <textarea
+              rows={6}
+              className="w-full px-4 py-3 rounded-xl bg-[#eef2f7]
+          shadow-[inset_4px_4px_8px_#c9d4e3,inset_-4px_-4px_8px_#ffffff]
+          outline-none text-sm text-gray-700"
+              placeholder="Write book description..."
             />
           </div>
 

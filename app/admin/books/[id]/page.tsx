@@ -1,9 +1,7 @@
 import { handleGetOneBook } from "@/lib/action/admin/book-action";
-import EditBookForm from "../../_component/EditBookForm";
-import { handleGetAllGenres } from "@/lib/action/admin/genre-action";
+import BookDetails from "../_component/BookDetails";
 
-export type EditBookProps = {
-  id: string;
+export type BookDetailsProps = {
   title: string;
   author: string;
   description: string;
@@ -25,17 +23,9 @@ export default async function Page({
   if (!book) {
     return <div>Book not found</div>;
   }
-
-  const genreResponse = await handleGetAllGenres();
-
-  if (!genreResponse.success) {
-    throw new Error(genreResponse.message || "Failed to load genres");
-  }
-
   return (
     <div>
-      Book Edit Page: {id}
-      <EditBookForm book={book} genres={genreResponse.data} />
+      <BookDetails book={book} />
     </div>
   );
 }

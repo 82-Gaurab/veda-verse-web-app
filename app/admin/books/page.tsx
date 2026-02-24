@@ -15,7 +15,7 @@ export default async function Page({
   const response = await handleGetAllBooks(page, size, search as string);
 
   if (!response.success) {
-    throw new Error(response.message || "Failed to load users");
+    return <div>Failed to Load Users</div>;
   }
   return (
     <div>

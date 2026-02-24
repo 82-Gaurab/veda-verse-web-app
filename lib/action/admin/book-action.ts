@@ -4,6 +4,7 @@ import {
   createBook,
   deleteBook,
   getAllBooks,
+  getBookById,
   updateBook,
 } from "@/lib/api/admin/book";
 import { revalidatePath } from "next/cache";
@@ -65,7 +66,7 @@ export const handleUpdateBook = async (id: string, data: FormData) => {
   try {
     const response = await updateBook(id, data);
     if (response.success) {
-      revalidatePath("/admin/books");
+      // revalidatePath("/admin/books");
       return {
         success: true,
         message: "Update Book successful",
@@ -102,6 +103,28 @@ export const handleDeleteBook = async (id: string) => {
     return {
       success: false,
       message: error.message || "Delete Book action failed",
+    };
+  }
+};
+
+export const handleGetOneBook = async (id: string) => {
+  try {
+    const response = await getBookById(id);
+    if (response.success) {
+      return {
+        success: true,
+        message: "Get Book by id successful",
+        data: response.data,
+      };
+    }
+    return {
+      success: false,
+      message: response.message || "Get Book by id failed",
+    };
+  } catch (error: Error | any) {
+    return {
+      success: false,
+      message: error.message || "Get Book by id action failed",
     };
   }
 };

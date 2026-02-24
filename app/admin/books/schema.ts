@@ -11,6 +11,7 @@ const ACCEPTED_IMAGE_TYPES = [
 export const BookSchema = z.object({
   title: z.string().min(1, { message: "Book title is required" }),
   author: z.string().min(1, { message: "Book author is required" }),
+  description: z.string().min(1, { message: "Book description is required" }),
   genre: z.array(z.string()).optional(), // multiple genres can be selected
   price: z.number().min(1, { message: "Price must be at least 1" }),
   stockAmount: z
@@ -28,3 +29,6 @@ export const BookSchema = z.object({
 });
 
 export type BookData = z.infer<typeof BookSchema>;
+
+export const BookEditSchema = BookSchema.partial();
+export type BookEditData = z.infer<typeof BookEditSchema>;
