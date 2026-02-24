@@ -328,13 +328,13 @@ export default function CreateUserForm() {
             type={showConfirmPassword ? "text" : "password"}
             autoComplete="new-password"
             className="w-full px-4 py-3 rounded-xl 
-                 bg-[#eef2f7] 
-                 shadow-[inset_4px_4px_8px_#c8d0e0,inset_-4px_-4px_8px_#ffffff]
-                 outline-none
-                 text-sm text-gray-700
-                 placeholder:text-gray-400
-                 transition
-                 focus:shadow-[inset_2px_2px_4px_#c8d0e0,inset_-2px_-2px_4px_#ffffff]"
+                bg-[#eef2f7] 
+                shadow-[inset_4px_4px_8px_#c8d0e0,inset_-4px_-4px_8px_#ffffff]
+                outline-none
+                text-sm text-gray-700
+                placeholder:text-gray-400
+                transition
+                focus:shadow-[inset_2px_2px_4px_#c8d0e0,inset_-2px_-2px_4px_#ffffff]"
             {...register("confirmPassword")}
             placeholder="••••••"
           />
@@ -357,14 +357,16 @@ export default function CreateUserForm() {
       <button
         type="submit"
         disabled={isSubmitting || pending}
-        className="w-full py-3 rounded-xl 
-                 bg-linear-to-r from-slate-700 to-slate-800
-                 text-white text-sm font-medium
-                 shadow-lg
-                 hover:opacity-90
-                 active:scale-[0.98]
-                 transition
-                 disabled:opacity-50"
+        className="w-full py-3 rounded-xl
+                    bg-green-600
+                    text-white text-sm font-semibold
+                    shadow-lg
+                    hover:bg-green-700 focus:outline-none 
+                    focus:ring-2 focus:ring-green-400 
+                    focus:ring-offset-2 duration-200
+                    active:scale-[0.98]
+                    transition
+                    disabled:opacity-50"
       >
         {isSubmitting || pending ? "Creating account..." : "Create account"}
       </button>

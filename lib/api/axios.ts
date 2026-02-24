@@ -2,7 +2,7 @@ import axios from "axios";
 import { getAuthToken } from "../cookie";
 
 const BASE_URL =
-  process.env.Next_PUBLIC_API_BASE_URL || "http://localhost:4000/api/v1";
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000/api/v1";
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,

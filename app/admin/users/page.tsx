@@ -26,7 +26,7 @@ export default async function Page({
         search={search}
       />
       <Link
-        className="text-blue-500 border border-blue-500 p-2 rounded inline-block"
+        className="px-5 py-2.5 bg-green-600 text-white text-sm font-semibold rounded-xl shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 transition duration-200"
         href="/admin/users/create"
       >
         Create User

@@ -15,37 +15,34 @@ export default function MessageModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Overlay */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+        className="absolute inset-0 bg-black/30 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
 
-      {/* Modal */}
-      <div className="relative z-50 w-full max-w-lg mx-4 bg-gray-900 text-gray-200 rounded-2xl shadow-2xl border border-gray-700 animate-in fade-in zoom-in duration-200">
-        {/* Header */}
-        <div className="flex justify-between items-center px-6 py-4 border-b border-gray-700">
-          <h2 className="text-lg font-semibold text-white">Message Details</h2>
+      <div className="relative z-50 w-full max-w-lg mx-4 bg-green-50/90 text-gray-800 rounded-2xl shadow-2xl border border-green-200 animate-in fade-in zoom-in duration-200">
+        <div className="flex justify-between items-center px-6 py-4 border-b border-green-200">
+          <h2 className="text-lg font-semibold text-green-900">
+            Message Details
+          </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition text-xl font-bold"
+            className="text-green-700 hover:text-green-900 transition text-[25px] font-bold"
           >
             ×
           </button>
         </div>
 
-        {/* Body */}
         <div className="px-6 py-5 max-h-100 overflow-y-auto">
-          <p className="whitespace-pre-wrap leading-relaxed text-gray-300">
+          <p className="whitespace-pre-wrap leading-relaxed text-gray-700">
             {message}
           </p>
         </div>
 
-        {/* Footer */}
-        <div className="px-6 py-4 border-t border-gray-700 flex justify-end">
+        <div className="px-6 py-4 border-t border-green-200 flex justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition"
+            className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition"
           >
             Close
           </button>

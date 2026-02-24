@@ -19,7 +19,7 @@ export default async function Page({
     profilePicture != "default" &&
     profilePicture != ""
   ) {
-    profilePicture = `${process.env.Next_PUBLIC_API_BASE_URL}${profilePicture}`;
+    profilePicture = `${process.env.NEXT_PUBLIC_API_BASE_URL}${profilePicture}`;
   }
 
   return (
