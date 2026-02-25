@@ -11,9 +11,8 @@ const ADMIN_LINKS = [
   { href: "/admin/users", label: "Users", id: "users" },
   { href: "/admin/books", label: "Books", id: "books" },
   { href: "/admin/orders", label: "Orders", id: "order" },
-  { href: "/admin/categories", label: "Categories", id: "category" },
+  { href: "/admin/genres", label: "Genres", id: "category" },
   { href: "/admin/messages", label: "Messages", id: "message" },
-  { href: "/admin/inventory", label: "Inventory", id: "inventory" },
 ];
 
 export default function AdminSidebar({

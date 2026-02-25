@@ -33,9 +33,9 @@ export const handleGetAllOrders = async (
   }
 };
 
-export const handleUpdateOrder = async (id: string, data: FormData) => {
+export const handleUpdateOrder = async (id: string, status: string) => {
   try {
-    const response = await updateOrder(id, data);
+    const response = await updateOrder(id, { status });
     if (response.success) {
       revalidatePath("/admin/orders");
       return {

@@ -3,24 +3,32 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import toast from "react-hot-toast";
-import { handleDeleteUser } from "@/lib/action/admin/user-action";
 import DeleteModal from "@/app/(public)/_component/DeleteModal";
-const DisplayUserTable = ({
-  users,
+import StatusModal from "./StatusModal";
+import { handleDeleteOrder } from "@/lib/action/admin/order-action";
+
+const DisplayOrderTable = ({
+  orders,
   pagination,
   search,
 }: {
-  users: any[];
+  orders: any[];
   pagination: any;
   search?: string;
 }) => {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState(search || "");
+  const [statusModalOrderId, setStatusModalOrderId] = useState<string | null>(
+    null,
+  );
+  const [newStatus, setNewStatus] = useState<
+    "pending" | "paid" | "shipped" | "delivered" | "cancelled"
+  >("pending");
+
   const handleSearchChange = () => {
     router.push(
-      `/admin/users?page=1&size=${pagination.size}` +
+      `/admin/orders?page=1&size=${pagination.size}` +
         (searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ""),
     );
   };
@@ -32,7 +40,7 @@ const DisplayUserTable = ({
 
     // Previous button
     const prevHref =
-      `/admin/users?page=${currentPage - 1}&size=${pagination.size}` +
+      `/admin/orders?page=${currentPage - 1}&size=${pagination.size}` +
       (searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : "");
     pages.push(
       <Link
@@ -56,7 +64,7 @@ const DisplayUserTable = ({
     // Add first page if not in range
     if (startPage > 1) {
       const href =
-        `/admin/users?page=1&size=${pagination.size}` +
+        `/admin/orders?page=1&size=${pagination.size}` +
         (searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : "");
       pages.push(
         <Link
@@ -79,7 +87,7 @@ const DisplayUserTable = ({
     // Add page numbers in range
     for (let i = startPage; i <= endPage; i++) {
       const href =
-        `/admin/users?page=${i}&size=${pagination.size}` +
+        `/admin/orders?page=${i}&size=${pagination.size}` +
         (search ? `&search=${encodeURIComponent(search)}` : "");
       pages.push(
         <Link
@@ -107,7 +115,7 @@ const DisplayUserTable = ({
         );
       }
       const href =
-        `/admin/users?page=${totalPages}&size=${pagination.size}` +
+        `/admin/orders?page=${totalPages}&size=${pagination.size}` +
         (search ? `&search=${encodeURIComponent(search)}` : "");
       pages.push(
         <Link
@@ -122,7 +130,7 @@ const DisplayUserTable = ({
 
     // Next button
     const nextHref =
-      `/admin/users?page=${currentPage + 1}&size=${pagination.size}` +
+      `/admin/orders?page=${currentPage + 1}&size=${pagination.size}` +
       (search ? `&search=${encodeURIComponent(search)}` : "");
     pages.push(
       <Link
@@ -145,14 +153,15 @@ const DisplayUserTable = ({
 
   const onDelete = async () => {
     try {
-      await handleDeleteUser(deleteId!);
-      toast.success("User deleted successfully");
+      await handleDeleteOrder(deleteId!);
+      toast.success("Order deleted successfully");
     } catch (err: Error | any) {
-      toast.error(err.message || "Failed to delete user");
+      toast.error(err.message || "Failed to delete order");
     } finally {
       setDeleteId(null);
     }
   };
+
   return (
     <div className="mt-6 mb-6 bg-green-100/20 rounded-xl shadow-sm overflow-hidden border border-green-200">
       <DeleteModal
@@ -163,6 +172,12 @@ const DisplayUserTable = ({
         description="Are you sure you want to delete this item? This action cannot be undone."
       />
 
+      <StatusModal
+        isOpen={statusModalOrderId}
+        onClose={() => setStatusModalOrderId(null)}
+        currentStatus={newStatus}
+      />
+
       {/* Search & Page Size */}
       <div className="p-5 bg-green-100/40 border-b border-green-200 flex flex-wrap gap-3 items-center">
         {/* Search input */}
@@ -171,7 +186,7 @@ const DisplayUserTable = ({
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSearchChange()}
-          placeholder="Search users..."
+          placeholder="Search orders..."
           className="w-72 px-4 py-2 border border-green-300 bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
         />
         <button
@@ -215,66 +230,50 @@ const DisplayUserTable = ({
         <thead className="bg-green-200/40 text-green-900 uppercase text-xs tracking-wider">
           <tr>
             <th className="px-6 py-4">ID</th>
-            <th className="px-6 py-4">Image</th>
-            <th className="px-6 py-4">Username</th>
-            <th className="px-6 py-4">Email</th>
-            <th className="px-6 py-4">Role</th>
+            <th className="px-6 py-4">Books</th>
+            <th className="px-6 py-4">Total price</th>
+            <th className="px-6 py-4">Status</th>
             <th className="px-6 py-4">Actions</th>
           </tr>
         </thead>
 
         <tbody className="divide-y divide-green-200">
-          {users.map((user, index) => (
+          {orders.map((order, index) => (
             <tr
-              key={user._id}
+              key={order._id}
               className={`transition ${
                 index % 2 === 0 ? "bg-green-100/30" : "bg-green-100/50"
               } hover:bg-green-200/50`}
             >
-              <td className="px-6 py-4 text-gray-700">{user._id}</td>
-
-              <td className="px-6 py-4">
-                {user.profilePicture ? (
-                  <Image
-                    src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${user.profilePicture}`}
-                    alt="User Image"
-                    width={40}
-                    height={40}
-                    unoptimized
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="w-10 h-10 bg-green-200 rounded-full flex items-center justify-center">
-                    <span className="text-green-800 text-xs">N/A</span>
-                  </div>
-                )}
-              </td>
+              <td className="px-6 py-4 text-gray-700">{order._id}</td>
 
               <td className="px-6 py-4 font-medium text-gray-800">
-                {user.username}
+                {order.books.map((book: any, index: number) => (
+                  <div key={index}>
+                    {book.bookName} (x{book.quantity})
+                  </div>
+                ))}
               </td>
-
-              <td className="px-6 py-4 text-gray-700">{user.email}</td>
-
-              <td className="px-6 py-4 text-gray-700 capitalize">
-                {user.role}
+              <td className="px-6 py-4 font-medium text-gray-800">
+                {order.totalPrice}
+              </td>
+              <td className="px-6 py-4 font-medium text-gray-800">
+                {order.status}
               </td>
 
               <td className="px-6 py-4">
-                <Link
-                  href={`/admin/users/${user._id}`}
-                  className="text-green-800 hover:underline font-medium"
-                >
-                  View
-                </Link>
-                <Link
-                  href={`/admin/users/${user._id}/edit`}
+                <button
+                  onClick={() => {
+                    setStatusModalOrderId(order._id);
+                    setNewStatus(order.status);
+                  }}
                   className="text-green-700 ml-4 hover:underline font-medium"
                 >
-                  Edit
-                </Link>
+                  Edit Status
+                </button>
+
                 <button
-                  onClick={() => setDeleteId(user._id)}
+                  onClick={() => setDeleteId(order._id)}
                   className="ml-4 text-red-600 hover:underline font-medium"
                 >
                   Delete
@@ -296,4 +295,4 @@ const DisplayUserTable = ({
   );
 };
 
-export default DisplayUserTable;
+export default DisplayOrderTable;

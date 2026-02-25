@@ -34,7 +34,6 @@ export default async function Page({
 
   return (
     <div>
-      Book Edit Page: {id}
       <EditBookForm book={book} genres={genreResponse.data} />
     </div>
   );

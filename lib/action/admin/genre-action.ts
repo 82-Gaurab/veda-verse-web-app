@@ -5,11 +5,12 @@ import {
   deleteGenre,
   getAllGenres,
   getAllGenresPaginated,
+  getGenreById,
   updateGenre,
 } from "@/lib/api/admin/genre";
 import { revalidatePath } from "next/cache";
 
-export const handleCreateGenre = async (data: FormData) => {
+export const handleCreateGenre = async (data: { name: string }) => {
   try {
     const response = await createGenre(data);
     if (response.success) {
@@ -89,7 +90,10 @@ export const handleGetAllGenres = async () => {
   }
 };
 
-export const handleUpdateGenre = async (id: string, data: FormData) => {
+export const handleUpdateGenre = async (
+  id: string,
+  data: { name: string | undefined },
+) => {
   try {
     const response = await updateGenre(id, data);
     if (response.success) {
@@ -130,6 +134,28 @@ export const handleDeleteGenre = async (id: string) => {
     return {
       success: false,
       message: error.message || "Delete Genre action failed",
+    };
+  }
+};
+
+export const handleGetOneGenre = async (id: string) => {
+  try {
+    const response = await getGenreById(id);
+    if (response.success) {
+      return {
+        success: true,
+        message: "Get Genre by id successful",
+        data: response.data,
+      };
+    }
+    return {
+      success: false,
+      message: response.message || "Get Genre by id failed",
+    };
+  } catch (error: Error | any) {
+    return {
+      success: false,
+      message: error.message || "Get Genre by id action failed",
     };
   }
 };

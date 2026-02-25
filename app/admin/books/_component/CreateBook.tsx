@@ -200,6 +200,11 @@ export default function CreateBookForm({ genres }: { genres: Genre[] }) {
                          shadow-[inset_4px_4px_8px_#c8d0e0,inset_-4px_-4px_8px_#ffffff]
                          outline-none text-sm text-gray-700"
             />
+            {errors.author && (
+              <span className="text-red-500 text-sm">
+                {errors.author.message}
+              </span>
+            )}
           </div>
 
           {/* Genres */}
@@ -239,6 +244,11 @@ export default function CreateBookForm({ genres }: { genres: Genre[] }) {
                 );
               }}
             />
+            {errors.genre && (
+              <span className="text-red-500 text-sm">
+                {errors.genre.message}
+              </span>
+            )}
           </div>
 
           {/* Price */}
@@ -254,6 +264,11 @@ export default function CreateBookForm({ genres }: { genres: Genre[] }) {
                          shadow-[inset_4px_4px_8px_#c8d0e0,inset_-4px_-4px_8px_#ffffff]
                          outline-none text-sm text-gray-700"
             />
+            {errors.price && (
+              <span className="text-red-500 text-sm">
+                {errors.price.message}
+              </span>
+            )}
           </div>
 
           {/* Stock */}
@@ -269,6 +284,11 @@ export default function CreateBookForm({ genres }: { genres: Genre[] }) {
                          shadow-[inset_4px_4px_8px_#c8d0e0,inset_-4px_-4px_8px_#ffffff]
                          outline-none text-sm text-gray-700"
             />
+            {errors.stockAmount && (
+              <span className="text-red-500 text-sm">
+                {errors.stockAmount.message}
+              </span>
+            )}
           </div>
 
           {/* Published Year */}
@@ -303,6 +323,11 @@ export default function CreateBookForm({ genres }: { genres: Genre[] }) {
                 );
               }}
             />
+            {errors.publishedYear && (
+              <span className="text-red-500 text-sm">
+                {errors.publishedYear.message}
+              </span>
+            )}
           </div>
 
           <div>
@@ -310,12 +335,18 @@ export default function CreateBookForm({ genres }: { genres: Genre[] }) {
               Description
             </label>
             <textarea
+              {...register("description")}
               rows={6}
               className="w-full px-4 py-3 rounded-xl bg-[#eef2f7]
           shadow-[inset_4px_4px_8px_#c9d4e3,inset_-4px_-4px_8px_#ffffff]
           outline-none text-sm text-gray-700"
               placeholder="Write book description..."
             />
+            {errors.description && (
+              <span className="text-red-500 text-sm">
+                {errors.description.message}
+              </span>
+            )}
           </div>
 
           {/* Submit */}

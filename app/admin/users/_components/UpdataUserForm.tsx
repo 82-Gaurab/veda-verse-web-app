@@ -290,12 +290,16 @@ export default function UpdateUserForm({ user }: UpdateUserFormProps) {
       <button
         type="submit"
         disabled={isSubmitting || pending}
-        className="w-full py-3 rounded-xl 
-             bg-linear-to-r from-slate-700 to-slate-800 
-             text-white text-xs uppercase tracking-wider  
-             shadow-lg hover:opacity-90 
-             transition active:scale-[0.98]
-             disabled:opacity-50"
+        className="w-full py-3 rounded-xl
+                    bg-green-600
+                    text-white text-sm font-semibold
+                    shadow-lg
+                    hover:bg-green-700 focus:outline-none 
+                    focus:ring-2 focus:ring-green-400 
+                    focus:ring-offset-2 duration-200
+                    active:scale-[0.98]
+                    transition
+                    disabled:opacity-50"
       >
         {isSubmitting || pending ? "Updating..." : "Update User"}
       </button>

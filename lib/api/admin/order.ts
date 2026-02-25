@@ -21,11 +21,7 @@ export const getAllOrders = async (
 
 export const updateOrder = async (id: string, updateData: any) => {
   try {
-    const response = await axios.put(API.ADMIN.ORDERS.UPDATE(id), updateData, {
-      headers: {
-        "Content-Type": "multipart/form-data", // for file upload/multer
-      },
-    });
+    const response = await axios.put(API.ADMIN.ORDERS.UPDATE(id), updateData);
     return response.data;
   } catch (error: Error | any) {
     throw new Error(

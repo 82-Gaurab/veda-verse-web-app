@@ -4,17 +4,9 @@ import axios from "../axios";
 
 export const createGenre = async (genreData: any) => {
   try {
-    const response = await axios.post(
-      API.ADMIN.GENRES.CREATE_GENRE,
-      genreData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data", // for file upload/multer
-        },
-      },
-    );
+    const response = await axios.post(API.ADMIN.GENRES.CREATE_GENRE, genreData);
     return response.data;
-  } catch (error: Error | any) {
+  } catch (error: any) {
     throw new Error(
       error.response?.data?.message || error.message || "Create genre failed",
     );
@@ -53,11 +45,7 @@ export const getAllGenres = async () => {
 
 export const updateGenre = async (id: string, updateData: any) => {
   try {
-    const response = await axios.put(API.ADMIN.GENRES.UPDATE(id), updateData, {
-      headers: {
-        "Content-Type": "multipart/form-data", // for file upload/multer
-      },
-    });
+    const response = await axios.put(API.ADMIN.GENRES.UPDATE(id), updateData);
     return response.data;
   } catch (error: Error | any) {
     throw new Error(
@@ -73,6 +61,19 @@ export const deleteGenre = async (id: string) => {
   } catch (error: Error | any) {
     throw new Error(
       error.response?.data?.message || error.message || "Delete Genre failed",
+    );
+  }
+};
+
+export const getGenreById = async (id: string) => {
+  try {
+    const response = await axios.get(API.ADMIN.GENRES.GET_ONE(id));
+    return response.data;
+  } catch (error: Error | any) {
+    throw new Error(
+      error.response?.data?.message ||
+        error.message ||
+        "Get Genre By Id Failed",
     );
   }
 };

@@ -82,11 +82,12 @@ export default function EditBookForm({ book, genres }: EditBookFormProps) {
           formData.append("publishedYear", data.publishedYear);
 
         if (data.genre && data.genre.length > 0) {
-          const selectedGenreNames = genres
-            .filter((g) => data.genre?.includes(g._id))
-            .map((g) => g.name);
-
-          selectedGenreNames.forEach((g) => formData.append("genre", g));
+          data.genre.forEach((name) => {
+            formData.append("genre", name);
+          });
+        } else {
+          // Send empty indicator so backend clears genres
+          formData.append("genre", "");
         }
 
         if (data.coverImg) {
@@ -187,8 +188,8 @@ export default function EditBookForm({ book, genres }: EditBookFormProps) {
       <div className="space-y-1">
         <label className="text-xs uppercase tracking-wider">Description</label>
         <textarea
-          rows={4}
           {...register("description")}
+          rows={4}
           className="w-full px-4 py-3 rounded-xl bg-[#eef2f7]
           shadow-[inset_4px_4px_8px_#c9d4e3,inset_-4px_-4px_8px_#ffffff]
           outline-none text-sm text-gray-700"
@@ -205,7 +206,6 @@ export default function EditBookForm({ book, genres }: EditBookFormProps) {
         <Controller
           name="genre"
           control={control}
-          defaultValue={book.genre || []}
           render={({ field }) => {
             const selected = field.value || [];
 
@@ -274,11 +274,15 @@ export default function EditBookForm({ book, genres }: EditBookFormProps) {
         type="submit"
         disabled={isSubmitting || pending}
         className="w-full py-3 rounded-xl
-        bg-linear-to-r from-slate-700 to-slate-800
-        text-white text-xs uppercase tracking-wider
-        shadow-lg hover:opacity-90
-        transition active:scale-[0.98]
-        disabled:opacity-50"
+                    bg-green-600
+                    text-white text-sm font-semibold
+                    shadow-lg
+                    hover:bg-green-700 focus:outline-none 
+                    focus:ring-2 focus:ring-green-400 
+                    focus:ring-offset-2 duration-200
+                    active:scale-[0.98]
+                    transition
+                    disabled:opacity-50"
       >
         {isSubmitting || pending ? "Updating..." : "Update Book"}
       </button>

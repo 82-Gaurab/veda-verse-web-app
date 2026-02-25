@@ -26,6 +26,7 @@ export const API = {
       CREATE_GENRE: "/admin/genres",
       GET_ALL_GENRE_PAGINATED: "/admin/genres",
       GET_ALL_GENRE: "/admin/genres/all",
+      GET_ONE: (genreId: string) => `/admin/genres/${genreId}`,
       DELETE: (genreId: string) => `/admin/genres/${genreId}`,
       UPDATE: (genreId: string) => `/admin/genres/${genreId}`,
     },

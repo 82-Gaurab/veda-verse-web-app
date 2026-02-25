@@ -3,16 +3,15 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import toast from "react-hot-toast";
-import { handleDeleteUser } from "@/lib/action/admin/user-action";
 import DeleteModal from "@/app/(public)/_component/DeleteModal";
-const DisplayUserTable = ({
-  users,
+import { handleDeleteGenre } from "@/lib/action/admin/genre-action";
+const DisplayGenreTable = ({
+  genres,
   pagination,
   search,
 }: {
-  users: any[];
+  genres: any[];
   pagination: any;
   search?: string;
 }) => {
@@ -20,7 +19,7 @@ const DisplayUserTable = ({
   const [searchTerm, setSearchTerm] = useState(search || "");
   const handleSearchChange = () => {
     router.push(
-      `/admin/users?page=1&size=${pagination.size}` +
+      `/admin/genres?page=1&size=${pagination.size}` +
         (searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ""),
     );
   };
@@ -32,7 +31,7 @@ const DisplayUserTable = ({
 
     // Previous button
     const prevHref =
-      `/admin/users?page=${currentPage - 1}&size=${pagination.size}` +
+      `/admin/genres?page=${currentPage - 1}&size=${pagination.size}` +
       (searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : "");
     pages.push(
       <Link
@@ -56,7 +55,7 @@ const DisplayUserTable = ({
     // Add first page if not in range
     if (startPage > 1) {
       const href =
-        `/admin/users?page=1&size=${pagination.size}` +
+        `/admin/genres?page=1&size=${pagination.size}` +
         (searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : "");
       pages.push(
         <Link
@@ -79,7 +78,7 @@ const DisplayUserTable = ({
     // Add page numbers in range
     for (let i = startPage; i <= endPage; i++) {
       const href =
-        `/admin/users?page=${i}&size=${pagination.size}` +
+        `/admin/genres?page=${i}&size=${pagination.size}` +
         (search ? `&search=${encodeURIComponent(search)}` : "");
       pages.push(
         <Link
@@ -107,7 +106,7 @@ const DisplayUserTable = ({
         );
       }
       const href =
-        `/admin/users?page=${totalPages}&size=${pagination.size}` +
+        `/admin/genres?page=${totalPages}&size=${pagination.size}` +
         (search ? `&search=${encodeURIComponent(search)}` : "");
       pages.push(
         <Link
@@ -122,7 +121,7 @@ const DisplayUserTable = ({
 
     // Next button
     const nextHref =
-      `/admin/users?page=${currentPage + 1}&size=${pagination.size}` +
+      `/admin/genres?page=${currentPage + 1}&size=${pagination.size}` +
       (search ? `&search=${encodeURIComponent(search)}` : "");
     pages.push(
       <Link
@@ -145,10 +144,10 @@ const DisplayUserTable = ({
 
   const onDelete = async () => {
     try {
-      await handleDeleteUser(deleteId!);
-      toast.success("User deleted successfully");
+      await handleDeleteGenre(deleteId!);
+      toast.success("Genre deleted successfully");
     } catch (err: Error | any) {
-      toast.error(err.message || "Failed to delete user");
+      toast.error(err.message || "Failed to delete genre");
     } finally {
       setDeleteId(null);
     }
@@ -171,7 +170,7 @@ const DisplayUserTable = ({
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSearchChange()}
-          placeholder="Search users..."
+          placeholder="Search genres..."
           className="w-72 px-4 py-2 border border-green-300 bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
         />
         <button
@@ -215,66 +214,34 @@ const DisplayUserTable = ({
         <thead className="bg-green-200/40 text-green-900 uppercase text-xs tracking-wider">
           <tr>
             <th className="px-6 py-4">ID</th>
-            <th className="px-6 py-4">Image</th>
-            <th className="px-6 py-4">Username</th>
-            <th className="px-6 py-4">Email</th>
-            <th className="px-6 py-4">Role</th>
+            <th className="px-6 py-4">Title</th>
             <th className="px-6 py-4">Actions</th>
           </tr>
         </thead>
 
         <tbody className="divide-y divide-green-200">
-          {users.map((user, index) => (
+          {genres.map((genre, index) => (
             <tr
-              key={user._id}
+              key={genre._id}
               className={`transition ${
                 index % 2 === 0 ? "bg-green-100/30" : "bg-green-100/50"
               } hover:bg-green-200/50`}
             >
-              <td className="px-6 py-4 text-gray-700">{user._id}</td>
-
-              <td className="px-6 py-4">
-                {user.profilePicture ? (
-                  <Image
-                    src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${user.profilePicture}`}
-                    alt="User Image"
-                    width={40}
-                    height={40}
-                    unoptimized
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="w-10 h-10 bg-green-200 rounded-full flex items-center justify-center">
-                    <span className="text-green-800 text-xs">N/A</span>
-                  </div>
-                )}
-              </td>
+              <td className="px-6 py-4 text-gray-700">{genre._id}</td>
 
               <td className="px-6 py-4 font-medium text-gray-800">
-                {user.username}
-              </td>
-
-              <td className="px-6 py-4 text-gray-700">{user.email}</td>
-
-              <td className="px-6 py-4 text-gray-700 capitalize">
-                {user.role}
+                {genre.name}
               </td>
 
               <td className="px-6 py-4">
                 <Link
-                  href={`/admin/users/${user._id}`}
-                  className="text-green-800 hover:underline font-medium"
-                >
-                  View
-                </Link>
-                <Link
-                  href={`/admin/users/${user._id}/edit`}
+                  href={`/admin/genres/${genre._id}/edit`}
                   className="text-green-700 ml-4 hover:underline font-medium"
                 >
                   Edit
                 </Link>
                 <button
-                  onClick={() => setDeleteId(user._id)}
+                  onClick={() => setDeleteId(genre._id)}
                   className="ml-4 text-red-600 hover:underline font-medium"
                 >
                   Delete
@@ -296,4 +263,4 @@ const DisplayUserTable = ({
   );
 };
 
-export default DisplayUserTable;
+export default DisplayGenreTable;
