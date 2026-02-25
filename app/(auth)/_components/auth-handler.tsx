@@ -7,7 +7,15 @@ import Modal from "./modal";
 import Image from "next/image";
 import ForgetPasswordForm from "./ForgetPasswordForm";
 
-export default function AuthModals({ isCompact }: { isCompact: boolean }) {
+export default function AuthModals({
+  isCompact,
+  displayText,
+  className,
+}: {
+  isCompact: boolean;
+  displayText?: string;
+  className?: string;
+}) {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -18,8 +26,10 @@ export default function AuthModals({ isCompact }: { isCompact: boolean }) {
         className={`flex justify-center cursor-pointer`}
         onClick={() => setShowLoginModal(true)}
       >
-        <button className="cursor-pointer" style={{ color: "black" }}>
-          {isCompact ? (
+        <button className={className} style={{ color: "black" }}>
+          {displayText ? (
+            displayText
+          ) : isCompact ? (
             <Image
               src={"/icons/login.png"}
               alt={"icon"}

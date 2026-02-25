@@ -1,122 +1,164 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import BookCard from "@/app/(public)/_component/BookCard";
-import { Playfair_Display, Cormorant_Garamond } from "next/font/google";
-import { useState } from "react";
-import BookModal from "./BookModel";
+import {
+  handleGetAllBooks,
+  handleGetBookByGenre,
+} from "@/lib/action/book-action";
+import { handleGetAllGenres } from "@/lib/action/genre-action";
+import UserBookCard from "@/app/(public)/user/explore/_component/UserBookCard";
 
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["500", "700"],
-});
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-});
+export type Genre = {
+  _id: string;
+  name: string;
+};
 
-const BOOKS = [
-  {
-    title: "The Himalayan Manuscripts",
-    author: "Siddhartha Lama",
-    image: "/images/bg.jpg",
-    price: "100",
-  },
-  {
-    title: "Legends of Nepal",
-    author: "Maya Shrestha",
-    image: "/images/bg.jpg",
-    price: "100",
-  },
-  {
-    title: "Ancient Wisdom",
-    author: "Bhaskar Rai",
-    image: "/images/bg.jpg",
-    price: "100",
-  },
-  {
-    title: "Sacred Scripts",
-    author: "Tara Gurung",
-    image: "/images/bg.jpg",
-    price: "100",
-  },
-  {
-    title: "Mythical Tales",
-    author: "Rajan Thapa",
-    image: "/images/bg.jpg",
-    price: "100",
-  },
-];
+export type Book = {
+  _id: string;
+  title: string;
+  author: string;
+  price: number;
+  coverImg: string;
+  genre: Genre[];
+};
 
-export default function ExplorePage() {
-  const [selectedBook, setSelectedBook] = useState<(typeof BOOKS)[0] | null>(
-    null,
-  );
+interface ExplorePageProps {
+  isLoggedIn?: boolean; // determines which card to show
+}
+
+export default function ExplorePage({ isLoggedIn = false }: ExplorePageProps) {
+  const [books, setBooks] = useState<Book[]>([]);
+  const [genres, setGenres] = useState<Genre[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeGenre, setActiveGenre] = useState<string | null>(null);
+
+  const CardComponent = isLoggedIn ? UserBookCard : BookCard;
+
+  // Fetch all books
+  const fetchBooks = async (search?: string) => {
+    try {
+      setLoading(true);
+      const response = await handleGetAllBooks(search);
+      setBooks(response.data || []);
+      setActiveGenre(null); // reset genre selection
+    } catch (error) {
+      console.error("Failed to fetch books:", error);
+      setBooks([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch books by genre
+  const fetchBooksByGenre = async (genreId: string) => {
+    try {
+      setLoading(true);
+      const response = await handleGetBookByGenre(genreId);
+      setBooks(response.data || []);
+      setActiveGenre(genreId);
+    } catch (error) {
+      console.error("Failed to fetch books by genre:", error);
+      setBooks([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch genres on mount
+  useEffect(() => {
+    const fetchGenres = async () => {
+      try {
+        const res = await handleGetAllGenres();
+        setGenres(res.data || []);
+      } catch (error) {
+        console.error("Failed to fetch genres:", error);
+        setGenres([]);
+      }
+    };
+    fetchGenres();
+    fetchBooks();
+  }, []);
+
+  console.log({ ...books });
+  const handleSearch = () => fetchBooks(searchTerm.trim() || undefined);
+
   return (
-    <div className="relative min-h-screen bg-[#FDF6E3] text-[#3A3A3A] overflow-hidden">
-      <div className="max-w-7xl mx-auto px-8 py-24 space-y-16">
-        {/* Hero */}
-        <section className="text-center space-y-4">
-          <h1
-            className={`${playfair.className} text-5xl md:text-6xl text-[#C6A75E]`}
-          >
-            Explore the Archive
-          </h1>
-          <p className={`${cormorant.className} text-lg md:text-xl`}>
-            Disimage the treasures of Nepal’s literary heritage. Browse, read,
-            and immerse yourself in centuries of wisdom.
-          </p>
-        </section>
+    <div className="relative min-h-screen bg-emerald-50 overflow-hidden">
+      {/* Background shapes */}
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-emerald-200/40 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-emerald-100/40 rounded-full blur-3xl" />
 
-        {/* Search Bar */}
-        <section className="flex justify-center">
+      <div className="relative max-w-7xl mx-auto px-6 md:px-12 py-24 space-y-20">
+        {/* Search */}
+        <section className="flex justify-center gap-3">
           <input
             type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             placeholder="Search books..."
-            className="w-full md:w-1/2 border border-[#FFECC0] rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#C6A75E]"
+            className="
+              w-full md:w-1/2 px-6 py-4 rounded-2xl
+              bg-emerald-50
+              border border-emerald-400
+              shadow-[inset_4px_4px_10px_rgba(0,0,0,0.06),inset_-4px_-4px_10px_rgba(255,255,255,0.9)]
+              outline-none text-sm text-gray-700
+              transition
+              focus:shadow-[inset_2px_2px_6px_rgba(0,0,0,0.08),inset_-2px_-2px_6px_rgba(255,255,255,1)]
+            "
           />
+          <button
+            onClick={handleSearch}
+            className="px-6 py-4 rounded-2xl bg-emerald-700 text-white hover:bg-emerald-800 transition"
+          >
+            Search
+          </button>
         </section>
 
-        {/* Category Buttons */}
-        <section className="flex flex-wrap justify-center gap-4">
-          {["History", "Mythology", "Science", "Art", "Literature"].map(
-            (cat) => (
-              <button
-                key={cat}
-                className="bg-[#FFF8E1] border border-[#FFECC0] rounded-full px-6 py-2 hover:bg-[#FFECC0] transition"
-              >
-                {cat}
-              </button>
-            ),
-          )}
-        </section>
-
-        {/* Book Grid */}
-        <section className="flex flex-wrap gap-x-5 gap-y-10 justify-center items-center">
-          {BOOKS.map((book) => (
-            <div
-              key={book.title}
-              onClick={() => setSelectedBook(book)}
-              className="cursor-pointer"
+        {/* Genres */}
+        <section className="flex flex-wrap justify-center gap-5">
+          <button
+            onClick={() => fetchBooks()}
+            className={`px-6 py-2 rounded-full text-sm transition duration-300
+              shadow-[6px_6px_14px_rgba(0,0,0,0.06),-6px_-6px_14px_rgba(255,255,255,0.9)]
+              hover:-translate-y-1 hover:bg-emerald-100
+              active:scale-95
+              ${activeGenre === null ? "bg-emerald-700 text-white hover:bg-emerald-400" : "bg-emerald-50 text-emerald-800"}
+            `}
+          >
+            All
+          </button>
+          {genres.map((gen) => (
+            <button
+              key={gen._id}
+              onClick={() => fetchBooksByGenre(gen._id)}
+              className={`px-6 py-2 rounded-full text-sm transition duration-300
+                shadow-[6px_6px_14px_rgba(0,0,0,0.06),-6px_-6px_14px_rgba(255,255,255,0.9)]
+                hover:-translate-y-1 hover:bg-emerald-100
+                active:scale-95
+                ${activeGenre === gen._id ? "bg-emerald-700 text-white hover:bg-emerald-400" : "bg-emerald-50 text-emerald-800"}
+              `}
             >
-              <BookCard
-                key={book.title}
-                title={book.title}
-                author={book.author}
-                price={"200"}
-                image={"/images/bg.jpg"}
-              />
-            </div>
+              {gen.name}
+            </button>
           ))}
         </section>
+
+        {/* Books Grid */}
+        <section className="flex flex-wrap gap-x-4 gap-y-7 justify-center">
+          {loading ? (
+            <p className="text-gray-600">Loading books...</p>
+          ) : books.length > 0 ? (
+            books.map((book) => (
+              <CardComponent key={book._id} link={"/explore"} {...book} />
+            ))
+          ) : (
+            <p className="text-gray-600">No books found.</p>
+          )}
+        </section>
       </div>
-      {/* Modal */}
-      {selectedBook && (
-        <BookModal
-          {...selectedBook}
-          isOpen={!!selectedBook}
-          onClose={() => setSelectedBook(null)}
-        />
-      )}
     </div>
   );
 }

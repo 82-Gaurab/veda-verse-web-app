@@ -1,133 +1,137 @@
 "use client";
 
 import Image from "next/image";
-import { Playfair_Display, Cormorant_Garamond } from "next/font/google";
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["500", "700"],
-});
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-});
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-[#FDF6E3] text-[#3A3A3A] relative overflow-hidden">
-      {/* Subtle mystical glow / floating dust */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="w-full h-full bg-linear-to-t from-[#FFECC0]/30 via-transparent to-transparent mix-blend-soft-light"></div>
-      </div>
+    <div className="relative min-h-screen bg-emerald-50 text-emerald-900 overflow-hidden">
+      {/* Soft ambient glow */}
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-emerald-200/40 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-emerald-100/40 rounded-full blur-3xl" />
 
-      <div className="relative max-w-6xl mx-auto px-8 py-24 space-y-32">
-        {/* Hero Section */}
+      <div className="relative max-w-6xl mx-auto px-6 md:px-12 py-24 space-y-32">
+        {/* 🌿 Hero */}
         <section className="text-center space-y-6">
-          <h1
-            className={`${playfair.className} text-5xl md:text-6xl text-[#C6A75E] tracking-wide`}
-          >
-            VedaVerse: The Mystical Archive
+          <span className="text-xs uppercase tracking-[0.3em] text-emerald-600">
+            Our Story
+          </span>
+
+          <h1 className="text-4xl md:text-6xl font-serif font-bold">
+            A Calm Sanctuary for Readers
           </h1>
-          <div className="w-24 h-0.5 bg-[#C6A75E] mx-auto" />
-          <p
-            className={`${cormorant.className} text-lg md:text-xl leading-relaxed max-w-3xl mx-auto text-[#3A3A3A]`}
-          >
-            Step into a luminous sanctuary of knowledge, where Nepalese literary
-            heritage meets centuries of wisdom, illuminated with golden light
-            and whispers of stories long preserved.
+
+          <p className="text-gray-600 text-lg max-w-3xl mx-auto leading-relaxed">
+            We believe books should feel like a warm space — peaceful,
+            intentional, and timeless. Our collection brings together stories
+            that inspire curiosity and quiet reflection.
           </p>
         </section>
 
-        {/* Cinematic Image Section */}
-        <section className="relative h-120 rounded-xl overflow-hidden shadow-xl border border-[#FFECC0]">
-          <Image
-            src="/images/bg.jpg"
-            alt="Mystical Library"
-            fill
-            className="object-cover brightness-95 contrast-105"
-          />
-          <div className="absolute inset-0 bg-linear-to-t from-[#FFECC0]/40 via-transparent to-transparent" />
-          <div className="absolute bottom-10 left-10">
-            <h2 className={`${playfair.className} text-3xl text-[#C6A75E]`}>
-              Where Knowledge Glows Like Sunlight
+        {/* 🌿 Cinematic Image */}
+        <section className="relative rounded-3xl overflow-hidden">
+          <div
+            className="
+              rounded-3xl overflow-hidden
+              shadow-[10px_10px_30px_rgba(0,0,0,0.08),-10px_-10px_30px_rgba(255,255,255,0.9)]
+            "
+          >
+            <Image
+              src="/images/bg.jpg"
+              alt="Library"
+              width={1200}
+              height={600}
+              className="object-cover w-full h-112.5"
+            />
+          </div>
+
+          <div className="absolute bottom-10 left-10 bg-white/70 backdrop-blur-md px-6 py-4 rounded-2xl shadow-md">
+            <h2 className="font-serif text-xl text-emerald-900">
+              Where Stories Feel Like Home
             </h2>
           </div>
         </section>
 
-        {/* Our Purpose */}
+        {/* 🌿 Purpose + Commitment */}
         <section className="grid md:grid-cols-2 gap-16 items-center">
+          {/* Purpose */}
           <div className="space-y-6">
-            <h2 className={`${playfair.className} text-4xl text-[#C6A75E]`}>
-              Our Purpose
-            </h2>
-            <p className={`${cormorant.className} text-lg leading-relaxed`}>
-              Inspired by Nepal’s ancient libraries and manuscript traditions,
-              VedaVerse preserves knowledge while making it accessible to
-              readers everywhere.
+            <h2 className="text-3xl font-serif font-bold">Our Purpose</h2>
+
+            <p className="text-gray-600 leading-relaxed">
+              We curate meaningful books that nurture calm thinking, deep
+              reflection, and lifelong learning.
             </p>
-            <p className={`${cormorant.className} text-lg leading-relaxed`}>
-              A mystical light shines through the pages of every story we
-              curate, connecting past wisdom to present minds.
+
+            <p className="text-gray-600 leading-relaxed">
+              Every title is selected with intention — blending tradition,
+              knowledge, and modern accessibility.
             </p>
           </div>
 
-          <div className="bg-[#FFF8E1] border border-[#FFECC0] p-10 rounded-xl shadow-lg hover:shadow-2xl transition">
-            <h3
-              className={`${playfair.className} text-2xl text-[#C6A75E] mb-6`}
-            >
+          {/* Commitment Card */}
+          <div
+            className="
+              p-10 rounded-3xl
+              bg-emerald-50
+              shadow-[8px_8px_24px_rgba(0,0,0,0.06),-8px_-8px_24px_rgba(255,255,255,0.9)]
+            "
+          >
+            <h3 className="text-xl font-serif font-semibold mb-6">
               Our Commitments
             </h3>
-            <ul className={`${cormorant.className} space-y-4 text-lg`}>
-              <li>• Preserve Nepal’s literary heritage.</li>
-              <li>• Make knowledge accessible everywhere.</li>
-              <li>• Encourage lifelong learning and curiosity.</li>
-              <li>• Honor tradition while embracing technology.</li>
+
+            <ul className="space-y-4 text-gray-600 text-sm">
+              <li>• Curate thoughtfully selected titles.</li>
+              <li>• Create a peaceful digital browsing experience.</li>
+              <li>• Encourage curiosity and reflection.</li>
+              <li>• Blend tradition with modern simplicity.</li>
             </ul>
           </div>
         </section>
 
-        {/* Core Pillars */}
-        <section className="text-center space-y-16">
-          <h2 className={`${playfair.className} text-4xl text-[#C6A75E]`}>
-            Pillars of the Mystical Archive
-          </h2>
-          <div className="grid md:grid-cols-3 gap-10">
+        {/* 🌿 Pillars */}
+        <section className="space-y-16 text-center">
+          <h2 className="text-3xl font-serif font-bold">Our Core Values</h2>
+
+          <div className="flex flex-wrap justify-center gap-12">
             {[
               {
-                title: "Preservation",
-                desc: "Safeguarding manuscripts and literature across Nepal.",
+                title: "Thoughtful Curation",
+                desc: "Books selected with care and intention.",
               },
               {
                 title: "Accessibility",
-                desc: "Bringing knowledge to every reader with magical ease.",
+                desc: "Knowledge made simple and approachable.",
               },
               {
-                title: "Continuity",
-                desc: "Connecting generations with the glow of shared wisdom.",
+                title: "Timelessness",
+                desc: "Stories that resonate across generations.",
               },
             ].map((item) => (
               <div
                 key={item.title}
-                className="bg-[#FFF8E1] border border-[#FFECC0] p-10 rounded-xl shadow-md hover:shadow-xl transition duration-500"
+                className="
+                  w-full md:w-[30%]
+                  p-10 rounded-3xl
+                  bg-emerald-50
+                  shadow-[6px_6px_20px_rgba(0,0,0,0.06),-6px_-6px_20px_rgba(255,255,255,0.9)]
+                  transition duration-300
+                  hover:-translate-y-2
+                "
               >
-                <h3
-                  className={`${playfair.className} text-2xl text-[#C6A75E] mb-4`}
-                >
-                  {item.title}
-                </h3>
-                <p className={`${cormorant.className} text-lg`}>{item.desc}</p>
+                <h3 className="font-serif text-xl mb-4">{item.title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {item.desc}
+                </p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Mystical Quote */}
-        <section className="text-center pt-20 border-t border-[#FFECC0]">
-          <blockquote
-            className={`${playfair.className} text-2xl italic text-[#C6A75E]`}
-          >
-            “Every page is a sunbeam, illuminating the path of timeless
-            knowledge.”
+        {/* 🌿 Quote */}
+        <section className="text-center pt-20">
+          <blockquote className="font-serif text-2xl italic text-emerald-700">
+            “A good book feels like a quiet conversation that stays with you.”
           </blockquote>
         </section>
       </div>

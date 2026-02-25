@@ -109,3 +109,14 @@ export const sendMessage = async (messageData: any) => {
     );
   }
 };
+
+export const getUserById = async (id: string) => {
+  try {
+    const response = await axios.get(API.AUTH.GET_ONE(id));
+    return response.data;
+  } catch (error: Error | any) {
+    throw new Error(
+      error.response?.data?.message || error.message || "Get User By Id Failed",
+    );
+  }
+};

@@ -4,12 +4,14 @@ interface ViewModalProps {
   isOpen: boolean;
   onClose: () => void;
   message: string;
+  isTestimonial: string;
 }
 
 export default function MessageModal({
   isOpen,
   onClose,
   message,
+  isTestimonial,
 }: ViewModalProps) {
   if (!isOpen) return null;
 
@@ -34,9 +36,12 @@ export default function MessageModal({
         </div>
 
         <div className="px-6 py-5 max-h-100 overflow-y-auto">
-          <p className="whitespace-pre-wrap leading-relaxed text-gray-700">
+          <p className="whitespace-pre-wrap text-lg leading-relaxed text-gray-700">
             {message}
           </p>
+          <span className="text-green-900">
+            Is This Testimonial: {isTestimonial}
+          </span>
         </div>
 
         <div className="px-6 py-4 border-t border-green-200 flex justify-end">

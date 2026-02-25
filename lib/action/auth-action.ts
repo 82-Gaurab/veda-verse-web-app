@@ -12,6 +12,7 @@ import {
   resetPassword,
   changePassword,
   sendMessage,
+  getUserById,
 } from "../api/auth";
 import { setAuthToken, setUserData } from "../cookie";
 
@@ -170,6 +171,28 @@ export const handleUserMessage = async (formData: any) => {
     return {
       success: false,
       message: error.message || "Failed to Send Message",
+    };
+  }
+};
+
+export const handleGetOneUser = async (id: string) => {
+  try {
+    const response = await getUserById(id);
+    if (response.success) {
+      return {
+        success: true,
+        message: "Get user by id successful",
+        data: response.data,
+      };
+    }
+    return {
+      success: false,
+      message: response.message || "Get user by id failed",
+    };
+  } catch (error: Error | any) {
+    return {
+      success: false,
+      message: error.message || "Get user by id action failed",
     };
   }
 };

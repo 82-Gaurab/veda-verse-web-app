@@ -15,8 +15,8 @@ const cormorant = Cormorant_Garamond({
 interface BookModalProps {
   title: string;
   author: string;
-  price: string;
-  image: string;
+  price: number;
+  coverImg: string;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -25,7 +25,7 @@ export default function BookModal({
   title,
   author,
   price,
-  image,
+  coverImg,
   isOpen,
   onClose,
 }: BookModalProps) {
@@ -45,16 +45,16 @@ export default function BookModal({
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          className="absolute top-5 right-5 text-[#C6A75E] text-[15px] z-40 cursor-pointer hover:bg-gray-500 pt-1 pr-2 pb-1 pl-2 rounded-2xl"
+          className="absolute top-3 right-3 text-[#C6A75E] text-[15px] z-40 cursor-pointer hover:bg-gray-500 pt-1 pr-2 pb-1 pl-2 rounded-2xl"
           onClick={() => onClose()}
         >
           X
         </button>
 
         {/* Book Cover */}
-        <div className="relative w-full h-64 mb-6">
+        <div className="relative w-full h-64 mb-6 mt-2.5">
           <Image
-            src={image}
+            src={coverImg}
             alt={title}
             fill
             className="object-cover rounded-lg"

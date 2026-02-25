@@ -4,25 +4,15 @@
 import { MessageData, messageSchema } from "@/app/(auth)/schema";
 import { handleUserMessage } from "@/lib/action/auth-action";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Playfair_Display, Cormorant_Garamond } from "next/font/google";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["500", "700"],
-});
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-});
 
 export default function ContactPage() {
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<MessageData>({
     resolver: zodResolver(messageSchema),
   });
@@ -43,113 +33,124 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#FDF6E3] text-[#3A3A3A] overflow-hidden">
-      <div className="mx-auto max-w-7xl px-8 py-24 space-y-24">
-        {/* Hero Section */}
-        <section className="text-center space-y-6">
-          <h1
-            className={`${playfair.className} text-5xl md:text-6xl text-[#C6A75E]`}
-          >
-            Get in Touch
+    <div className="min-h-screen bg-emerald-50 py-24 px-6">
+      <div
+        className="
+          max-w-3xl mx-auto p-12 rounded-3xl
+          bg-emerald-50
+          shadow-[10px_10px_30px_rgba(0,0,0,0.06),-10px_-10px_30px_rgba(255,255,255,0.9)]
+        "
+      >
+        {/* Header */}
+        <div className="text-center space-y-4 mb-12">
+          <span className="text-xs uppercase tracking-[0.3em] text-emerald-600">
+            Contact Us
+          </span>
+
+          <h1 className="text-4xl font-serif font-bold text-emerald-900">
+            Let’s Start a Conversation
           </h1>
-          <div className="w-24 h-0.5 bg-[#C6A75E] mx-auto" />
-          <p
-            className={`${cormorant.className} text-lg md:text-xl leading-relaxed text-[#3A3A3A]`}
+
+          <p className="text-gray-600 max-w-md mx-auto">
+            Have a question, suggestion, or just want to say hello? We&apos;d
+            love to hear from you.
+          </p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          {/* Name */}
+          <div className="space-y-2">
+            <label className="text-xs uppercase tracking-wider text-gray-500">
+              Name
+            </label>
+            <input
+              {...register("username")}
+              placeholder="Your name"
+              className="
+                w-full px-5 py-3 rounded-xl
+                bg-emerald-50
+                shadow-[inset_4px_4px_8px_rgba(0,0,0,0.06),inset_-4px_-4px_8px_rgba(255,255,255,0.9)]
+                outline-none text-sm text-gray-700
+                transition
+                focus:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.08),inset_-2px_-2px_4px_rgba(255,255,255,1)]
+              "
+            />
+            {errors.username && (
+              <p className="text-xs text-red-500">{errors.username.message}</p>
+            )}
+          </div>
+
+          {/* Email */}
+          <div className="space-y-2">
+            <label className="text-xs uppercase tracking-wider text-gray-500">
+              Email
+            </label>
+            <input
+              type="email"
+              {...register("userEmail")}
+              placeholder="Your email"
+              className="
+                w-full px-5 py-3 rounded-xl
+                bg-emerald-50
+                shadow-[inset_4px_4px_8px_rgba(0,0,0,0.06),inset_-4px_-4px_8px_rgba(255,255,255,0.9)]
+                outline-none text-sm text-gray-700
+                transition
+                focus:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.08),inset_-2px_-2px_4px_rgba(255,255,255,1)]
+              "
+            />
+            {errors.userEmail && (
+              <p className="text-xs text-red-500">{errors.userEmail.message}</p>
+            )}
+          </div>
+
+          {/* Message */}
+          <div className="space-y-2">
+            <label className="text-xs uppercase tracking-wider text-gray-500">
+              Message
+            </label>
+            <textarea
+              rows={6}
+              {...register("message")}
+              placeholder="Write your message..."
+              className="
+                w-full px-5 py-4 rounded-xl
+                bg-emerald-50
+                shadow-[inset_4px_4px_8px_rgba(0,0,0,0.06),inset_-4px_-4px_8px_rgba(255,255,255,0.9)]
+                outline-none text-sm text-gray-700
+                transition resize-none
+                focus:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.08),inset_-2px_-2px_4px_rgba(255,255,255,1)]
+              "
+            />
+            {errors.message && (
+              <p className="text-xs text-red-500">{errors.message.message}</p>
+            )}
+          </div>
+
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="
+              w-full py-3 rounded-xl
+              bg-emerald-700 text-white text-sm font-semibold
+              shadow-lg
+              transition duration-300
+              hover:bg-emerald-800
+              active:scale-[0.97]
+              disabled:opacity-50
+            "
           >
-            Have questions, suggestions, or want to contribute? Reach out and
-            connect with us at VedaVerse – your mystical archive of knowledge.
-          </p>
-        </section>
+            {isSubmitting ? "Sending..." : "Send Message"}
+          </button>
+        </form>
+      </div>
 
-        {/* Contact Form Section */}
-        <section className="bg-[#FFF8E1] border border-[#FFECC0] rounded-xl shadow-lg p-10">
-          <form
-            className="flex flex-col gap-6"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <div className="flex flex-col">
-              <label
-                className={`${cormorant.className} text-lg`}
-                htmlFor="name"
-              >
-                Name
-              </label>
-              <input
-                className="mt-2 w-full border border-[#FFECC0] rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#C6A75E]"
-                placeholder="Your name"
-                {...register("username")}
-              />
-              {errors.username && (
-                <span className="text-red-500 text-sm mt-1">
-                  {errors.username.message}
-                </span>
-              )}
-            </div>
-
-            <div className="flex flex-col">
-              <label
-                className={`${cormorant.className} text-lg`}
-                htmlFor="email"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                className="mt-2 w-full border border-[#FFECC0] rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#C6A75E]"
-                placeholder="Your email"
-                {...register("userEmail")}
-              />
-              {errors.userEmail && (
-                <span className="text-red-500 text-sm mt-1">
-                  {errors.userEmail.message}
-                </span>
-              )}
-            </div>
-
-            <div>
-              <label
-                className={`${cormorant.className} text-lg`}
-                htmlFor="message"
-              >
-                Message
-              </label>
-              <textarea
-                rows={6}
-                className="mt-2 w-full border border-[#FFECC0] rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#C6A75E]"
-                placeholder="Write your message..."
-                {...register("message")}
-              />
-              {errors.message && (
-                <span className="text-red-500 text-sm mt-1">
-                  {errors.message.message}
-                </span>
-              )}
-            </div>
-
-            <button
-              type="submit"
-              className="bg-[#C6A75E] text-[#FDF6E3] font-semibold rounded-lg px-6 py-3 hover:bg-[#bfa75e] transition"
-            >
-              Send Message
-            </button>
-          </form>
-        </section>
-
-        {/* Contact Info Section */}
-        <section className="text-center space-y-6">
-          <h2 className={`${playfair.className} text-3xl text-[#C6A75E]`}>
-            Our Library
-          </h2>
-          <p className={`${cormorant.className} text-lg`}>
-            Address: Kathmandu, Nepal
-          </p>
-          <p className={`${cormorant.className} text-lg`}>
-            Email: contact@vedaverse.com
-          </p>
-          <p className={`${cormorant.className} text-lg`}>
-            Phone: +977 1 2345678
-          </p>
-        </section>
+      {/* Contact Info */}
+      <div className="text-center mt-16 space-y-2 text-gray-600 text-sm">
+        <p>Kathmandu, Nepal</p>
+        <p>contact@vedaverse.com</p>
+        <p>+977 1 2345678</p>
       </div>
     </div>
   );

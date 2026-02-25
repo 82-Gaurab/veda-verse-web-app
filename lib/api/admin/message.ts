@@ -31,3 +31,14 @@ export const deleteMessages = async (id: string) => {
     );
   }
 };
+
+export const updateMessage = async (id: string, updateData: any) => {
+  try {
+    const response = await axios.put(API.ADMIN.MESSAGES.UPDATE(id), updateData);
+    return response.data;
+  } catch (error: Error | any) {
+    throw new Error(
+      error.response?.data?.message || error.message || "Update Message failed",
+    );
+  }
+};

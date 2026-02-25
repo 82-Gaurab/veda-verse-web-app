@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import DeleteModal from "@/app/(public)/_component/DeleteModal";
 import { handleDeleteMessage } from "@/lib/action/admin/message-action";
 import MessageModal from "./MessageModel";
+import UpdateMessageModal from "./UpdateMessage";
 
 const DisplayMessageTable = ({
   messages,
@@ -23,6 +24,10 @@ const DisplayMessageTable = ({
   const [deleteId, setDeleteId] = useState(null);
   const [showViewModal, setShowViewModal] = useState(false);
   const [viewMessage, setViewMessage] = useState("");
+  const [isTestimonial, setIsTestimonial] = useState(false);
+  const [editId, setEditId] = useState<string | null>(null); // <-- Track message ID for edit
+
+  console.log({ ...messages });
 
   const handleSearchChange = () => {
     router.push(
@@ -107,6 +112,7 @@ const DisplayMessageTable = ({
 
   return (
     <div className="mt-6 mb-6 bg-green-100/20 rounded-xl shadow-sm overflow-hidden border border-green-200">
+      {/* Delete Modal */}
       <DeleteModal
         isOpen={deleteId}
         onClose={() => setDeleteId(null)}
@@ -115,14 +121,23 @@ const DisplayMessageTable = ({
         description="Are you sure you want to delete this message? This action cannot be undone."
       />
 
+      {/* View Modal */}
       <MessageModal
         isOpen={showViewModal}
         onClose={() => setShowViewModal(false)}
         message={viewMessage}
+        isTestimonial={`${isTestimonial}`}
       />
+
+      {/* Update/Edit Modal */}
+      <UpdateMessageModal
+        isOpen={editId}
+        onClose={() => setEditId(null)}
+        isTestimonial={isTestimonial}
+      />
+
       {/* Search & Page Size */}
       <div className="p-5 bg-green-100/40 border-b border-green-200 flex flex-wrap gap-3 items-center">
-        {/* Search input */}
         <input
           type="text"
           value={searchTerm}
@@ -138,7 +153,6 @@ const DisplayMessageTable = ({
           Search
         </button>
 
-        {/* Page size selector */}
         <div className="ml-auto flex items-center gap-2">
           <label
             htmlFor="pageSize"
@@ -194,19 +208,29 @@ const DisplayMessageTable = ({
               <td className="px-4 py-2 max-w-xs truncate text-gray-700">
                 {message.message}
               </td>
-              <td className="px-6 py-4">
+              <td className="px-6 py-4 flex gap-2">
                 <button
                   className="text-green-700 hover:underline font-medium"
                   onClick={() => {
                     setShowViewModal(true);
                     setViewMessage(message.message);
+                    setIsTestimonial(message.isTestimonial);
                   }}
                 >
                   View
                 </button>
                 <button
+                  onClick={() => {
+                    setEditId(message._id);
+                    setIsTestimonial(message.isTestimonial);
+                  }}
+                  className="text-green-700 hover:underline font-medium"
+                >
+                  Edit
+                </button>
+                <button
                   onClick={() => setDeleteId(message._id)}
-                  className="ml-1 text-red-500 hover:underline font-medium"
+                  className="text-red-500 hover:underline font-medium"
                 >
                   Delete
                 </button>
@@ -224,105 +248,6 @@ const DisplayMessageTable = ({
         <div className="flex items-center gap-2">{makePagination()}</div>
       </div>
     </div>
-    // <div className="mt-6 border border-gray-700 rounded-lg overflow-hidden">
-    //   <DeleteModal
-    //     isOpen={deleteId}
-    //     onClose={() => setDeleteId(null)}
-    //     onConfirm={onDelete}
-    //     title="Delete Message"
-    //     description="Are you sure you want to delete this message? This action cannot be undone."
-    //   />
-
-    //   <MessageModal
-    //     isOpen={showViewModal}
-    //     onClose={() => setShowViewModal(false)}
-    //     message={viewMessage}
-    //   />
-
-    //   {/* Search */}
-    //   <div className="p-4 bg-gray-800">
-    //     <input
-    //       type="text"
-    //       value={searchTerm}
-    //       onChange={(e) => setSearchTerm(e.target.value)}
-    //       onKeyDown={(e) => e.key === "Enter" && handleSearchChange()}
-    //       placeholder="Search messages..."
-    //       className="mr-2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-    //     />
-    //     <button
-    //       onClick={handleSearchChange}
-    //       className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-    //     >
-    //       Search
-    //     </button>
-    //   </div>
-
-    //   {/* Table */}
-    //   <table className="w-full table-auto border-collapse">
-    //     <thead className="bg-gray-800">
-    //       <tr>
-    //         <th className="px-4 py-2 text-left text-sm font-medium text-gray-400">
-    //           ID
-    //         </th>
-    //         <th className="px-4 py-2 text-left text-sm font-medium text-gray-400">
-    //           Name
-    //         </th>
-    //         <th className="px-4 py-2 text-left text-sm font-medium text-gray-400">
-    //           Email
-    //         </th>
-    //         <th className="px-4 py-2 text-left text-sm font-medium text-gray-400">
-    //           Message
-    //         </th>
-    //         <th className="px-4 py-2 text-left text-sm font-medium text-gray-400">
-    //           Actions
-    //         </th>
-    //       </tr>
-    //     </thead>
-
-    //     <tbody className="bg-gray-900 divide-y divide-gray-700">
-    //       {messages.map((message) => (
-    //         <tr key={message._id}>
-    //           <td className="px-4 py-2 text-sm text-gray-300">{message._id}</td>
-    //           <td className="px-4 py-2 text-sm text-gray-300">
-    //             {message.username}
-    //           </td>
-    //           <td className="px-4 py-2 text-sm text-gray-300">
-    //             {message.userEmail}
-    //           </td>
-    //           <td className="px-4 py-2 text-sm max-w-xs truncate">
-    //             {message.message}
-    //           </td>
-    //           <td className="px-4 py-2 text-sm">
-    //             <button
-    //               className="text-green-500 hover:underline cursor-pointer w-fit"
-    //               onClick={() => {
-    //                 setShowViewModal(true);
-    //                 setViewMessage(message.message);
-    //               }}
-    //             >
-    //               View
-    //             </button>
-
-    //             <button
-    //               onClick={() => setDeleteId(message._id)}
-    //               className="ml-4 text-red-500 hover:underline cursor-pointer w-fit"
-    //             >
-    //               Delete
-    //             </button>
-    //           </td>
-    //         </tr>
-    //       ))}
-    //     </tbody>
-    //   </table>
-
-    //   {/* Pagination */}
-    //   <div className="p-4 flex justify-between items-center bg-gray-800">
-    //     <div className="text-sm text-gray-300">
-    //       Page {pagination.page} of {pagination.totalPages}
-    //     </div>
-    //     <div className="space-x-2">{makePagination()}</div>
-    //   </div>
-    // </div>
   );
 };
 

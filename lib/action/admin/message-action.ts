@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
-import { deleteMessages, getAllMessages } from "@/lib/api/admin/message";
+import {
+  deleteMessages,
+  getAllMessages,
+  updateMessage,
+} from "@/lib/api/admin/message";
 import { revalidatePath } from "next/cache";
 
 export const handleGetAllMessages = async (
@@ -52,6 +56,32 @@ export const handleDeleteMessage = async (id: string) => {
     return {
       success: false,
       message: error.message || "Delete message action failed",
+    };
+  }
+};
+
+export const handleUpdateMessage = async (
+  id: string,
+  isTestimonial: boolean,
+) => {
+  try {
+    const response = await updateMessage(id, { isTestimonial });
+    if (response.success) {
+      revalidatePath("/admin/messages");
+      return {
+        success: true,
+        message: "Update Message successful",
+        data: response.data,
+      };
+    }
+    return {
+      success: false,
+      message: response.message || "Update Message failed",
+    };
+  } catch (error: Error | any) {
+    return {
+      success: false,
+      message: error.message || "Update Message action failed",
     };
   }
 };

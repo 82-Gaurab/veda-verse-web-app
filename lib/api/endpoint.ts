@@ -11,10 +11,23 @@ export const API = {
     REQUEST_RESET_PASSWORD: "/auth/request-password-reset",
     RESET_PASSWORD: (token: string) => `/auth/reset-password/${token}`,
     CHANGE_PASSWORD: (token: string) => `/auth/change-password/${token}`,
+    GET_ONE: (userId: string) => `/auth/${userId}`,
+  },
+  ORDER: {
+    CREATE: "/orders/",
+    GET_BY_USER_ID: `/orders/my-orders`,
   },
   BOOKS: {
     GET_ALL_BOOK: "/books/",
     GET_ONE: (bookId: string) => `/books/${bookId}`,
+    GET_BY_GENRE_ID: (genreId: string) => `/books/genre/${genreId}`,
+  },
+  REVIEWS: {
+    GET_BY_BOOK_ID: (bookId: string) => `/reviews/books/${bookId}`,
+    MY_REVIEWS: "/reviews/my-reviews",
+  },
+  GENRES: {
+    GET_ALL: "/genres/",
   },
   ADMIN: {
     DASHBOARD: "/admin/dashboard",
@@ -42,6 +55,7 @@ export const API = {
     },
     MESSAGES: {
       GET_ALL_MESSAGE: "/admin/messages/",
+      UPDATE: (messageId: string) => `/admin/messages/${messageId}`,
       DELETE: (messageId: string) => `/admin/messages/${messageId}`,
     },
     USER: {
@@ -52,4 +66,5 @@ export const API = {
       DELETE: (userId: string) => `/admin/users/${userId}`,
     },
   },
+  TESTIMONIAL: "/messages/testimonials",
 };

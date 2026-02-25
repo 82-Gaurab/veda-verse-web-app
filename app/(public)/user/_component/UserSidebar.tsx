@@ -9,7 +9,7 @@ import { useState } from "react";
 
 const LINKS = [
   { href: "/user/dashboard", label: "Home", id: "home" },
-  { href: "/user/wishlist", label: "WishList", id: "wishlist" },
+  { href: "/user/explore", label: "Explore", id: "explore" },
   { href: "/user/cart", label: "Cart", id: "cart" },
   { href: "/user/history", label: "Purchase History", id: "purchase-history" },
   { href: "/user/reviews", label: "Reviews", id: "review" },
@@ -18,11 +18,7 @@ const LINKS = [
 export default function UserSidebar({ isCompact, setIsCompact }: SidebarProps) {
   const pathname = usePathname();
   const sidebarWidth = isCompact ? "80px" : "256px";
-  const [imgSrc, setImgSrc] = useState(
-    // user?.profilePicture
-    //   ? `${process.env.NEXT_PUBLIC_API_BASE_URL}${user.profilePicture}`      :
-    "/icons/default-profile.png",
-  );
+  const [imgSrc, setImgSrc] = useState("/icons/default-profile.png");
 
   const isActive = (href: string) =>
     href === "/" ? pathname === href : pathname?.startsWith(href);
@@ -38,14 +34,14 @@ export default function UserSidebar({ isCompact, setIsCompact }: SidebarProps) {
         }}
       >
         <div>
-          <div className="p-4 border-b border-gray-200 ">
+          <div className="px-6 py-6 border-b border-neutral-200/40 ">
             <div
-              className="rounded flex items-center font-bold"
+              className="flex items-center transition-all duration-300"
               style={{ gap: isCompact ? "0" : "16px" }}
             >
               <Link
                 href="/admin"
-                className="flex items-center gap-1"
+                className="flex items-center gap-3"
                 style={{
                   justifyContent: isCompact ? "center" : "",
                 }}
@@ -54,15 +50,15 @@ export default function UserSidebar({ isCompact, setIsCompact }: SidebarProps) {
                   <>
                     <Image
                       src="/icons/logo.png"
-                      height="40"
-                      width="35"
+                      height="42"
+                      width="38"
                       alt="logo"
                       style={{
                         transition: "all ease-in-out 0.35s",
                         cursor: "pointer",
                       }}
                     />
-                    <span className="font-semibold text-[#488563] text-[20px]">
+                    <span className="text-[#3F6E58] text-[20px] tracking-wide font-semibold">
                       VedaVerse
                     </span>
                   </>
@@ -74,12 +70,12 @@ export default function UserSidebar({ isCompact, setIsCompact }: SidebarProps) {
                 height={isCompact ? 60 : 40}
                 width={isCompact ? 40 : 35}
                 alt="logo"
-                className="transition-all ease-in-out duration-300 cursor-pointer"
+                className="cursor-pointer transition-all duration-300 hover:scale-105 active:scale-95"
               />
             </div>
           </div>
 
-          <nav className="p-2 mt-24 space-y-1 flex flex-col gap-3">
+          <nav className="mt-20 px-2.5 flex flex-col gap-4">
             {LINKS.map((link) => (
               <Link
                 key={link.href}
@@ -87,11 +83,18 @@ export default function UserSidebar({ isCompact, setIsCompact }: SidebarProps) {
                 style={{
                   justifyContent: isCompact ? "center" : "",
                 }}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200 ease-in-out ${
-                  isActive(link.href)
-                    ? "bg-[#f1ede1] shadow-[inset_0_5px_8px_rgba(0,0,0,0.2)] rounded text-gray-700"
-                    : "text-gray-700 hover:bg-fuchsia-200"
-                }`}
+                className={` flex items-center gap-4 px-4 py-3 rounded-xl
+                  text-[13px] tracking-wider uppercase
+                  transition-all duration-300 ease-in-out ${
+                    isActive(link.href)
+                      ? "bg-[#f1ede1] shadow-[inset_0_5px_8px_rgba(0,0,0,0.2)] rounded text-gray-700"
+                      : `
+                        text-neutral-600
+                        hover:bg-[#EAE6DE]
+                        hover:shadow-[4px_4px_10px_rgba(0,0,0,0.04),-4px_-4px_10px_rgba(255,255,255,0.6)]
+                        active:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.06),inset_-3px_-3px_6px_rgba(255,255,255,0.6)]
+                      `
+                  }`}
               >
                 <Image
                   src={`/icons/${link.id}.png`}

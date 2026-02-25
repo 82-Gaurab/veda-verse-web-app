@@ -15,7 +15,7 @@ interface Book {
   link: string;
 }
 
-const BookCard = ({
+const UserBookCard = ({
   _id,
   title,
   author,
@@ -24,6 +24,12 @@ const BookCard = ({
   genre,
   link,
 }: Book) => {
+  const handleAddToCart = () => {
+    // Placeholder logic: Replace with your cart handling logic
+    console.log(`Book ${_id} added to cart`);
+    alert(`Added "${title}" to cart!`);
+  };
+
   return (
     <div
       className="
@@ -88,30 +94,53 @@ const BookCard = ({
         </div>
       )}
 
-      <div className="mt-6 flex items-center justify-between">
+      <div className="mt-6 flex items-center justify-between gap-2">
+        {/* Price */}
         <span className="text-emerald-800 font-semibold text-lg">₹{price}</span>
 
-        <Link
-          href={`${link}/${_id}`} // navigate to the book detail page using book ID
-          className="
-    text-sm
-    px-4
-    py-2
-    rounded-xl
-    bg-emerald-100
-    text-emerald-800
-    shadow-inner
-    transition
-    duration-300
-    hover:bg-emerald-200
-    active:scale-95
-  "
-        >
-          View
-        </Link>
+        {/* Buttons */}
+        <div className="flex gap-2">
+          <Link
+            href={`${link}/${_id}`} // navigate to the book detail page using book ID
+            className="
+              text-sm
+              px-4
+              py-2
+              rounded-xl
+              bg-emerald-100
+              text-emerald-800
+              shadow-inner
+              transition
+              duration-300
+              hover:bg-emerald-200
+              active:scale-95
+            "
+          >
+            View
+          </Link>
+
+          <button
+            onClick={handleAddToCart}
+            className="
+              text-sm
+              px-4
+              py-2
+              rounded-xl
+              bg-emerald-600
+              text-white
+              shadow-md
+              transition
+              duration-300
+              hover:bg-emerald-700
+              active:scale-95
+            "
+          >
+            Add to Cart
+          </button>
+        </div>
       </div>
     </div>
   );
 };
 
-export default BookCard;
+export default UserBookCard;

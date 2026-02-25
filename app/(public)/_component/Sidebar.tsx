@@ -11,13 +11,14 @@ const LINKS = [
   { href: "/explore", label: "Explore", id: "explore" },
   { href: "/contact", label: "Contact Us", id: "contact" },
 ];
+
 export interface SidebarProps {
   isCompact: boolean;
   setIsCompact: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function Sidebar({ isCompact, setIsCompact }: SidebarProps) {
-  const sidebarWidth = isCompact ? "80px" : "256px";
+  const sidebarWidth = isCompact ? "90px" : "270px";
   const pathname = usePathname();
 
   const isActive = (href: string) =>
@@ -25,60 +26,59 @@ export default function Sidebar({ isCompact, setIsCompact }: SidebarProps) {
 
   return (
     <>
-      {/* Sidebar */}
       <aside
-        className={`
-                flex flex-col justify-between fixed top-0 left-0.5 h-screen border-r border-gray-200 z-40 overflow-hidden`}
+        className="fixed top-0 left-0 h-screen z-40 flex flex-col justify-between transition-all duration-500 ease-in-out"
         style={{
-          paddingBottom: "32px",
-          backgroundColor: "#F2EFE8",
           width: sidebarWidth,
-          transition: "all ease-in-out 0.4s",
+          background: "#F2EFE8",
+          paddingBottom: "32px",
+          boxShadow:
+            "8px 0 20px rgba(0,0,0,0.04), -4px 0 15px rgba(255,255,255,0.7)",
         }}
       >
         <div>
-          <div className="p-4 border-b border-gray-200 ">
+          {/* Header */}
+          <div className="px-6 py-6 border-b border-neutral-200/40">
             <div
-              className="rounded flex items-center font-bold"
-              style={{ gap: isCompact ? "0" : "16px" }}
+              className="flex items-center transition-all duration-300"
+              style={{ gap: isCompact ? "0" : "14px" }}
             >
               <Link
                 href="/admin"
-                className="flex items-center gap-1"
+                className="flex items-center gap-3"
                 style={{
                   justifyContent: isCompact ? "center" : "",
                 }}
               >
-                {isCompact ? null : (
+                {!isCompact && (
                   <>
                     <Image
                       src="/icons/logo.png"
-                      height="40"
-                      width="35"
+                      height="42"
+                      width="38"
                       alt="logo"
-                      style={{
-                        transition: "all ease-in-out 0.35s",
-                        cursor: "pointer",
-                      }}
+                      className="transition-all duration-300"
                     />
-                    <span className="font-semibold text-[#488563] text-[20px]">
+                    <span className="text-[#3F6E58] text-[20px] tracking-wide font-semibold">
                       VedaVerse
                     </span>
                   </>
                 )}
               </Link>
+
               <Image
                 onClick={() => setIsCompact((prev) => !prev)}
                 src="/icons/menu.png"
-                height={isCompact ? 60 : 40}
-                width={isCompact ? 40 : 35}
-                alt="logo"
-                className="transition-all ease-in-out duration-300 cursor-pointer"
+                height={isCompact ? 60 : 38}
+                width={isCompact ? 40 : 34}
+                alt="menu"
+                className="cursor-pointer transition-all duration-300 hover:scale-105 active:scale-95"
               />
             </div>
           </div>
 
-          <nav className="p-2 mt-24 space-y-1 flex flex-col gap-3">
+          {/* Navigation */}
+          <nav className="mt-20 px-4 flex flex-col gap-4">
             {LINKS.map((link) => (
               <Link
                 key={link.href}
@@ -86,29 +86,49 @@ export default function Sidebar({ isCompact, setIsCompact }: SidebarProps) {
                 style={{
                   justifyContent: isCompact ? "center" : "",
                 }}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200 ease-in-out ${
-                  isActive(link.href)
-                    ? "bg-[#f1ede1] shadow-[inset_0_5px_8px_rgba(0,0,0,0.2)] rounded text-gray-700"
-                    : "text-gray-700 hover:bg-fuchsia-200"
-                }`}
+                className={`
+                  flex items-center gap-4 px-4 py-3 rounded-xl
+                  text-[13px] tracking-wider uppercase
+                  transition-all duration-300 ease-in-out
+                  ${
+                    isActive(link.href)
+                      ? `
+                       bg-[#f1ede1] shadow-[inset_0_5px_8px_rgba(0,0,0,0.2)] rounded text-gray-700
+                      `
+                      : `
+                        text-neutral-600
+                        hover:bg-[#EAE6DE]
+                        hover:shadow-[4px_4px_10px_rgba(0,0,0,0.04),-4px_-4px_10px_rgba(255,255,255,0.6)]
+                        active:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.06),inset_-3px_-3px_6px_rgba(255,255,255,0.6)]
+                      `
+                  }
+                `}
               >
                 <Image
                   src={`/icons/${link.id}.png`}
-                  height={isCompact ? 30 : 25}
-                  width={isCompact ? 30 : 25}
+                  height={isCompact ? 28 : 22}
+                  width={isCompact ? 28 : 22}
                   alt=""
-                  style={{
-                    transition: "all ease-in-out 0.6s",
-                  }}
+                  className="transition-all duration-300 opacity-80"
                 />
-                {isCompact ? null : <span>{link.label}</span>}
+                {!isCompact && <span>{link.label}</span>}
               </Link>
             ))}
           </nav>
         </div>
 
-        <div className="m-6">
-          <AuthModals isCompact={isCompact} />
+        {/* Bottom Auth Card */}
+        <div className="mx-5 mb-6">
+          <div
+            className="rounded-2xl p-3"
+            style={{
+              background: "#E6E2DA",
+              boxShadow:
+                "6px 6px 15px rgba(0,0,0,0.05), -6px -6px 15px rgba(255,255,255,0.7)",
+            }}
+          >
+            <AuthModals isCompact={isCompact} />
+          </div>
         </div>
       </aside>
     </>
