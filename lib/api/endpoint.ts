@@ -17,6 +17,7 @@ export const API = {
     GET_ONE: (bookId: string) => `/books/${bookId}`,
   },
   ADMIN: {
+    DASHBOARD: "/admin/dashboard",
     ORDERS: {
       GET_ALL_ORDER: "/admin/orders",
       DELETE: (orderId: string) => `/admin/orders/${orderId}`,

@@ -194,7 +194,7 @@ const DisplayUserTable = ({
             value={pagination.size}
             onChange={(e) => {
               router.push(
-                `/admin/messages?page=1&size=${e.target.value}` +
+                `/admin/users?page=1&size=${e.target.value}` +
                   (searchTerm
                     ? `&search=${encodeURIComponent(searchTerm)}`
                     : ""),
