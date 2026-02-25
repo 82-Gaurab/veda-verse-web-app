@@ -11,7 +11,6 @@ import { useTransition } from "react";
 import toast from "react-hot-toast";
 import { handleChangePassword } from "@/lib/action/auth-action";
 import { getAuthToken } from "@/lib/cookie";
-// import { handleChangePassword } from "@/lib/action/auth-action";
 
 export default function ChangePassword() {
   const [pending, startTransition] = useTransition();

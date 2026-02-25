@@ -13,6 +13,8 @@ import {
   changePassword,
   sendMessage,
   getUserById,
+  addToCart,
+  getMyData,
 } from "../api/auth";
 import { setAuthToken, setUserData } from "../cookie";
 
@@ -193,6 +195,46 @@ export const handleGetOneUser = async (id: string) => {
     return {
       success: false,
       message: error.message || "Get user by id action failed",
+    };
+  }
+};
+
+export const handleAddToCart = async (data: any) => {
+  try {
+    const response = await addToCart(data);
+    if (response.success) {
+      return {
+        success: true,
+        message: "Add to Cart successful",
+        data: response.data,
+      };
+    }
+  } catch (error: Error | any) {
+    return {
+      success: false,
+      message: error.message || "Add To Cart action failed",
+    };
+  }
+};
+
+export const handleGetMyData = async () => {
+  try {
+    const response = await getMyData();
+    if (response.success) {
+      return {
+        success: true,
+        message: "Get My Data successful",
+        data: response.data,
+      };
+    }
+    return {
+      success: false,
+      message: response.message || "Get My Data failed",
+    };
+  } catch (error: Error | any) {
+    return {
+      success: false,
+      message: error.message || "Get My Data action failed",
     };
   }
 };

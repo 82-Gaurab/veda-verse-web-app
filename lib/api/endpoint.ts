@@ -12,6 +12,8 @@ export const API = {
     RESET_PASSWORD: (token: string) => `/auth/reset-password/${token}`,
     CHANGE_PASSWORD: (token: string) => `/auth/change-password/${token}`,
     GET_ONE: (userId: string) => `/auth/${userId}`,
+    ADD_TO_CART: "/auth/cart",
+    GET_MY_DATA: "/auth/me",
   },
   ORDER: {
     CREATE: "/orders/",

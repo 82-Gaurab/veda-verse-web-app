@@ -120,3 +120,25 @@ export const getUserById = async (id: string) => {
     );
   }
 };
+
+export const addToCart = async (cartData: any) => {
+  try {
+    const response = await axios.put(API.AUTH.ADD_TO_CART, cartData);
+    return response.data;
+  } catch (error: Error | any) {
+    throw new Error(
+      error.response?.data?.message || error.message || "Add to Cart failed",
+    );
+  }
+};
+
+export const getMyData = async () => {
+  try {
+    const response = await axios.get(API.AUTH.GET_MY_DATA);
+    return response.data;
+  } catch (error: Error | any) {
+    throw new Error(
+      error.response?.data?.message || error.message || "Get My Data Failed",
+    );
+  }
+};

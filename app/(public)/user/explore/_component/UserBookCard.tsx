@@ -1,5 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { handleAddToCart } from "@/lib/action/auth-action";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import toast from "react-hot-toast";
 interface Genre {
   _id: string;
   name: string;
@@ -24,10 +28,21 @@ const UserBookCard = ({
   genre,
   link,
 }: Book) => {
-  const handleAddToCart = () => {
-    // Placeholder logic: Replace with your cart handling logic
-    console.log(`Book ${_id} added to cart`);
-    alert(`Added "${title}" to cart!`);
+  const [loading, setLoading] = useState(false);
+  const handleAddToCartAction = async () => {
+    try {
+      setLoading(true);
+      const response = await handleAddToCart({ product: _id, quantity: 1 });
+
+      if (!response?.success) {
+        throw new Error(response?.message);
+      }
+      toast.success("Item Added to Cart");
+    } catch (error: Error | any) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -101,7 +116,7 @@ const UserBookCard = ({
         {/* Buttons */}
         <div className="flex gap-2">
           <Link
-            href={`${link}/${_id}`} // navigate to the book detail page using book ID
+            href={`${link}/${_id}`}
             className="
               text-sm
               px-4
@@ -120,7 +135,8 @@ const UserBookCard = ({
           </Link>
 
           <button
-            onClick={handleAddToCart}
+            disabled={loading}
+            onClick={handleAddToCartAction}
             className="
               text-sm
               px-4
@@ -135,7 +151,7 @@ const UserBookCard = ({
               active:scale-95
             "
           >
-            Add to Cart
+            {loading ? "Adding..." : "Add to Cart"}
           </button>
         </div>
       </div>
