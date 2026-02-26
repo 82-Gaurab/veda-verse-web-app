@@ -37,7 +37,7 @@ export default function ContactPage() {
       <div
         className="
           max-w-3xl mx-auto p-12 rounded-3xl
-          bg-emerald-50
+          bg-green-100
           shadow-[10px_10px_30px_rgba(0,0,0,0.06),-10px_-10px_30px_rgba(255,255,255,0.9)]
         "
       >

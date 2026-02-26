@@ -32,7 +32,7 @@ export default function CartItemCard({ item }: { item: CartItem }) {
       "
     >
       {/* Cover Image */}
-      <div className="relative w-24 h-32 flex-shrink-0 rounded-xl overflow-hidden">
+      <div className="relative w-24 h-32 shrink-0 rounded-xl overflow-hidden">
         <Image
           src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${item.bookId.coverImg}`}
           alt={item.bookId.title}
@@ -58,7 +58,7 @@ export default function CartItemCard({ item }: { item: CartItem }) {
 
         {/* View Book Button */}
         <Link
-          href={`/books/${item.bookId._id}`}
+          href={`/user/dashboard/${item.bookId._id}`}
           className="
             mt-3 inline-block px-4 py-2 rounded-xl
             bg-emerald-100 text-emerald-800

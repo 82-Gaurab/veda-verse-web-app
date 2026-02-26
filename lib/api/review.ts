@@ -25,3 +25,14 @@ export const getMyReviews = async () => {
     );
   }
 };
+
+export const createReview = async (reviewData: any) => {
+  try {
+    const response = await axios.post(API.REVIEWS.CREATE, reviewData);
+    return response.data;
+  } catch (error: Error | any) {
+    throw new Error(
+      error.response?.data?.message || error.message || "Create Review failed",
+    );
+  }
+};

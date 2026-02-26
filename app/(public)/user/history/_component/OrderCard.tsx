@@ -1,5 +1,5 @@
 "use client";
-
+import Link from "next/link";
 export type Order = {
   _id: string;
   books: {
@@ -33,13 +33,23 @@ export default function OrderCard({ order }: { order: Order }) {
   return (
     <div
       className="
-        group
+      group
+    bg-white/90
+    backdrop-blur-xl
+
+    flex flex-col
+
+    border border-emerald-100
+    ring-1 ring-black/5
+
+    shadow-lg shadow-emerald-900/5
+    hover:shadow-2xl hover:shadow-emerald-900/10
+
+    hover:-translate-y-2
+    hover:scale-[1.02]
         relative
-        p-6 rounded-2xl bg-emerald-50/70 backdrop-blur-md
-        shadow-[6px_6px_16px_rgba(0,0,0,0.06),-6px_-6px_16px_rgba(255,255,255,0.8)]
+        p-6 rounded-2xl
         transition-all duration-300 ease-out
-        hover:shadow-[8px_8px_20px_rgba(0,0,0,0.08),-8px_-8px_20px_rgba(255,255,255,0.9)]
-        hover:-translate-y-1 hover:scale-[1.01]
         space-y-4
       "
     >
@@ -57,17 +67,23 @@ export default function OrderCard({ order }: { order: Order }) {
         </span>
       </div>
 
+      <h1 className="text-3xl font-bold text-emerald-900 mb-6">Books</h1>
+
       {/* Books List */}
       <div className="space-y-3">
         {order.books.map((item) => (
-          <div
+          <Link
             key={item._id}
+            href={`/user/dashboard/${item.bookId._id}`} // adjust route if needed
             className="
-              flex justify-between items-center bg-emerald-50/50 rounded-xl p-3
-              shadow-[inset_2px_2px_6px_rgba(0,0,0,0.04),inset_-2px_-2px_6px_rgba(255,255,255,0.9)]
-              transition-all duration-200
-              hover:shadow-[6px_6px_14px_rgba(0,0,0,0.06),-6px_-6px_14px_rgba(255,255,255,0.9)]
-            "
+    flex justify-between items-center bg-emerald-50/50 rounded-xl p-3
+    shadow-[inset_2px_2px_6px_rgba(0,0,0,0.04),inset_-2px_-2px_6px_rgba(255,255,255,0.9)]
+    transition-all duration-200
+    hover:shadow-[6px_6px_14px_rgba(0,0,0,0.06),-6px_-6px_14px_rgba(255,255,255,0.9)]
+    hover:-translate-y-0.5
+    active:scale-[0.99]
+    cursor-pointer
+  "
           >
             <div>
               <p className="font-medium text-emerald-900">
@@ -77,10 +93,11 @@ export default function OrderCard({ order }: { order: Order }) {
                 Rs.{item.bookId.price} × {item.quantity}
               </p>
             </div>
+
             <p className="font-semibold text-emerald-800">
               Rs.{item.bookId.price * item.quantity}
             </p>
-          </div>
+          </Link>
         ))}
       </div>
 

@@ -2,9 +2,9 @@
 "use server";
 import { createOrder, getOrderByUserId } from "@/lib/api/order";
 
-export const handleCreateOrder = async (data: any) => {
+export const handleCreateOrder = async () => {
   try {
-    const response = await createOrder(data);
+    const response = await createOrder();
     if (response.success) {
       return {
         success: true,

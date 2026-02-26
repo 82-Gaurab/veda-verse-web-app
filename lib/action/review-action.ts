@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
-import { getMyReviews, getReviewByBookId } from "@/lib/api/review";
+import {
+  getMyReviews,
+  getReviewByBookId,
+  createReview,
+} from "@/lib/api/review";
 
 export const handleGetReviewByBookId = async (bookId: string) => {
   try {
@@ -42,6 +46,28 @@ export const handleGetMyReviews = async () => {
     return {
       success: false,
       message: error.message || "Get My Reviews action failed",
+    };
+  }
+};
+
+export const handleCreateReview = async (data: any) => {
+  try {
+    const response = await createReview(data);
+    if (response.success) {
+      return {
+        success: true,
+        message: "Review Creation successful",
+        data: response.data,
+      };
+    }
+    return {
+      success: false,
+      message: response.message || "Review Creation failed",
+    };
+  } catch (error: Error | any) {
+    return {
+      success: false,
+      message: error.message || "Review Creation action failed",
     };
   }
 };

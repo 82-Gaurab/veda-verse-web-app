@@ -1,6 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
+import { Star } from "lucide-react";
 
 export interface Review {
   _id: string;
@@ -27,7 +28,7 @@ export default function MyReviewCard({ review }: MyReviewCardProps) {
       className="
         group
         relative
-        bg-emerald-50/70 backdrop-blur-md
+        bg-white/60 backdrop-blur-md
         rounded-2xl p-6
         shadow-[6px_6px_16px_rgba(0,0,0,0.06),-6px_-6px_16px_rgba(255,255,255,0.8)]
         transition-all duration-300 ease-out
@@ -43,8 +44,9 @@ export default function MyReviewCard({ review }: MyReviewCardProps) {
             {review.bookId.title}
           </h2>
         </div>
-        <span className="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
-          ⭐ {review.rating.toFixed(1)}
+        <span className="flex flex-col items-center justify-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+          <Star size={17} className=" text-yellow-500 fill-yellow-500" />
+          {review.rating.toFixed(1)}
         </span>
       </div>
 

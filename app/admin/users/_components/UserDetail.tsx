@@ -10,7 +10,6 @@ interface UserDetailProps {
     email: string;
     role: "user" | "admin";
     profilePicture?: string | null;
-    wishlist: string[]; // or populated books if needed
     cart: {
       bookId: string;
       quantity: number;
@@ -90,15 +89,6 @@ export default function UserDetail({ user }: UserDetailProps) {
 
               {/* Meta Info Cards */}
               <div className="grid grid-cols-2 gap-6 text-sm">
-                <div className="bg-white/60 border border-blue-200 rounded-xl p-4 shadow-inner">
-                  <p className="uppercase text-xs tracking-wide text-blue-800 mb-1">
-                    Wishlist
-                  </p>
-                  <p className="text-gray-800 font-medium">
-                    {user.wishlist?.length || 0} items
-                  </p>
-                </div>
-
                 <div className="bg-white/60 border border-blue-200 rounded-xl p-4 shadow-inner">
                   <p className="uppercase text-xs tracking-wide text-blue-800 mb-1">
                     Cart

@@ -14,7 +14,7 @@ export default async function Page({
   }
   return (
     <div>
-      <PublicBookDetails book={response.data} />
+      <PublicBookDetails book={response.data} isLoggedIn={false} />
     </div>
   );
 }

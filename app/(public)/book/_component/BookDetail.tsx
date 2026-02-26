@@ -1,9 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { handleGetReviewByBookId } from "@/lib/action/review-action";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import ReviewCard from "../../_component/ReviewCard";
+import toast from "react-hot-toast";
+import { handleAddToCart } from "@/lib/action/auth-action";
+import ReviewForm from "./ReviewForm";
 
 interface PublicBookDetailsProps {
   book: {
@@ -16,6 +20,7 @@ interface PublicBookDetailsProps {
     publishedYear?: string;
     coverImg?: string | null;
   };
+  isLoggedIn: boolean;
 }
 
 type ReviewWithUser = {
@@ -30,7 +35,29 @@ type ReviewWithUser = {
   comment: string;
 };
 
-export default function PublicBookDetails({ book }: PublicBookDetailsProps) {
+export default function PublicBookDetails({
+  book,
+  isLoggedIn,
+}: PublicBookDetailsProps) {
+  const [loading, setLoading] = useState(false);
+  const handleAddToCartAction = async () => {
+    try {
+      setLoading(true);
+      const response = await handleAddToCart({
+        product: book._id,
+        quantity: 1,
+      });
+
+      if (!response?.success) {
+        toast.error(response?.message);
+      }
+      toast.success("Item Added to Cart");
+    } catch (error: Error | any) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   const [reviews, setReviews] = useState<ReviewWithUser[]>([]);
 
   useEffect(() => {
@@ -124,8 +151,35 @@ export default function PublicBookDetails({ book }: PublicBookDetailsProps) {
               <div className="text-3xl font-semibold text-green-900">
                 Rs. {book.price.toFixed(2)}
               </div>
+              {isLoggedIn ? (
+                <button
+                  disabled={loading}
+                  onClick={handleAddToCartAction}
+                  className="
+              text-sm
+              px-4
+              py-2
+              rounded-xl
+              bg-emerald-600
+              text-white
+              shadow-md
+              transition
+              duration-300
+              hover:bg-emerald-700
+              active:scale-95
+            "
+                >
+                  {loading ? "Adding..." : "Add to Cart"}
+                </button>
+              ) : null}
             </div>
           </div>
+
+          {isLoggedIn && (
+            <div className="w-full flex justify-center mt-10">
+              <ReviewForm bookId={book._id} />
+            </div>
+          )}
 
           {/* Reviews */}
           <div className="mt-12 space-y-4 md:col-span-2">

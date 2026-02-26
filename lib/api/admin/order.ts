@@ -40,3 +40,16 @@ export const deleteOrder = async (id: string) => {
     );
   }
 };
+
+export const getOrderByUserId = async (id: string) => {
+  try {
+    const response = await axios.get(API.ADMIN.ORDERS.GET_BY_USER_ID(id));
+    return response.data;
+  } catch (error: Error | any) {
+    throw new Error(
+      error.response?.data?.message ||
+        error.message ||
+        "Get Order By User Id failed",
+    );
+  }
+};

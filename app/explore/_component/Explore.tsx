@@ -7,7 +7,7 @@ import {
   handleGetBookByGenre,
 } from "@/lib/action/book-action";
 import { handleGetAllGenres } from "@/lib/action/genre-action";
-import UserBookCard from "@/app/(public)/user/explore/_component/UserBookCard";
+import UserBookCard from "@/app/(public)/user/dashboard/_component/UserBookCard";
 
 export type Genre = {
   _id: string;
@@ -35,6 +35,7 @@ export default function ExplorePage({ isLoggedIn = false }: ExplorePageProps) {
   const [activeGenre, setActiveGenre] = useState<string | null>(null);
 
   const CardComponent = isLoggedIn ? UserBookCard : BookCard;
+  const link = isLoggedIn ? "/user/dashboard" : "/book";
 
   // Fetch all books
   const fetchBooks = async (search?: string) => {
@@ -90,7 +91,7 @@ export default function ExplorePage({ isLoggedIn = false }: ExplorePageProps) {
       <div className="absolute -top-40 -left-40 w-96 h-96 bg-emerald-200/40 rounded-full blur-3xl" />
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-emerald-100/40 rounded-full blur-3xl" />
 
-      <div className="relative max-w-7xl mx-auto px-6 md:px-12 py-24 space-y-20">
+      <div className="relative max-w-7xl mx-auto py-24 space-y-20">
         {/* Search */}
         <section className="flex justify-center gap-3">
           <input
@@ -152,7 +153,7 @@ export default function ExplorePage({ isLoggedIn = false }: ExplorePageProps) {
             <p className="text-gray-600">Loading books...</p>
           ) : books.length > 0 ? (
             books.map((book) => (
-              <CardComponent key={book._id} link={"/explore"} {...book} />
+              <CardComponent key={book._id} link={link} {...book} />
             ))
           ) : (
             <p className="text-gray-600">No books found.</p>

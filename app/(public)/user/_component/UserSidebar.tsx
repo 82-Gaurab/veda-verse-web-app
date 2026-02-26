@@ -1,15 +1,13 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import Link from "next/link";
+import { Settings } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { SidebarProps } from "../../_component/Sidebar";
-import { useState } from "react";
 
 const LINKS = [
   { href: "/user/dashboard", label: "Home", id: "home" },
-  { href: "/user/explore", label: "Explore", id: "explore" },
   { href: "/user/cart", label: "Cart", id: "cart" },
   { href: "/user/history", label: "Purchase History", id: "purchase-history" },
   { href: "/user/reviews", label: "Reviews", id: "review" },
@@ -18,7 +16,6 @@ const LINKS = [
 export default function UserSidebar({ isCompact, setIsCompact }: SidebarProps) {
   const pathname = usePathname();
   const sidebarWidth = isCompact ? "80px" : "256px";
-  const [imgSrc, setImgSrc] = useState("/icons/default-profile.png");
 
   const isActive = (href: string) =>
     href === "/" ? pathname === href : pathname?.startsWith(href);
@@ -111,13 +108,16 @@ export default function UserSidebar({ isCompact, setIsCompact }: SidebarProps) {
           </nav>
         </div>
 
-        <Link className="mb-6 flex justify-center" href={"/user/profile"}>
-          <img
-            src={imgSrc}
-            alt="User Image"
-            className={`${isCompact ? "w-12 h-12" : "w-10 h-10"} rounded-full object-cover`}
-            onError={() => setImgSrc("/default-profile.png")}
-          />
+        <Link
+          href="/user/profile"
+          className="m-3 flex justify-center items-center rounded-2xl p-3 transition active:scale-95"
+          style={{
+            background: "#E6E2DA",
+            boxShadow:
+              "6px 6px 15px rgba(0,0,0,0.05), -6px -6px 15px rgba(255,255,255,0.7)",
+          }}
+        >
+          <Settings size={30} className="text-gray-700" />
         </Link>
       </aside>
     </>

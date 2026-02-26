@@ -59,7 +59,7 @@ export const handleLogin = async (formData: any) => {
   }
 };
 
-export const handleUpdateUser = async (data: FormData) => {
+export const handleUpdateMyself = async (data: FormData) => {
   try {
     const response = await updateUser(data);
     if (response.success) {

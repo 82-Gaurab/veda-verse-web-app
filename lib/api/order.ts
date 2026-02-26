@@ -2,9 +2,9 @@
 import { API } from "./endpoint";
 import axios from "./axios";
 
-export const createOrder = async (orderData: any) => {
+export const createOrder = async () => {
   try {
-    const response = await axios.post(API.ORDER.CREATE, orderData);
+    const response = await axios.post(API.ORDER.CREATE);
     return response.data;
   } catch (error: Error | any) {
     throw new Error(

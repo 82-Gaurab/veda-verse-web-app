@@ -1,372 +1,375 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { useState, useRef } from "react";
+import { useState, useRef, useTransition } from "react";
+import ConfirmationModal from "./ConfirmationModal";
+import { Edit2 } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
+import { UserEditData, UserEditSchema } from "@/app/admin/users/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
+import { handleUpdateMyself } from "@/lib/action/auth-action";
+import { useRouter } from "next/navigation";
 
-function ConfirmationModal({
-  message,
-  onConfirm,
-  onCancel,
-}: {
-  message: string;
-  onConfirm: () => void;
-  onCancel: () => void;
-}) {
+interface UpdateUserFormProps {
+  user: {
+    id: string;
+    firstName?: string;
+    lastName?: string;
+    email: string;
+    username: string;
+    role: string;
+    profilePicture?: string | null;
+  };
+}
+
+export default function ProfilePage({ user }: UpdateUserFormProps) {
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    watch,
+    formState: { errors, isSubmitting, isDirty, dirtyFields },
+  } = useForm<UserEditData>({
+    resolver: zodResolver(UserEditSchema),
+    defaultValues: {
+      firstName: user.firstName || "",
+      lastName: user.lastName || "",
+      email: user.email || "",
+      username: user.username || "",
+      profilePicture: undefined,
+    },
+  });
+  const router = useRouter();
+
+  // For image preview & file input
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(
+    user.profilePicture || null,
+  );
+  const isProfileChanged =
+    isDirty || (previewImage && previewImage !== user.profilePicture);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [pending, startTransition] = useTransition();
+
+  const handleReset = () => {
+    reset({
+      firstName: user.firstName || "",
+      lastName: user.lastName || "",
+      email: user.email || "",
+      username: user.username || "",
+      profilePicture: undefined,
+    });
+
+    setPreviewImage(user.profilePicture || null);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+
+    toast.success("Changes reset");
+  };
+
+  const handleImageChange = (
+    file: File | undefined,
+    onChange: (file: File | undefined) => void,
+  ) => {
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setPreviewImage(previewUrl);
+      onChange(file);
+    }
+  };
+  const handleDismissImage = (onChange?: (file?: File) => void) => {
+    onChange?.(undefined);
+    setPreviewImage(user.profilePicture || null);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+  const onSubmit = async (data: UserEditData) => {
+    if (!isProfileChanged) return;
+
+    startTransition(async () => {
+      try {
+        const formData = new FormData();
+        formData.append("id", user.id);
+
+        if (dirtyFields.firstName)
+          formData.append("firstName", data.firstName || "");
+
+        if (dirtyFields.lastName)
+          formData.append("lastName", data.lastName || "");
+
+        if (dirtyFields.email) formData.append("email", data.email || "");
+
+        if (dirtyFields.username)
+          formData.append("username", data.username || "");
+
+        if (data.profilePicture) {
+          formData.append("profilePicture", data.profilePicture);
+        }
+
+        const response = await handleUpdateMyself(formData);
+
+        if (!response.success) {
+          throw new Error(response.message || "Update failed");
+        }
+
+        toast.success("Profile updated successfully");
+        router.refresh();
+
+        // Reset dirty state after success
+        reset(data);
+      } catch (error: any) {
+        toast.error(error.message || "Update failed");
+      }
+    });
+  };
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-      <div className="bg-[#1E1E1E] p-6 rounded-lg max-w-sm w-full text-gray-200 shadow-lg">
-        <p className="mb-6">{message}</p>
-        <div className="flex justify-end gap-4">
+    <div className="min-h-screen bg-[#eef2f7] font-sans text-gray-700">
+      {/* Top Navbar */}
+      <div className="sticky top-0 z-40 bg-[#eef2f7] shadow-[0_8px_20px_#c9d4e3]">
+        <div className="max-w-5xl mx-auto px-8 py-5 flex items-center gap-8">
           <button
-            onClick={onCancel}
-            className="px-4 py-2 rounded-md bg-gray-700 hover:bg-gray-600 transition"
+            key={"EditProfile"}
+            className={`text-sm uppercase tracking-wider font-semibold transition 
+                  "text-gray-800"
+
+              }`}
           >
-            Cancel
+            Edit profile
           </button>
+
           <button
-            onClick={onConfirm}
-            className="px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 transition text-white"
+            onClick={() => setShowLogoutModal(true)}
+            className="ml-auto text-sm uppercase tracking-wider font-semibold text-red-500 hover:text-red-600 transition"
           >
             Logout
           </button>
         </div>
       </div>
-    </div>
-  );
-}
 
-export default function ProfilePage() {
-  const [activeTab, setActiveTab] = useState("Edit profile");
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
-
-  // For image preview & file input
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [imgSrc, setImgSrc] = useState("/icons/default-profile.png");
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) setImgSrc(URL.createObjectURL(file));
-  };
-
-  // Simple form state for demo
-  const [form, setForm] = useState({
-    firstName: "Birkhe",
-    lastName: "",
-    about: "",
-    pronouns: "",
-    website: "",
-  });
-
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
-  ) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleReset = () => {
-    setForm({
-      firstName: "",
-      lastName: "",
-      about: "",
-      pronouns: "",
-      website: "",
-    });
-    setImgSrc("/icons/default-profile.png");
-  };
-
-  const handleSave = () => {
-    alert("Profile saved (demo)");
-  };
-
-  const handleLogoutConfirm = () => {
-    setShowLogoutModal(false);
-    // Add your logout logic here, e.g., clear auth, redirect, etc.
-    alert("Logged out (demo)");
-  };
-
-  return (
-    <div className="min-h-screen bg-[#121212] text-gray-200 flex font-sans">
-      {/* Sidebar */}
-      <aside className="w-60 border-r border-gray-700 px-6 pt-12 flex flex-col gap-6">
-        <button
-          onClick={() => setActiveTab("Edit profile")}
-          className={`text-left font-semibold text-sm leading-snug transition-colors duration-200 ${
-            activeTab === "Edit profile"
-              ? "text-white font-bold"
-              : "text-gray-400 hover:text-white"
-          }`}
-        >
+      {/* Main Content Card */}
+      <div
+        className="max-w-3xl mx-auto mt-14 p-10 rounded-3xl bg-[#eef2f7]
+        shadow-[12px_12px_30px_#c9d4e3,-12px_-12px_30px_#ffffff]"
+      >
+        <h1 className="text-2xl font-bold mb-2 uppercase tracking-wide">
           Edit profile
-        </button>
-        <button
-          onClick={() => setActiveTab("Update password")}
-          className={`text-left font-semibold text-sm leading-snug transition-colors duration-200 ${
-            activeTab === "Update password"
-              ? "text-white font-bold"
-              : "text-gray-400 hover:text-white"
-          }`}
+        </h1>
+
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="max-w-xl mx-auto space-y-6 p-8 rounded-3xl 
+            "
         >
-          Update password
-        </button>
-
-        <button
-          onClick={() => setShowLogoutModal(true)}
-          className="mt-auto text-left font-semibold text-sm text-red-500 hover:text-red-400"
-        >
-          Logout
-        </button>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 p-10 max-w-4xl">
-        {activeTab === "Edit profile" && (
-          <>
-            <h1 className="text-2xl font-bold mb-2">Edit profile</h1>
-            <p className="mb-8 text-gray-400 max-w-lg">
-              Keep your personal details private. Information you add here is
-              visible to anyone who can view your profile.
-            </p>
-
-            {/* Profile photo & change button */}
-            <div className="flex items-center gap-6 mb-8">
-              <div className="w-20 h-20 rounded-full overflow-hidden border border-gray-600 bg-gray-800">
+          {/* Profile Preview */}
+          <div className="mb-6 flex justify-center">
+            <div className="relative w-28 h-28">
+              {/* Profile Image */}
+              {previewImage ? (
                 <img
-                  src={imgSrc}
-                  alt="Profile photo"
-                  className="w-full h-full object-cover"
+                  src={previewImage}
+                  alt="Profile Preview"
+                  className="w-28 h-28 rounded-full object-cover border-4 border-white shadow-md"
                 />
-              </div>
-              <div>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="hidden"
-                />
-                <button
-                  onClick={() => fileInputRef.current?.click()}
-                  className="bg-gray-800 text-gray-300 hover:bg-gray-700 px-3 py-1 rounded-md text-sm"
-                >
-                  Change
-                </button>
-              </div>
+              ) : (
+                <div className="w-28 h-28 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 border-2 border-dashed border-gray-400">
+                  <span className="text-sm">No Image</span>
+                </div>
+              )}
+
+              <Controller
+                name="profilePicture"
+                control={control}
+                render={({ field: { onChange } }) => {
+                  const isNewImage =
+                    previewImage && previewImage !== user.profilePicture;
+
+                  return (
+                    <>
+                      {/* Hidden File Input */}
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept=".jpg,.jpeg,.png,.webp"
+                        onChange={(e) =>
+                          handleImageChange(e.target.files?.[0], onChange)
+                        }
+                        className="hidden"
+                      />
+
+                      {/* Edit Icon */}
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="absolute bottom-0 right-0 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full shadow-lg transition"
+                      >
+                        <Edit2 size={16} />
+                      </button>
+
+                      {/* Remove Icon (Only when new image selected) */}
+                      {isNewImage && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            handleDismissImage(onChange);
+                            setPreviewImage(user.profilePicture || null);
+                          }}
+                          className="absolute top-0 right-0 bg-red-500 hover:bg-red-600 text-white w-7 h-7 rounded-full flex items-center justify-center text-sm shadow-md transition"
+                        >
+                          ✕
+                        </button>
+                      )}
+                    </>
+                  );
+                }}
+              />
             </div>
-
-            {/* Form */}
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSave();
-              }}
-              className="space-y-6 max-w-lg"
-            >
-              <div>
-                <label
-                  htmlFor="firstName"
-                  className="block text-xs font-semibold mb-1"
-                >
-                  First name
-                </label>
-                <input
-                  id="firstName"
-                  name="firstName"
-                  type="text"
-                  value={form.firstName}
-                  onChange={handleInputChange}
-                  placeholder="First name"
-                  className="w-full bg-[#1E1E1E] border border-gray-700 rounded-md py-2 px-3 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#5c88f6]"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="lastName"
-                  className="block text-xs font-semibold mb-1"
-                >
-                  Last name
-                </label>
-                <input
-                  id="lastName"
-                  name="lastName"
-                  type="text"
-                  value={form.lastName}
-                  onChange={handleInputChange}
-                  placeholder="Last name"
-                  className="w-full bg-[#1E1E1E] border border-gray-700 rounded-md py-2 px-3 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#5c88f6]"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="about"
-                  className="block text-xs font-semibold mb-1"
-                >
-                  About
-                </label>
-                <textarea
-                  id="about"
-                  name="about"
-                  rows={3}
-                  value={form.about}
-                  onChange={handleInputChange}
-                  placeholder="Tell your story"
-                  className="w-full bg-[#1E1E1E] border border-gray-700 rounded-md py-2 px-3 text-sm placeholder-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-[#5c88f6]"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="pronouns"
-                  className="block text-xs font-semibold mb-1"
-                >
-                  Pronouns
-                </label>
-                <select
-                  id="pronouns"
-                  name="pronouns"
-                  value={form.pronouns}
-                  onChange={handleInputChange}
-                  className="w-full bg-[#1E1E1E] border border-gray-700 rounded-md py-2 px-3 text-sm text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#5c88f6]"
-                >
-                  <option value="" disabled>
-                    Add your pronouns
-                  </option>
-                  <option value="she/her">She/Her</option>
-                  <option value="he/him">He/Him</option>
-                  <option value="they/them">They/Them</option>
-                  <option value="other">Other</option>
-                </select>
-                <p className="mt-1 text-xs text-gray-500">
-                  Choose up to 2 sets of pronouns to appear on your profile so
-                  others know how to refer to you. You can edit or remove these
-                  any time.
-                </p>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="website"
-                  className="block text-xs font-semibold mb-1"
-                >
-                  Website
-                </label>
-                <input
-                  id="website"
-                  name="website"
-                  type="url"
-                  value={form.website}
-                  onChange={handleInputChange}
-                  placeholder="https://"
-                  className="w-full bg-[#1E1E1E] border border-gray-700 rounded-md py-2 px-3 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#5c88f6]"
-                />
-                <p className="mt-1 text-xs text-gray-500">
-                  Add a link to drive traffic to your site
-                </p>
-              </div>
-
-              <div className="flex justify-end gap-4 mt-8">
-                <button
-                  type="button"
-                  onClick={handleReset}
-                  className="bg-gray-800 px-5 py-2 rounded-full text-gray-400 hover:text-white hover:bg-gray-700 transition text-sm font-semibold"
-                >
-                  Reset
-                </button>
-                <button
-                  type="submit"
-                  className="bg-[#5c88f6] px-5 py-2 rounded-full text-white hover:bg-sky-500 transition text-sm font-semibold"
-                >
-                  Save
-                </button>
-              </div>
-            </form>
-          </>
-        )}
-
-        {activeTab === "Update password" && (
-          <div className="max-w-lg">
-            <h1 className="text-2xl font-bold mb-6">Update password</h1>
-            <p className="mb-8 text-gray-400">
-              Change your password to keep your account secure.
-            </p>
-            {/* Placeholder for update password form */}
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert("Password updated (demo)");
-              }}
-              className="space-y-6"
-            >
-              <div>
-                <label
-                  htmlFor="currentPassword"
-                  className="block text-xs font-semibold mb-1"
-                >
-                  Current password
-                </label>
-                <input
-                  id="currentPassword"
-                  name="currentPassword"
-                  type="password"
-                  placeholder="••••••••"
-                  className="w-full bg-[#1E1E1E] border border-gray-700 rounded-md py-2 px-3 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#5c88f6]"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="newPassword"
-                  className="block text-xs font-semibold mb-1"
-                >
-                  New password
-                </label>
-                <input
-                  id="newPassword"
-                  name="newPassword"
-                  type="password"
-                  placeholder="••••••••"
-                  className="w-full bg-[#1E1E1E] border border-gray-700 rounded-md py-2 px-3 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#5c88f6]"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="confirmPassword"
-                  className="block text-xs font-semibold mb-1"
-                >
-                  Confirm new password
-                </label>
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  placeholder="••••••••"
-                  className="w-full bg-[#1E1E1E] border border-gray-700 rounded-md py-2 px-3 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#5c88f6]"
-                />
-              </div>
-
-              <div className="flex justify-end mt-6">
-                <button
-                  type="submit"
-                  className="bg-[#5c88f6] px-5 py-2 rounded-full text-white hover:bg-sky-500 transition text-sm font-semibold"
-                >
-                  Update Password
-                </button>
-              </div>
-            </form>
           </div>
-        )}
 
-        {showLogoutModal && (
-          <ConfirmationModal
-            message="Are you sure you want to logout?"
-            onCancel={() => setShowLogoutModal(false)}
-            onConfirm={handleLogoutConfirm}
-          />
-        )}
-      </main>
+          <div className="space-y-1">
+            <label
+              className="text-xs uppercase tracking-wider "
+              htmlFor="firstName"
+            >
+              First name
+            </label>
+            <input
+              id="firstName"
+              type="text"
+              autoComplete="given-name"
+              className="w-full px-4 py-3 rounded-xl 
+           bg-[#eef2f7] 
+           shadow-[inset_4px_4px_8px_#c9d4e3,inset_-4px_-4px_8px_#ffffff]
+           outline-none
+           focus:shadow-[inset_2px_2px_4px_#c9d4e3,inset_-2px_-2px_4px_#ffffff]
+           transition text-sm text-gray-700 placeholder:text-gray-400"
+              {...register("firstName")}
+              placeholder="Jane"
+            />
+            {errors.firstName?.message && (
+              <p className="text-xs text-red-600">{errors.firstName.message}</p>
+            )}
+          </div>
+
+          <div className="space-y-1">
+            <label
+              className="text-xs uppercase tracking-wider "
+              htmlFor="lastName"
+            >
+              Last name
+            </label>
+            <input
+              id="lastName"
+              type="text"
+              autoComplete="family-name"
+              className="w-full px-4 py-3 rounded-xl 
+           bg-[#eef2f7] 
+           shadow-[inset_4px_4px_8px_#c9d4e3,inset_-4px_-4px_8px_#ffffff]
+           outline-none
+           focus:shadow-[inset_2px_2px_4px_#c9d4e3,inset_-2px_-2px_4px_#ffffff]
+           transition text-sm text-gray-700 placeholder:text-gray-400"
+              {...register("lastName")}
+              placeholder="Doe"
+            />
+            {errors.lastName?.message && (
+              <p className="text-xs text-red-600">{errors.lastName.message}</p>
+            )}
+          </div>
+
+          <div className="space-y-1">
+            <label
+              className="text-xs uppercase tracking-wider "
+              htmlFor="email"
+            >
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              autoComplete="email"
+              className="w-full px-4 py-3 rounded-xl 
+           bg-[#eef2f7] 
+           shadow-[inset_4px_4px_8px_#c9d4e3,inset_-4px_-4px_8px_#ffffff]
+           outline-none
+           focus:shadow-[inset_2px_2px_4px_#c9d4e3,inset_-2px_-2px_4px_#ffffff]
+           transition text-sm text-gray-700 placeholder:text-gray-400"
+              {...register("email")}
+              placeholder="you@example.com"
+            />
+            {errors.email?.message && (
+              <p className="text-xs text-red-600">{errors.email.message}</p>
+            )}
+          </div>
+
+          <div className="space-y-1">
+            <label
+              className="text-xs uppercase tracking-wider "
+              htmlFor="username"
+            >
+              Username
+            </label>
+            <input
+              id="username"
+              type="text"
+              autoComplete="username"
+              className="w-full px-4 py-3 rounded-xl 
+           bg-[#eef2f7] 
+           shadow-[inset_4px_4px_8px_#c9d4e3,inset_-4px_-4px_8px_#ffffff]
+           outline-none
+           focus:shadow-[inset_2px_2px_4px_#c9d4e3,inset_-2px_-2px_4px_#ffffff]
+           transition text-sm text-gray-700 placeholder:text-gray-400"
+              {...register("username")}
+              placeholder="Jane Doe"
+            />
+            {errors.username?.message && (
+              <p className="text-xs text-red-600">{errors.username.message}</p>
+            )}
+          </div>
+
+          <div className="flex gap-6">
+            <button
+              onClick={handleReset}
+              className="w-full py-3 rounded-xl
+    bg-gray-600
+    text-white text-sm font-semibold
+    shadow-lg
+    hover:bg-gray-400
+    active:scale-[0.98]
+    transition
+    disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Reset
+            </button>
+            <button
+              type="submit"
+              disabled={!isProfileChanged || isSubmitting || pending}
+              className="w-full py-3 rounded-xl
+    bg-green-600
+    text-white text-sm font-semibold
+    shadow-lg
+    hover:bg-green-700
+    active:scale-[0.98]
+    transition
+    disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting || pending ? "Saving..." : "Save"}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {showLogoutModal && (
+        <ConfirmationModal
+          message="Are you sure you want to logout?"
+          onCancel={() => setShowLogoutModal(false)}
+        />
+      )}
     </div>
   );
 }

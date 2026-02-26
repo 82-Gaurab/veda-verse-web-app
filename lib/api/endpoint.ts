@@ -27,6 +27,7 @@ export const API = {
   REVIEWS: {
     GET_BY_BOOK_ID: (bookId: string) => `/reviews/books/${bookId}`,
     MY_REVIEWS: "/reviews/my-reviews",
+    CREATE: "/reviews/",
   },
   GENRES: {
     GET_ALL: "/genres/",
@@ -35,8 +36,9 @@ export const API = {
     DASHBOARD: "/admin/dashboard",
     ORDERS: {
       GET_ALL_ORDER: "/admin/orders",
-      DELETE: (orderId: string) => `/admin/orders/${orderId}`,
       UPDATE: (orderId: string) => `/admin/orders/${orderId}`,
+      DELETE: (orderId: string) => `/admin/orders/${orderId}`,
+      GET_BY_USER_ID: (orderId: string) => `/admin/orders/${orderId}`,
     },
     GENRES: {
       CREATE_GENRE: "/admin/genres",

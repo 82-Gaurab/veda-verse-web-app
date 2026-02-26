@@ -27,23 +27,28 @@ const BookCard = ({
   return (
     <div
       className="
-        group
-        bg-emerald-50/70
-        backdrop-blur-md
-        rounded-2xl
-        min-w-75
-        w-full max-w-75
-        p-5
-        h-120
-        flex flex-col
-        transition-all
-        duration-300
-        ease-out
-        shadow-[6px_6px_16px_rgba(0,0,0,0.06),-6px_-6px_16px_rgba(255,255,255,0.8)]
-        hover:shadow-[8px_8px_20px_rgba(0,0,0,0.08),-8px_-8px_20px_rgba(255,255,255,0.9)]
-        hover:-translate-y-1
-        hover:scale-[1.02]
-      "
+    group
+    bg-white
+    backdrop-blur-xl
+    rounded-2xl
+    min-w-75
+    w-full max-w-75
+    p-5
+    h-120
+    flex flex-col
+    transition-all
+    duration-300
+    ease-out
+
+    border border-emerald-100
+    ring-1 ring-black/5
+
+    shadow-lg shadow-emerald-900/5
+    hover:shadow-2xl hover:shadow-emerald-900/10
+
+    hover:-translate-y-2
+    hover:scale-[1.02]
+  "
     >
       {/* Image */}
       <div className="relative w-full h-60 mb-6 rounded-xl overflow-hidden">
