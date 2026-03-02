@@ -44,17 +44,19 @@ const ForgetPasswordForm = ({ onOpenLogin }: ForgotPasswordFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(submit)} className="space-y-4">
+    <form onSubmit={handleSubmit(submit)} className="space-y-4 text-black">
       {error && <p className="text-sm text-red-600">{error}</p>}
       <div className="space-y-1">
-        <label className="text-sm font-medium" htmlFor="email">
+        <label className="text-[17px] font-medium" htmlFor="email">
           Email
         </label>
         <input
           id="email"
           type="email"
           autoComplete="email"
-          className="h-10 w-full rounded-md border border-black/10 dark:border-white/15 bg-background px-3 text-sm outline-none focus:border-foreground/40"
+          className="w-full px-4 py-2.5 mt-2 rounded-2xl bg-[#e0e5ec] outline-none
+          shadow-[inset_6px_6px_10px_#a3b1c6,inset_-6px_-6px_10px_#ffffff]
+          text-gray-700"
           {...register("email")}
           placeholder="you@example.com"
         />
@@ -66,15 +68,21 @@ const ForgetPasswordForm = ({ onOpenLogin }: ForgotPasswordFormProps) => {
       <button
         type="submit"
         disabled={isSubmitting || pending}
-        className="h-10 w-full rounded-md bg-foreground text-background text-sm font-semibold hover:opacity-90 disabled:opacity-60"
+        className="w-full py-2 rounded-full text-white font-semibold
+        bg-linear-to-r from-[#63ad84] to-[#488563]
+        shadow-[6px_6px_10px_#a3b1c6,-6px_-6px_10px_#ffffff]
+        hover:scale-[1.02] transition"
       >
         {isSubmitting || pending ? "Sending..." : "Send Link"}
       </button>
 
-      <div className="mt-1 text-center text-sm">
-        Already have an account?{" "}
-        <button onClick={onOpenLogin} className="font-semibold hover:underline">
-          Log in
+      <div className="my-2 text-center text-[15px]">
+        Already have an account.
+        <button
+          className="text-[#BE9D68] ml-1 cursor-pointer"
+          onClick={onOpenLogin}
+        >
+          Login
         </button>
       </div>
     </form>

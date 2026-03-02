@@ -1,3 +1,5 @@
+import ContactPage from "./_component/Contact";
+
 export default function Page() {
-  return <h1>Contact Us Page</h1>;
+  return <ContactPage />;
 }

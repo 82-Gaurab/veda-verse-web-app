@@ -10,6 +10,7 @@ export const UserSchema = z
     confirmPassword: z.string().min(6, { message: "Minimum 6 characters" }),
     firstName: z.string().optional(),
     lastName: z.string().optional(),
+    role: z.string().optional(),
     username: z
       .string()
       .min(3, { message: "Username must be at least 3 characters" }),
@@ -32,3 +33,15 @@ export type UserData = z.infer<typeof UserSchema>;
 
 export const UserEditSchema = UserSchema.partial();
 export type UserEditData = z.infer<typeof UserEditSchema>;
+
+export const ChangePasswordSchema = z
+  .object({
+    newPassword: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string().min(8, "Please confirm your password"),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+export type ChangePasswordData = z.infer<typeof ChangePasswordSchema>;

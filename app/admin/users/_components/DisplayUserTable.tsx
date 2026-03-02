@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { handleDeleteUser } from "@/lib/action/admin/user-action";
-import DeleteModal from "@/app/_component/DeleteModal";
+import DeleteModal from "@/app/(public)/_component/DeleteModal";
 const DisplayUserTable = ({
   users,
   pagination,
@@ -37,8 +37,12 @@ const DisplayUserTable = ({
     pages.push(
       <Link
         key="prev"
-        className={`px-3 py-1 border rounded-md 
-                    ${currentPage === 1 ? "bg-gray-200 text-gray-400 cursor-not-allowed pointer-events-none" : "bg-white text-blue-500 hover:bg-blue-100"}`}
+        className={`px-4 py-2 rounded-lg text-sm font-medium transition
+                    ${
+                      currentPage === 1
+                        ? "bg-green-200 text-green-600 cursor-not-allowed pointer-events-none"
+                        : "bg-green-500 text-white hover:bg-green-600"
+                    }`}
         href={currentPage === 1 ? "#" : prevHref}
       >
         Previous
@@ -80,8 +84,12 @@ const DisplayUserTable = ({
       pages.push(
         <Link
           key={i}
-          className={`px-3 py-1 border rounded-md 
-                        ${i === currentPage ? "bg-blue-500 text-white" : "bg-white text-blue-500 hover:bg-blue-100"}`}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition
+                    ${
+                      i === currentPage
+                        ? "bg-green-600 text-white"
+                        : "bg-green-500 text-white hover:bg-green-600"
+                    }`}
           href={href}
         >
           {i}
@@ -119,8 +127,12 @@ const DisplayUserTable = ({
     pages.push(
       <Link
         key="next"
-        className={`px-3 py-1 border rounded-md 
-                    ${currentPage === totalPages ? "bg-gray-200 text-gray-400 cursor-not-allowed pointer-events-none" : "bg-white text-blue-500 hover:bg-blue-100"}`}
+        className={`px-4 py-2 rounded-lg text-sm font-medium transition
+  ${
+    currentPage === totalPages
+      ? "bg-green-200 text-green-600 cursor-not-allowed pointer-events-none"
+      : "bg-green-500 text-white hover:bg-green-600"
+  }`}
         href={currentPage === totalPages ? "#" : nextHref}
       >
         Next
@@ -142,7 +154,7 @@ const DisplayUserTable = ({
     }
   };
   return (
-    <div className="mt-6 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+    <div className="mt-6 mb-6 bg-green-100/20 rounded-xl shadow-sm overflow-hidden border border-green-200">
       <DeleteModal
         isOpen={deleteId}
         onClose={() => setDeleteId(null)}
@@ -151,96 +163,119 @@ const DisplayUserTable = ({
         description="Are you sure you want to delete this item? This action cannot be undone."
       />
 
-      <div className="p-4 bg-gray-50 dark:bg-gray-800">
+      {/* Search & Page Size */}
+      <div className="p-5 bg-green-100/40 border-b border-green-200 flex flex-wrap gap-3 items-center">
+        {/* Search input */}
         <input
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleSearchChange();
-            }
-          }}
+          onKeyDown={(e) => e.key === "Enter" && handleSearchChange()}
           placeholder="Search users..."
-          className="mr-2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-72 px-4 py-2 border border-green-300 bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
         />
         <button
           onClick={handleSearchChange}
-          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 transition"
         >
           Search
         </button>
+
+        {/* Page size selector */}
+        <div className="ml-auto flex items-center gap-2">
+          <label
+            htmlFor="pageSize"
+            className="text-green-900 text-sm font-medium"
+          >
+            Rows per page:
+          </label>
+          <select
+            id="pageSize"
+            value={pagination.size}
+            onChange={(e) => {
+              router.push(
+                `/admin/users?page=1&size=${e.target.value}` +
+                  (searchTerm
+                    ? `&search=${encodeURIComponent(searchTerm)}`
+                    : ""),
+              );
+            }}
+            className="px-3 py-2 border border-green-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+          >
+            {[5, 10, 25, 50, 100].map((size) => (
+              <option key={size} value={size}>
+                {size}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
-      <table className="w-full table-auto border-collapse">
-        <thead className="bg-gray-50 dark:bg-gray-800">
+
+      <table className="w-full text-sm text-left border-collapse">
+        <thead className="bg-green-200/40 text-green-900 uppercase text-xs tracking-wider">
           <tr>
-            <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-              ID
-            </th>
-            <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-              Image
-            </th>
-            <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-              Name
-            </th>
-            <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-              Email
-            </th>
-            <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-              Role
-            </th>
-            <th className="px-4 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-              Actions
-            </th>
+            <th className="px-6 py-4">ID</th>
+            <th className="px-6 py-4">Image</th>
+            <th className="px-6 py-4">Username</th>
+            <th className="px-6 py-4">Email</th>
+            <th className="px-6 py-4">Role</th>
+            <th className="px-6 py-4">Actions</th>
           </tr>
         </thead>
-        <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
-          {users.map((user) => (
-            <tr key={user._id}>
-              <td className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">
-                {user._id}
-              </td>
-              <td className="px-4 py-2">
+
+        <tbody className="divide-y divide-green-200">
+          {users.map((user, index) => (
+            <tr
+              key={user._id}
+              className={`transition ${
+                index % 2 === 0 ? "bg-green-100/30" : "bg-green-100/50"
+              } hover:bg-green-200/50`}
+            >
+              <td className="px-6 py-4 text-gray-700">{user._id}</td>
+
+              <td className="px-6 py-4">
                 {user.profilePicture ? (
-                  <img
-                    src={`${process.env.Next_PUBLIC_API_BASE_URL}${user.profilePicture}`}
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${user.profilePicture}`}
                     alt="User Image"
-                    className="w-10 h-10 rounded-full object-cover"
                     width={40}
                     height={40}
+                    unoptimized
+                    className="w-10 h-10 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                    <span className="text-gray-600 text-sm">N/A</span>
+                  <div className="w-10 h-10 bg-green-200 rounded-full flex items-center justify-center">
+                    <span className="text-green-800 text-xs">N/A</span>
                   </div>
                 )}
               </td>
-              <td className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">
-                {user.firstName || " " + user.lastName || " "}
+
+              <td className="px-6 py-4 font-medium text-gray-800">
+                {user.username}
               </td>
-              <td className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">
-                {user.email}
-              </td>
-              <td className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 text-capitalize">
+
+              <td className="px-6 py-4 text-gray-700">{user.email}</td>
+
+              <td className="px-6 py-4 text-gray-700 capitalize">
                 {user.role}
               </td>
-              <td className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">
-                {/* Add action buttons or links here */}
+
+              <td className="px-6 py-4">
                 <Link
                   href={`/admin/users/${user._id}`}
-                  className="text-green-500 hover:underline"
+                  className="text-green-800 hover:underline font-medium"
                 >
                   View
                 </Link>
                 <Link
                   href={`/admin/users/${user._id}/edit`}
-                  className="text-blue-500 ml-4 hover:underline"
+                  className="text-green-700 ml-4 hover:underline font-medium"
                 >
                   Edit
                 </Link>
                 <button
                   onClick={() => setDeleteId(user._id)}
-                  className="ml-4 text-red-500 hover:underline"
+                  className="ml-4 text-red-600 hover:underline font-medium"
                 >
                   Delete
                 </button>
@@ -249,12 +284,13 @@ const DisplayUserTable = ({
           ))}
         </tbody>
       </table>
+
       {/* Pagination */}
-      <div className="p-4 flex justify-between items-center bg-gray-50 dark:bg-gray-800">
-        <div className="text-sm text-gray-700 dark:text-gray-300">
+      <div className="px-6 py-4 flex justify-between items-center bg-green-100/40 border-t border-green-200">
+        <div className="text-sm text-gray-700">
           Page {pagination.page} of {pagination.totalPages}
         </div>
-        <div className="space-x-2">{makePagination()}</div>
+        <div className="flex items-center gap-2">{makePagination()}</div>
       </div>
     </div>
   );

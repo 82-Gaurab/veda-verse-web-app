@@ -73,3 +73,63 @@ export const resetPassword = async (token: string, newPassword: string) => {
     );
   }
 };
+
+export const changePassword = async (data: any) => {
+  try {
+    const response = await axios.post(API.AUTH.CHANGE_PASSWORD, data);
+    return response.data;
+  } catch (error: Error | any) {
+    throw new Error(
+      error.response?.data?.message ||
+        error.message ||
+        "Change password failed",
+    );
+  }
+};
+
+export const sendMessage = async (messageData: any) => {
+  try {
+    const response = await axios.post(API.USER.MESSAGE, messageData);
+    return response.data;
+  } catch (error: Error | any) {
+    // info: if 4xx/5xx error, axios throws error
+    throw new Error(
+      error.response?.data?.message || // backend error message
+        error.message || // general axios error message
+        "Failed to send Message", // fallback message
+    );
+  }
+};
+
+export const getUserById = async (id: string) => {
+  try {
+    const response = await axios.get(API.AUTH.GET_ONE(id));
+    return response.data;
+  } catch (error: Error | any) {
+    throw new Error(
+      error.response?.data?.message || error.message || "Get User By Id Failed",
+    );
+  }
+};
+
+export const addToCart = async (cartData: any) => {
+  try {
+    const response = await axios.put(API.AUTH.ADD_TO_CART, cartData);
+    return response.data;
+  } catch (error: Error | any) {
+    throw new Error(
+      error.response?.data?.message || error.message || "Add to Cart failed",
+    );
+  }
+};
+
+export const getMyData = async () => {
+  try {
+    const response = await axios.get(API.AUTH.GET_MY_DATA);
+    return response.data;
+  } catch (error: Error | any) {
+    throw new Error(
+      error.response?.data?.message || error.message || "Get My Data Failed",
+    );
+  }
+};
