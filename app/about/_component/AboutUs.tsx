@@ -27,7 +27,6 @@ export default function AboutPage() {
           </p>
         </section>
 
-        {/* 🌿 Cinematic Image */}
         <section className="relative rounded-3xl overflow-hidden">
           <div
             className="
@@ -36,7 +35,7 @@ export default function AboutPage() {
             "
           >
             <Image
-              src="/images/bg.jpg"
+              src="/images/book.jpg"
               alt="Library"
               width={1200}
               height={600}
@@ -51,7 +50,6 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* 🌿 Purpose + Commitment */}
         <section className="grid md:grid-cols-2 gap-16 items-center">
           {/* Purpose */}
           <div className="space-y-6">

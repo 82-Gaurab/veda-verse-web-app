@@ -28,16 +28,22 @@ export default function AdminSidebar({
 
   return (
     <>
-      {/* Sidebar */}
       <aside
-        className={`
-                flex flex-col justify-between fixed top-0 left-0.5 h-screen border-r border-gray-200 z-40 overflow-hidden pb-8 bg-[#F2EFE8] transition-all duration-400 ease-in-out`}
-        style={{
-          width: sidebarWidth,
-        }}
+        className="
+          flex flex-col justify-between
+          fixed top-0 left-0.5 h-screen
+          border-r border-emerald-100
+          z-40 overflow-hidden pb-8
+          bg-emerald-50
+          transition-all duration-300 ease-in-out
+        "
+        style={{ width: sidebarWidth }}
       >
-        <div>
-          <div className="p-4 border-b border-gray-200 ">
+        <div className="absolute -top-20 -left-20 w-72 h-72 bg-emerald-200/30 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10">
+          {/* Logo Section */}
+          <div className="p-4 border-b border-emerald-100">
             <div
               className="rounded flex items-center font-bold"
               style={{ gap: isCompact ? "0" : "16px" }}
@@ -49,7 +55,7 @@ export default function AdminSidebar({
                   justifyContent: isCompact ? "center" : "",
                 }}
               >
-                {isCompact ? null : (
+                {!isCompact && (
                   <>
                     <Image
                       src="/icons/logo.png"
@@ -61,23 +67,25 @@ export default function AdminSidebar({
                         cursor: "pointer",
                       }}
                     />
-                    <span className="font-semibold text-[#488563] text-[20px]">
+                    <span className="font-semibold text-emerald-700 text-[20px]">
                       Admin Panel
                     </span>
                   </>
                 )}
               </Link>
+
               <Image
                 onClick={() => setIsCompact((prev) => !prev)}
                 src="/icons/menu.png"
                 height={isCompact ? 60 : 40}
                 width={isCompact ? 40 : 35}
-                alt="logo"
+                alt="menu"
                 className="transition-all ease-in-out duration-300 cursor-pointer"
               />
             </div>
           </div>
 
+          {/* Navigation */}
           <nav className="p-2 mt-2 space-y-1 flex flex-col gap-3">
             {ADMIN_LINKS.map((link) => (
               <Link
@@ -86,10 +94,12 @@ export default function AdminSidebar({
                 style={{
                   justifyContent: isCompact ? "center" : "",
                 }}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200 ease-in-out ${
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium 
+                transition-all duration-200 ease-in-out
+                ${
                   isActive(link.href)
-                    ? "bg-[#f1ede1] shadow-[inset_0_5px_8px_rgba(0,0,0,0.2)] rounded text-gray-700"
-                    : "text-gray-700 hover:bg-fuchsia-200"
+                    ? "bg-emerald-100 text-emerald-800 shadow-inner"
+                    : "text-emerald-700 hover:bg-emerald-100/70"
                 }`}
               >
                 <Image
@@ -101,20 +111,31 @@ export default function AdminSidebar({
                     transition: "all ease-in-out 0.6s",
                   }}
                 />
-                {isCompact ? null : <span>{link.label}</span>}
+                {!isCompact && <span>{link.label}</span>}
               </Link>
             ))}
           </nav>
         </div>
 
-        <button
-          onClick={() => {
-            logout();
-          }}
-          className="w-full mb-6 border flex items-center justify-center cursor-pointer text-black gap-2 px-3 py-2 text-sm rounded-md hover:bg-foreground/5 transition-colors"
-        >
-          Logout
-        </button>
+        {/* Logout Button */}
+        <div className="relative z-10 px-3">
+          <button
+            onClick={logout}
+            className="
+              w-full
+              flex items-center justify-center
+              cursor-pointer
+              gap-2 px-3 py-2 text-sm
+              rounded-xl
+              bg-emerald-100
+              text-emerald-800
+              hover:bg-emerald-200
+              transition-all duration-200
+            "
+          >
+            Logout
+          </button>
+        </div>
       </aside>
     </>
   );

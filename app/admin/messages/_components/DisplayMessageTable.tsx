@@ -51,10 +51,10 @@ const DisplayMessageTable = ({
       <Link
         key="prev"
         href={currentPage === 1 ? "#" : createHref(currentPage - 1)}
-        className={`px-3 py-1 border rounded-md ${
+        className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
           currentPage === 1
-            ? "bg-gray-200 text-black pointer-events-none"
-            : "bg-white text-blue-500 hover:bg-blue-100"
+            ? "bg-green-200 text-green-600 cursor-not-allowed pointer-events-none"
+            : "bg-green-500 text-white hover:bg-green-600"
         }`}
       >
         Previous
@@ -64,15 +64,37 @@ const DisplayMessageTable = ({
     const startPage = Math.max(1, currentPage - delta);
     const endPage = Math.min(totalPages, currentPage + delta);
 
+    if (startPage > 1) {
+      const href =
+        `/admin/messages?page=1&size=${pagination.size}` +
+        (searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : "");
+      pages.push(
+        <Link
+          key={1}
+          className="px-3 py-1 border rounded-md bg-white text-blue-500 hover:bg-blue-100"
+          href={href}
+        >
+          1
+        </Link>,
+      );
+      if (startPage > 2) {
+        pages.push(
+          <span key="ellipsis1" className="px-2 text-gray-500">
+            ...
+          </span>,
+        );
+      }
+    }
+
     for (let i = startPage; i <= endPage; i++) {
       pages.push(
         <Link
           key={i}
           href={createHref(i)}
-          className={`px-3 py-1 border rounded-md ${
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
             i === currentPage
-              ? "bg-blue-500 text-white"
-              : "bg-white text-blue-500 hover:bg-blue-100"
+              ? "bg-green-600 text-white"
+              : "bg-green-500 text-white hover:bg-green-600"
           }`}
         >
           {i}
@@ -85,10 +107,10 @@ const DisplayMessageTable = ({
       <Link
         key="next"
         href={currentPage === totalPages ? "#" : createHref(currentPage + 1)}
-        className={`px-3 py-1 border rounded-md ${
+        className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
           currentPage === totalPages
-            ? "bg-gray-200 text-black pointer-events-none"
-            : "bg-white text-blue-500 hover:bg-blue-100"
+            ? "bg-green-200 text-green-600 cursor-not-allowed pointer-events-none"
+            : "bg-green-500 text-white hover:bg-green-600"
         }`}
       >
         Next

@@ -111,10 +111,18 @@ export const handleGetOneBook = async (id: string) => {
   try {
     const response = await getBookById(id);
     if (response.success) {
+      const book = response.data;
+
+      const transformedBook = {
+        ...book,
+        genre: Array.isArray(book.genre)
+          ? book.genre.map((g: any) => g.name)
+          : [],
+      };
       return {
         success: true,
         message: "Get Book by id successful",
-        data: response.data,
+        data: transformedBook,
       };
     }
     return {

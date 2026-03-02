@@ -74,12 +74,9 @@ export const resetPassword = async (token: string, newPassword: string) => {
   }
 };
 
-export const changePassword = async (email: string, newPassword: string) => {
+export const changePassword = async (data: any) => {
   try {
-    const response = await axios.post(API.AUTH.CHANGE_PASSWORD, {
-      email: email,
-      newPassword: newPassword,
-    });
+    const response = await axios.post(API.AUTH.CHANGE_PASSWORD, data);
     return response.data;
   } catch (error: Error | any) {
     throw new Error(

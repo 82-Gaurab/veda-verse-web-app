@@ -116,7 +116,9 @@ const UserBookCard = ({
 
       <div className="mt-6 flex items-center justify-between gap-2">
         {/* Price */}
-        <span className="text-emerald-800 font-semibold text-lg">₹{price}</span>
+        <span className="text-emerald-800 font-semibold text-lg">
+          Rs.{price}
+        </span>
 
         {/* Buttons */}
         <div className="flex gap-2">

@@ -36,7 +36,6 @@ export type UserEditData = z.infer<typeof UserEditSchema>;
 
 export const ChangePasswordSchema = z
   .object({
-    currentPassword: z.string().min(6, "Current password is required"),
     newPassword: z.string().min(8, "Password must be at least 8 characters"),
     confirmPassword: z.string().min(8, "Please confirm your password"),
   })

@@ -127,12 +127,12 @@ export const handleResetPassword = async (
   }
 };
 
-export const handleChangePassword = async (
-  email: string,
-  newPassword: string,
-) => {
+export const handleChangePassword = async (data: {
+  email: string;
+  newPassword: string;
+}) => {
   try {
-    const response = await changePassword(newPassword, email);
+    const response = await changePassword(data);
     if (response.success) {
       return {
         success: true,

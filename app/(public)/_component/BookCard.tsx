@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 interface Genre {
   _id: string;
   name: string;
@@ -24,6 +25,9 @@ const BookCard = ({
   genre,
   link,
 }: Book) => {
+  const [imgSrc, setImgSrc] = useState(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}${coverImg}`,
+  );
   return (
     <div
       className="
@@ -53,13 +57,14 @@ const BookCard = ({
       {/* Image */}
       <div className="relative w-full h-60 mb-6 rounded-xl overflow-hidden">
         <Image
-          src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${coverImg}`}
+          src={imgSrc}
           alt={title}
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 320px"
           priority
           unoptimized
+          onError={() => setImgSrc("/images/default-book-cover.png")}
         />
       </div>
 
@@ -94,7 +99,9 @@ const BookCard = ({
       )}
 
       <div className="mt-6 flex items-center justify-between">
-        <span className="text-emerald-800 font-semibold text-lg">₹{price}</span>
+        <span className="text-emerald-800 font-semibold text-lg">
+          Rs.{price}
+        </span>
 
         <Link
           href={`${link}/${_id}`} // navigate to the book detail page using book ID

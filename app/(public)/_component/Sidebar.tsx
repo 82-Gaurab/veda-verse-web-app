@@ -27,24 +27,25 @@ export default function Sidebar({ isCompact, setIsCompact }: SidebarProps) {
   return (
     <>
       <aside
-        className="fixed top-0 left-0 h-screen z-40 flex flex-col justify-between transition-all duration-500 ease-in-out"
+        className="fixed bg-emerald-50 top-0 left-0 h-screen z-40 flex flex-col justify-between transition-all duration-500 ease-in-out"
         style={{
           width: sidebarWidth,
-          background: "#F2EFE8",
           paddingBottom: "32px",
           boxShadow:
             "8px 0 20px rgba(0,0,0,0.04), -4px 0 15px rgba(255,255,255,0.7)",
         }}
       >
-        <div>
+        <div className="absolute -top-20 -left-20 w-72 h-72 bg-emerald-200/30 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10">
           {/* Header */}
-          <div className="px-6 py-6 border-b border-neutral-200/40">
+          <div className="px-6 py-6 border-b border-emerald-100">
             <div
               className="flex items-center transition-all duration-300"
               style={{ gap: isCompact ? "0" : "14px" }}
             >
               <Link
-                href="/admin"
+                href="/"
                 className="flex items-center gap-3"
                 style={{
                   justifyContent: isCompact ? "center" : "",
@@ -59,7 +60,7 @@ export default function Sidebar({ isCompact, setIsCompact }: SidebarProps) {
                       alt="logo"
                       className="transition-all duration-300"
                     />
-                    <span className="text-[#3F6E58] text-[20px] tracking-wide font-semibold">
+                    <span className="text-emerald-700 text-[20px] tracking-wide font-semibold">
                       VedaVerse
                     </span>
                   </>
@@ -86,21 +87,13 @@ export default function Sidebar({ isCompact, setIsCompact }: SidebarProps) {
                 style={{
                   justifyContent: isCompact ? "center" : "",
                 }}
-                className={`
-                  flex items-center gap-4 px-4 py-3 rounded-xl
+                className={`flex items-center gap-4 px-4 py-3 rounded-xl
                   text-[13px] tracking-wider uppercase
                   transition-all duration-300 ease-in-out
                   ${
                     isActive(link.href)
-                      ? `
-                       bg-[#f1ede1] shadow-[inset_0_5px_8px_rgba(0,0,0,0.2)] rounded text-gray-700
-                      `
-                      : `
-                        text-neutral-600
-                        hover:bg-[#EAE6DE]
-                        hover:shadow-[4px_4px_10px_rgba(0,0,0,0.04),-4px_-4px_10px_rgba(255,255,255,0.6)]
-                        active:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.06),inset_-3px_-3px_6px_rgba(255,255,255,0.6)]
-                      `
+                      ? "bg-emerald-100 text-emerald-800 shadow-inner"
+                      : "text-emerald-700 hover:bg-emerald-100/70 hover:shadow-[4px_4px_10px_rgba(0,0,0,0.04),-4px_-4px_10px_rgba(255,255,255,0.6)] active:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.06),inset_-3px_-3px_6px_rgba(255,255,255,0.6)]"
                   }
                 `}
               >
@@ -118,11 +111,10 @@ export default function Sidebar({ isCompact, setIsCompact }: SidebarProps) {
         </div>
 
         {/* Bottom Auth Card */}
-        <div className="mx-5 mb-6">
+        <div className="mx-5 mb-6 relative z-10">
           <div
-            className="rounded-2xl p-3"
+            className="rounded-2xl p-3 bg-emerald-100"
             style={{
-              background: "#E6E2DA",
               boxShadow:
                 "6px 6px 15px rgba(0,0,0,0.05), -6px -6px 15px rgba(255,255,255,0.7)",
             }}

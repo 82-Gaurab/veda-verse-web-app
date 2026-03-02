@@ -52,7 +52,7 @@ export default function CartItemCard({ item }: { item: CartItem }) {
             by {item.bookId.author}
           </p>
           <p className="text-emerald-800 font-semibold mt-1">
-            ₹{item.bookId.price}
+            Rs.{item.bookId.price}
           </p>
         </div>
 
@@ -75,7 +75,7 @@ export default function CartItemCard({ item }: { item: CartItem }) {
       <div className="flex flex-col text-right">
         <p className="text-gray-600">Qty: {item.quantity}</p>
         <p className="text-emerald-900 font-semibold">
-          ₹{item.bookId.price * item.quantity}
+          Rs.{item.bookId.price * item.quantity}
         </p>
       </div>
     </div>

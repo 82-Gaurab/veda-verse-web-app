@@ -7,12 +7,13 @@ import {
 } from "@/app/admin/users/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useTransition } from "react";
+import { useTransition, useState } from "react";
 import toast from "react-hot-toast";
 import { handleChangePassword } from "@/lib/action/auth-action";
 
 export default function ChangePassword({ email }: { email: string }) {
   const [pending, startTransition] = useTransition();
+  const [showPassword, setShowPassword] = useState(false); // 👈 added
 
   const {
     register,
@@ -26,7 +27,8 @@ export default function ChangePassword({ email }: { email: string }) {
   const onSubmit = async (data: ChangePasswordData) => {
     startTransition(async () => {
       try {
-        const response = await handleChangePassword(email, data.newPassword);
+        const sendData = { email: email, newPassword: data.newPassword };
+        const response = await handleChangePassword(sendData);
 
         if (!response.success) {
           throw new Error(response.message);
@@ -41,55 +43,37 @@ export default function ChangePassword({ email }: { email: string }) {
   };
 
   return (
-    <div className="">
+    <div>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Current Password */}
-        <div className="space-y-1">
-          <label className="text-xs uppercase tracking-wider text-emerald-800">
-            Current Password
-          </label>
-          <input
-            type="password"
-            {...register("currentPassword")}
-            className="
-             w-full px-4 py-3 rounded-xl outline-none
-           bg-emerald-50
-border border-emerald-400
-shadow-[inset_4px_4px_10px_rgba(0,0,0,0.06),inset_-4px_-4px_10px_rgba(255,255,255,0.9)]
-focus:shadow-[inset_2px_2px_6px_rgba(0,0,0,0.08),inset_-2px_-2px_6px_rgba(255,255,255,1)]
-            "
-            placeholder="Enter current password"
-          />
-          {errors.currentPassword && (
-            <p className="text-xs text-red-600">
-              {errors.currentPassword.message}
-            </p>
-          )}
-        </div>
-
         {/* New Password */}
-        <div className="space-y-1">
+        <div className="space-y-1 relative">
           <label className="text-xs uppercase tracking-wider text-emerald-800">
             New Password
           </label>
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             {...register("newPassword")}
             className="
               w-full px-4 py-3 rounded-xl outline-none
-           bg-emerald-50
-border border-emerald-400
-shadow-[inset_4px_4px_10px_rgba(0,0,0,0.06),inset_-4px_-4px_10px_rgba(255,255,255,0.9)]
-focus:shadow-[inset_2px_2px_6px_rgba(0,0,0,0.08),inset_-2px_-2px_6px_rgba(255,255,255,1)]
+              bg-emerald-50
+              border border-emerald-400
+              shadow-[inset_4px_4px_10px_rgba(0,0,0,0.06),inset_-4px_-4px_10px_rgba(255,255,255,0.9)]
+              focus:shadow-[inset_2px_2px_6px_rgba(0,0,0,0.08),inset_-2px_-2px_6px_rgba(255,255,255,1)]
             "
             placeholder="Enter new password"
           />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-4 top-10 text-sm text-gray-500 hover:text-gray-800"
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
           {errors.newPassword && (
             <p className="text-xs text-red-600">{errors.newPassword.message}</p>
           )}
         </div>
 
-        {/* Confirm Password */}
         <div className="space-y-1">
           <label className="text-xs uppercase tracking-wider text-emerald-800">
             Confirm New Password
@@ -99,10 +83,10 @@ focus:shadow-[inset_2px_2px_6px_rgba(0,0,0,0.08),inset_-2px_-2px_6px_rgba(255,25
             {...register("confirmPassword")}
             className="
               w-full px-4 py-3 rounded-xl outline-none
-           bg-emerald-50
-border border-emerald-400
-shadow-[inset_4px_4px_10px_rgba(0,0,0,0.06),inset_-4px_-4px_10px_rgba(255,255,255,0.9)]
-focus:shadow-[inset_2px_2px_6px_rgba(0,0,0,0.08),inset_-2px_-2px_6px_rgba(255,255,255,1)]
+              bg-emerald-50
+              border border-emerald-400
+              shadow-[inset_4px_4px_10px_rgba(0,0,0,0.06),inset_-4px_-4px_10px_rgba(255,255,255,0.9)]
+              focus:shadow-[inset_2px_2px_6px_rgba(0,0,0,0.08),inset_-2px_-2px_6px_rgba(255,255,255,1)]
             "
             placeholder="Confirm new password"
           />
@@ -113,7 +97,6 @@ focus:shadow-[inset_2px_2px_6px_rgba(0,0,0,0.08),inset_-2px_-2px_6px_rgba(255,25
           )}
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
           disabled={isSubmitting || pending}
