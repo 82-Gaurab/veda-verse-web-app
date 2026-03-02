@@ -14,7 +14,6 @@ export default async function Page({
   }
   return (
     <div>
-      User Route ko
       <PublicBookDetails book={response.data} isLoggedIn={true} />
     </div>
   );

@@ -23,12 +23,16 @@ export default async function Page() {
 
   return (
     <div>
-      <ProfilePage
-        user={{
-          ...response.data,
-          profilePicture,
-        }}
-      />
+      <div className="relative min-h-screen bg-emerald-50 overflow-hidden">
+        <div className="absolute -top-40 -left-40 w-96 h-96 bg-emerald-200/40 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-emerald-100/40 rounded-full blur-3xl" />
+        <ProfilePage
+          user={{
+            ...response.data,
+            profilePicture,
+          }}
+        />
+      </div>
     </div>
   );
 }

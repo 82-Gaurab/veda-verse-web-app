@@ -10,7 +10,7 @@ export const API = {
     UPDATE_PROFILE: "/auth/update-profile",
     REQUEST_RESET_PASSWORD: "/auth/request-password-reset",
     RESET_PASSWORD: (token: string) => `/auth/reset-password/${token}`,
-    CHANGE_PASSWORD: (token: string) => `/auth/change-password/${token}`,
+    CHANGE_PASSWORD: `/auth/reset-password-otp`,
     GET_ONE: (userId: string) => `/auth/${userId}`,
     ADD_TO_CART: "/auth/cart",
     GET_MY_DATA: "/auth/me",

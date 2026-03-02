@@ -128,18 +128,11 @@ export const handleResetPassword = async (
 };
 
 export const handleChangePassword = async (
-  token: string,
-  oldPassword: string,
+  email: string,
   newPassword: string,
-  confirmPassword: string,
 ) => {
   try {
-    const response = await changePassword(
-      token,
-      oldPassword,
-      newPassword,
-      confirmPassword,
-    );
+    const response = await changePassword(newPassword, email);
     if (response.success) {
       return {
         success: true,
