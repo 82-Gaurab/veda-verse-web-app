@@ -10,7 +10,7 @@ export default function AboutPage() {
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-emerald-100/40 rounded-full blur-3xl" />
 
       <div className="relative max-w-6xl mx-auto px-6 md:px-12 py-24 space-y-32">
-        {/* 🌿 Hero */}
+        {/* Hero */}
         <section className="text-center space-y-6">
           <span className="text-xs uppercase tracking-[0.3em] text-emerald-600">
             Our Story
@@ -87,7 +87,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* 🌿 Pillars */}
+        {/* Pillars */}
         <section className="space-y-16 text-center">
           <h2 className="text-3xl font-serif font-bold">Our Core Values</h2>
 
@@ -126,7 +126,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* 🌿 Quote */}
+        {/* Quote */}
         <section className="text-center pt-20">
           <blockquote className="font-serif text-2xl italic text-emerald-700">
             “A good book feels like a quiet conversation that stays with you.”
