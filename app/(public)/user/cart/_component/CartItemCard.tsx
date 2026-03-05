@@ -2,6 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { Plus, Minus, Trash2 } from "lucide-react";
+import {
+  handleUpdateCartItem,
+  handleDeleteCartItem,
+} from "@/lib/action/auth-action";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export interface CartBook {
   _id: string;
@@ -19,11 +26,40 @@ export interface CartItem {
 }
 
 export default function CartItemCard({ item }: { item: CartItem }) {
+  const router = useRouter();
+
+  const updateQuantity = async (newQty: number) => {
+    if (newQty < 1) return;
+
+    const response = await handleUpdateCartItem({
+      product: item.bookId._id,
+      quantity: newQty,
+    });
+
+    if (response?.success) {
+      router.refresh();
+    } else {
+      toast.error(response?.message || "Failed to update cart");
+    }
+  };
+
+  const removeItem = async () => {
+    const response = await handleDeleteCartItem({
+      product: item.bookId._id,
+    });
+
+    if (response?.success) {
+      toast.success("Item removed");
+      router.refresh();
+    } else {
+      toast.error(response?.message || "Failed to remove item");
+    }
+  };
+
   return (
     <div
       className="
-        group
-        flex gap-6 items-center p-5 rounded-2xl
+        group flex gap-6 items-center p-5 rounded-2xl
         bg-emerald-50/70 backdrop-blur-md
         shadow-[6px_6px_16px_rgba(0,0,0,0.06),-6px_-6px_16px_rgba(255,255,255,0.8)]
         transition-all duration-300 ease-out
@@ -56,7 +92,6 @@ export default function CartItemCard({ item }: { item: CartItem }) {
           </p>
         </div>
 
-        {/* View Book Button */}
         <Link
           href={`/user/dashboard/${item.bookId._id}`}
           className="
@@ -71,12 +106,51 @@ export default function CartItemCard({ item }: { item: CartItem }) {
         </Link>
       </div>
 
-      {/* Quantity + Total */}
-      <div className="flex flex-col text-right">
-        <p className="text-gray-600">Qty: {item.quantity}</p>
+      {/* Quantity Controls */}
+      <div className="flex flex-col items-end gap-2">
+        {/* Quantity Buttons */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => updateQuantity(item.quantity - 1)}
+            className="
+              p-2 rounded-lg bg-white shadow
+              hover:bg-gray-100 transition
+            "
+          >
+            <Minus size={16} />
+          </button>
+
+          <span className="font-semibold text-emerald-900 w-6 text-center">
+            {item.quantity}
+          </span>
+
+          <button
+            onClick={() => updateQuantity(item.quantity + 1)}
+            className="
+              p-2 rounded-lg bg-white shadow
+              hover:bg-gray-100 transition
+            "
+          >
+            <Plus size={16} />
+          </button>
+        </div>
+
+        {/* Total Price */}
         <p className="text-emerald-900 font-semibold">
           Rs.{item.bookId.price * item.quantity}
         </p>
+
+        {/* Remove Button */}
+        <button
+          onClick={removeItem}
+          className="
+            flex items-center gap-1 text-red-500 text-sm
+            hover:text-red-600 transition
+          "
+        >
+          <Trash2 size={16} />
+          Remove
+        </button>
       </div>
     </div>
   );

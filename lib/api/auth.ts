@@ -123,6 +123,34 @@ export const addToCart = async (cartData: any) => {
   }
 };
 
+export const updateCartItem = async (cartData: any) => {
+  try {
+    const response = await axios.patch(API.AUTH.UPDATE_CART_ITEM, cartData);
+    return response.data;
+  } catch (error: Error | any) {
+    throw new Error(
+      error.response?.data?.message ||
+        error.message ||
+        "Update Cart Item failed",
+    );
+  }
+};
+
+export const deleteCartItem = async (cartData: any) => {
+  try {
+    const response = await axios.delete(API.AUTH.DELETE_CART_ITEM, {
+      data: cartData,
+    });
+    return response.data;
+  } catch (error: Error | any) {
+    throw new Error(
+      error.response?.data?.message ||
+        error.message ||
+        "Delete Cart Item failed",
+    );
+  }
+};
+
 export const getMyData = async () => {
   try {
     const response = await axios.get(API.AUTH.GET_MY_DATA);

@@ -13,6 +13,8 @@ export const API = {
     CHANGE_PASSWORD: `/auth/reset-password-otp`,
     GET_ONE: (userId: string) => `/auth/${userId}`,
     ADD_TO_CART: "/auth/cart",
+    UPDATE_CART_ITEM: "/auth/cart/update-quantity",
+    DELETE_CART_ITEM: "/auth/cart/remove",
     GET_MY_DATA: "/auth/me",
   },
   ORDER: {
