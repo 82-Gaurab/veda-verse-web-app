@@ -15,6 +15,8 @@ import {
   getUserById,
   addToCart,
   getMyData,
+  deleteCartItem,
+  updateCartItem,
 } from "../api/auth";
 import { setAuthToken, setUserData } from "../cookie";
 
@@ -206,6 +208,44 @@ export const handleAddToCart = async (data: any) => {
     return {
       success: false,
       message: error.message || "Add To Cart action failed",
+    };
+  }
+};
+
+export const handleUpdateCartItem = async (data: any) => {
+  try {
+    const response = await updateCartItem(data);
+
+    if (response.success) {
+      return {
+        success: true,
+        message: "Cart updated successfully",
+        data: response.data,
+      };
+    }
+  } catch (error: Error | any) {
+    return {
+      success: false,
+      message: error.message || "Update Cart action failed",
+    };
+  }
+};
+
+export const handleDeleteCartItem = async (data: any) => {
+  try {
+    const response = await deleteCartItem(data);
+
+    if (response.success) {
+      return {
+        success: true,
+        message: "Cart item removed successfully",
+        data: response.data,
+      };
+    }
+  } catch (error: Error | any) {
+    return {
+      success: false,
+      message: error.message || "Delete Cart action failed",
     };
   }
 };

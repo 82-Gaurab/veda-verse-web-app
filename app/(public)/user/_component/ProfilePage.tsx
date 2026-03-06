@@ -220,6 +220,7 @@ shadow-[12px_12px_30px_rgba(16,185,129,0.15),-12px_-12px_30px_rgba(255,255,255,0
                         {/* Edit Icon */}
                         <button
                           type="button"
+                          aria-label="Upload profile picture"
                           onClick={() => fileInputRef.current?.click()}
                           className="absolute bottom-0 right-0 bg-emerald-700 hover:bg-emerald-800 text-white p-2 rounded-full shadow-lg transition"
                         >

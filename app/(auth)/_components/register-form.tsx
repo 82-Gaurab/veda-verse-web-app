@@ -38,10 +38,6 @@ export default function RegisterForm({ onOpenLogin }: RegisterModalProps) {
         throw new Error(res.message || "Registration failed");
       }
       toast.success("Registration successful");
-      // handle redirect (optional)
-      setTransition(() => {
-        router.push("/login");
-      });
     } catch (err: Error | any) {
       setError(err.message || "Registration failed");
       toast.error(err.message);
@@ -122,7 +118,7 @@ export default function RegisterForm({ onOpenLogin }: RegisterModalProps) {
           />
           <button
             type="button"
-            onClick={() => setShowConfirmPassword(!showPassword)}
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             className="absolute right-4 top-3 text-gray-400 hover:text-gray-700"
           >
             {showConfirmPassword ? "Hide" : "Show"}
