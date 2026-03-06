@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import ProfilePage from "@/app/(public)/user/_component/ProfilePage";
 import Page from "@/app/(public)/user/profile/page";
 import { handleGetMyData, handleUpdateMyself } from "@/lib/action/auth-action";
+import userEvent from "@testing-library/user-event";
 
 // Global Setup
 beforeAll(() => {
@@ -155,7 +156,7 @@ describe("Profile Page", () => {
         target: { value: "ab" },
       });
 
-      fireEvent.click(screen.getByText("Save"));
+      await userEvent.click(screen.getByText("Save"));
 
       await waitFor(() => {
         expect(
@@ -190,7 +191,7 @@ describe("Profile Page", () => {
         target: { value: "Jane" },
       });
 
-      fireEvent.click(screen.getByText("Save"));
+      await userEvent.click(screen.getByText("Save"));
 
       await waitFor(() => {
         expect(mockHandleUpdateMyself).toHaveBeenCalled();
@@ -213,7 +214,7 @@ describe("Profile Page", () => {
         target: { value: "Jane" },
       });
 
-      fireEvent.click(screen.getByText("Save"));
+      await userEvent.click(screen.getByText("Save"));
 
       await waitFor(() => {
         expect(mockToastError).toHaveBeenCalledWith("Update failed");

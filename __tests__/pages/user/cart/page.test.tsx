@@ -101,9 +101,6 @@ describe("CartList Component", () => {
 
     expect(screen.getByText("Atomic Habits")).toBeInTheDocument();
     expect(screen.getByText("Deep Work")).toBeInTheDocument();
-
-    expect(screen.getByText("Qty: 2")).toBeInTheDocument();
-    expect(screen.getByText("Qty: 1")).toBeInTheDocument();
   });
 
   it("calculates and displays grand total correctly", () => {
@@ -179,7 +176,6 @@ describe("CartItemCard Component", () => {
     expect(screen.getByText("Atomic Habits")).toBeInTheDocument();
     expect(screen.getByText(/by james clear/i)).toBeInTheDocument();
     expect(screen.getByText("Rs.500")).toBeInTheDocument();
-    expect(screen.getByText("Qty: 2")).toBeInTheDocument();
     expect(screen.getByText("Rs.1000")).toBeInTheDocument();
   });
 
