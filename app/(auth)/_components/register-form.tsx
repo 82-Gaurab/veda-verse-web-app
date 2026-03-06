@@ -38,10 +38,6 @@ export default function RegisterForm({ onOpenLogin }: RegisterModalProps) {
         throw new Error(res.message || "Registration failed");
       }
       toast.success("Registration successful");
-      // handle redirect (optional)
-      setTransition(() => {
-        router.push("/login");
-      });
     } catch (err: Error | any) {
       setError(err.message || "Registration failed");
       toast.error(err.message);
